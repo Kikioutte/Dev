@@ -1032,6 +1032,28 @@ section:first-child {
   body { background:#fff !important; }
 }
 
+/* Sprint 7.5 — Live Preview sandbox enhancements */
+.sandbox-console {
+	margin-top:8px;
+	padding:8px 12px;
+	border-radius:8px;
+	background:#111;
+	color:#ccc;
+	font-family:ui-monospace,"Cascadia Code",Menlo,monospace;
+	font-size:12px;
+	line-height:1.6;
+	max-height:110px;
+	overflow-y:auto;
+	display:none;
+}
+.sandbox-console.has-output { display:block; }
+.sandbox-console .con-error { color:#ff7070; }
+.sandbox-console .con-warn  { color:#ffc56a; }
+.sandbox-console .con-log   { color:#80c9ff; }
+.sandbox-console .con-info  { color:#a0e0a0; }
+.sandbox-tall textarea,
+.sandbox-tall iframe { min-height:320px !important; }
+
 /* Sprint 8 — Mode Cours, onglets, vocab, quiz-expl, carnet de bord */
 .mod-tabs { display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--notion-border); padding-bottom:0; flex-wrap:wrap; }
 .mod-tab { background:transparent; border:none; border-bottom:2px solid transparent; padding:8px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; font-weight:600; color:var(--notion-text-faint); transition:all 150ms; margin-bottom:-1px; font-family:inherit; }
@@ -1847,8 +1869,9 @@ function openMod(id){
 	// ── Panneau Bac à sable ───────────────────────────────
 	if(hasSandbox){
 		h += '<div class="tab-panel" id="tab-sandbox">';
-		h += '<div class="les-h" style="justify-content:space-between">🎮 Bac à sable — essaie en direct<button onclick="resetSandbox('+id+')" class="btn-reset" style="font-size:11px;padding:3px 8px" aria-label="Réinitialiser le code du bac à sable">↺ Réinitialiser</button></div>';
-		h += '<div class="sandbox"><textarea id="sandboxCode" oninput="updateSandbox()" aria-label="Éditeur de code" spellcheck="false"></textarea><iframe id="sandboxFrame" title="Aperçu en direct" sandbox="allow-scripts"></iframe></div>';
+		h += '<div class="les-h" style="justify-content:space-between">🎮 Bac à sable<div style="display:flex;gap:6px"><button onclick="toggleSandboxExpand()" id="sandboxExpandBtn" class="btn-reset" style="font-size:11px;padding:3px 8px" aria-label="Agrandir le bac à sable">⊕ Agrandir</button><button onclick="resetSandbox('+id+')" class="btn-reset" style="font-size:11px;padding:3px 8px" aria-label="Réinitialiser le code">↺ Réinitialiser</button></div></div>';
+		h += '<div class="sandbox" id="sandboxWrap"><textarea id="sandboxCode" onkeydown="sandboxTab(event)" oninput="updateSandbox()" aria-label="Éditeur de code" spellcheck="false"></textarea><iframe id="sandboxFrame" title="Aperçu en direct" sandbox="allow-scripts"></iframe></div>';
+		h += '<div class="sandbox-console" id="sandboxConsole" aria-live="polite" aria-label="Console JavaScript"></div>';
 		h += '</div>';
 	}
 
@@ -1865,7 +1888,7 @@ function openMod(id){
 	document.getElementById("mBody").innerHTML = h;
 	if(hasSandbox){
 		document.getElementById('sandboxCode').value = loadSandbox(id) || m.starter;
-		updateSandbox();
+		_renderSandbox();
 	}
 	const na = document.getElementById('notesArea');
 	if(na) na.value = loadNotes(id);
@@ -1874,23 +1897,79 @@ function openMod(id){
 	requestAnimationFrame(()=>{ const btn = document.querySelector('.x-close'); if(btn) btn.focus(); });
 }
 
-function updateSandbox(){
-	const ta = document.getElementById('sandboxCode');
-	const fr = document.getElementById('sandboxFrame');
-	if(!ta || !fr) return;
-	fr.srcdoc = ta.value;
-	if(_currentModId !== null) saveSandbox(_currentModId, ta.value);
+// ── Live Preview : debounce + console capture ────────────────────────────────
+let _sandboxTimer = null;
+
+function updateSandbox() {
+	clearTimeout(_sandboxTimer);
+	_sandboxTimer = setTimeout(_renderSandbox, 350);
 }
 
-function resetSandbox(id){
+function _renderSandbox() {
+	const ta  = document.getElementById('sandboxCode');
+	const fr  = document.getElementById('sandboxFrame');
+	const con = document.getElementById('sandboxConsole');
+	if (!ta || !fr) return;
+	if (con) { con.innerHTML = ''; con.classList.remove('has-output'); }
+	// Script injecté dans l'iframe pour intercepter console.* et window.onerror
+	const interceptor = '<scr'+'ipt>(function(){var p=function(t,m){parent.postMessage({_sb:1,t:t,m:m},\'*\')};[\'log\',\'warn\',\'error\',\'info\'].forEach(function(k){var o=console[k];console[k]=function(){p(k,[].slice.call(arguments).map(function(x){return typeof x===\'object\'?JSON.stringify(x):String(x)}).join(\' \'));o.apply(console,arguments)};});window.onerror=function(msg,s,l){p(\'error\',msg+\' (ligne \'+l+\')\');return false};}());<\/script>';
+	fr.srcdoc = interceptor + ta.value;
+	if (_currentModId !== null) saveSandbox(_currentModId, ta.value);
+}
+
+function resetSandbox(id) {
 	const m = MODULES.find(x=>x.id===id);
-	if(!m || !m.starter) return;
+	if (!m || !m.starter) return;
 	const ta = document.getElementById('sandboxCode');
-	if(!ta) return;
+	if (!ta) return;
 	ta.value = m.starter;
 	saveSandbox(id, m.starter);
-	updateSandbox();
+	_renderSandbox();
 }
+
+// Tab → indentation 2 espaces dans l'éditeur
+function sandboxTab(e) {
+	if (e.key !== 'Tab') return;
+	e.preventDefault();
+	e.stopPropagation();
+	const ta = e.target;
+	const s = ta.selectionStart, end = ta.selectionEnd;
+	if (s !== end) {
+		const lines = ta.value.slice(s, end).split('\n');
+		const indented = lines.map(function(l){ return '  ' + l; }).join('\n');
+		ta.value = ta.value.slice(0, s) + indented + ta.value.slice(end);
+		ta.selectionStart = s;
+		ta.selectionEnd = s + indented.length;
+	} else {
+		ta.value = ta.value.slice(0, s) + '  ' + ta.value.slice(end);
+		ta.selectionStart = ta.selectionEnd = s + 2;
+	}
+	clearTimeout(_sandboxTimer);
+	_renderSandbox();
+}
+
+// Bouton Agrandir / Réduire le bac à sable
+function toggleSandboxExpand() {
+	const wrap = document.getElementById('sandboxWrap');
+	const btn  = document.getElementById('sandboxExpandBtn');
+	if (!wrap) return;
+	wrap.classList.toggle('sandbox-tall');
+	const expanded = wrap.classList.contains('sandbox-tall');
+	if (btn) { btn.textContent = expanded ? '⊖ Réduire' : '⊕ Agrandir'; btn.setAttribute('aria-label', expanded ? 'Réduire le bac à sable' : 'Agrandir le bac à sable'); }
+}
+
+// Réception des messages console depuis l'iframe sandbox
+window.addEventListener('message', function(e) {
+	if (!e.data || !e.data._sb) return;
+	const con = document.getElementById('sandboxConsole');
+	if (!con) return;
+	const div = document.createElement('div');
+	div.className = 'con-' + (e.data.t || 'log');
+	div.textContent = e.data.m;
+	con.appendChild(div);
+	con.classList.add('has-output');
+	con.scrollTop = con.scrollHeight;
+});
 
 function renderQuiz(m){
 	const box = document.getElementById("quizBox");
