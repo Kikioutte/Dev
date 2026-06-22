@@ -1433,18 +1433,51 @@ const MODULES = [
 	badge:"🧰", badgeName:"Setup",
 	starter:"<h1>Hello World !</h1>\n<p>Bienvenue sur ma première page HTML.</p>\n<p>Modifie ce code et vois le résultat à droite ➡️</p>",
 	lessons:[
-		{h:"🌐 Comment marche le web", html:"<p>Quand tu tapes une adresse, ton <b>navigateur (client)</b> envoie une requête à un <b>serveur</b> qui répond avec du HTML, CSS et JS. C'est le modèle <b>client ↔ serveur</b>.</p><ul><li><b>Frontend</b> = ce que tu vois (HTML/CSS/JS).</li><li><b>Backend</b> = la logique côté serveur + base de données.</li></ul>"},
-		{h:"🛠️ Tes outils", html:"<ul><li>Installe <b>VS Code</b> (éditeur de code).</li><li>Un navigateur moderne (Chrome/Firefox) + ses <b>DevTools</b> (touche F12).</li><li>Crée un compte <b>GitHub</b>.</li></ul>"},
-		{h:"🔤 Les 3 langages du web", html:"<p>HTML, CSS et JS fonctionnent toujours <b>ensemble</b> :</p><ul><li><b>HTML</b> = le squelette (structure)</li><li><b>CSS</b> = les vêtements (style)</li><li><b>JS</b> = les muscles (interactivité)</li></ul><pre class='notion-code'><code>&lt;h1 id='titre'&gt;Bonjour&lt;/h1&gt;  &lt;!-- HTML --&gt;\nh1 { color: blue; }            /* CSS */\ndocument.querySelector('#titre').textContent = 'Hello !'; // JS</code></pre>"}
+		{h:"🌐 Comment fonctionne le web", html:"<p>Chaque fois que tu tapes une URL et que tu appuies sur Entrée, une <b>série d'étapes précises</b> se déroule :</p><ol><li><b>DNS</b> — ton navigateur traduit <code>google.com</code> en adresse IP (ex : <code>142.250.74.46</code>).</li><li><b>Connexion TCP</b> — une connexion fiable est établie avec le serveur.</li><li><b>Requête HTTP</b> — le navigateur demande la page : <code>GET /index.html HTTP/1.1</code>.</li><li><b>Réponse du serveur</b> — le serveur renvoie le fichier HTML (code 200 OK).</li><li><b>Rendu</b> — le navigateur lit le HTML, charge le CSS et le JS, et affiche la page.</li></ol><pre class='notion-code'><code>Navigateur                          Serveur\n    │── GET / HTTP/1.1 ──────────────&gt;│\n    │&lt;─ 200 OK + HTML/CSS/JS ─────────│\n    │── GET /style.css ───────────────&gt;│\n    │&lt;─ 200 OK + CSS ─────────────────│</code></pre><p>💡 Tu peux voir toutes ces requêtes dans l'onglet <b>Réseau</b> des DevTools (F12) !</p>"},
+		{h:"🏗️ Frontend vs Backend vs Base de données", html:"<p>Une application web moderne est composée de <b>3 couches</b> :</p><pre class='notion-code'><code>┌─────────────────────────────────────────┐\n│  FRONTEND (navigateur)                  │\n│  HTML + CSS + JavaScript                │\n│  Ce que l'utilisateur voit & utilise    │\n├─────────────────────────────────────────┤\n│  BACKEND (serveur)                      │\n│  Node.js / Python / PHP / Java…         │\n│  Logique métier, sécurité, API          │\n├─────────────────────────────────────────┤\n│  BASE DE DONNÉES                        │\n│  MySQL / PostgreSQL / MongoDB…          │\n│  Stockage persistant des données        │\n└─────────────────────────────────────────┘</code></pre><p><b>Full Stack</b> = maîtriser les 3 couches. C'est exactement ce que tu vas apprendre dans ce parcours !</p><ul><li>Un <b>développeur frontend</b> crée l'interface (boutons, formulaires, animations).</li><li>Un <b>développeur backend</b> gère la logique serveur et la sécurité.</li><li>Un <b>DBA</b> (Database Admin) optimise le stockage des données.</li></ul>"},
+		{h:"🔤 HTML, CSS et JS : les 3 rôles", html:"<p>Ces 3 langages sont <b>complémentaires</b> — chacun a un rôle bien précis :</p><pre class='notion-code'><code>&lt;!-- HTML = STRUCTURE (le squelette) --&gt;\n&lt;button id='monBtn' class='btn-primaire'&gt;Clique-moi&lt;/button&gt;\n\n/* CSS = STYLE (l'apparence) */\n.btn-primaire {\n  background: #097fe8;\n  color: white;\n  padding: 10px 20px;\n  border-radius: 8px;\n  border: none;\n  cursor: pointer;\n}\n\n// JS = COMPORTEMENT (l'interactivité)\ndocument.getElementById('monBtn').addEventListener('click', function() {\n  alert('Bonjour le monde !');\n});</code></pre><p>⚠️ Une erreur courante chez les débutants : mélanger les 3 dans le même fichier. La bonne pratique = <b>3 fichiers séparés</b> : <code>index.html</code>, <code>style.css</code>, <code>script.js</code>.</p>"},
+		{h:"🛠️ Installer ton environnement de travail", html:"<p>Les outils du développeur web moderne :</p><ol><li><b>VS Code</b> — l'éditeur de code le plus utilisé au monde.<br>Extensions indispensables : <em>Prettier</em> (formatage auto), <em>Live Server</em> (rechargement en direct), <em>ESLint</em> (erreurs JS en temps réel).</li><li><b>Google Chrome + DevTools</b> — appuie sur <code>F12</code> pour ouvrir les outils de développement :<ul><li>Onglet <b>Elements</b> → inspecter et modifier le HTML/CSS en direct</li><li>Onglet <b>Console</b> → voir les erreurs JS, tester des expressions</li><li>Onglet <b>Network</b> → voir toutes les requêtes HTTP</li><li>Onglet <b>Sources</b> → déboguer le JS ligne par ligne</li></ul></li><li><b>Git + GitHub</b> — versionner ton code et le partager (Module 6 entier dédié).</li><li><b>Node.js</b> — pour exécuter du JS hors du navigateur (Modules 8-10).</li></ol><p>💡 <b>Raccourcis VS Code essentiels</b> : <code>Ctrl+S</code> sauvegarder, <code>Ctrl+Z</code> annuler, <code>Alt+↑/↓</code> déplacer une ligne, <code>Ctrl+D</code> sélectionner le mot suivant identique.</p>"},
+		{h:"📄 Ton premier fichier HTML", html:"<p>Tout fichier HTML commence par cette structure de base — VS Code la génère automatiquement avec <code>html:5</code> + Tab :</p><pre class='notion-code'><code>&lt;!DOCTYPE html&gt;         &lt;!-- Déclare HTML5 --&gt;\n&lt;html lang=\"fr\"&gt;        &lt;!-- Langue de la page --&gt;\n&lt;head&gt;\n  &lt;meta charset=\"UTF-8\"&gt;                   &lt;!-- Encodage (accents) --&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"&gt;\n  &lt;title&gt;Ma première page&lt;/title&gt;          &lt;!-- Titre dans l'onglet --&gt;\n  &lt;link rel=\"stylesheet\" href=\"style.css\"&gt; &lt;!-- Lien vers le CSS --&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;h1&gt;Bonjour monde !&lt;/h1&gt;\n  &lt;p&gt;Ma première page web.&lt;/p&gt;\n  &lt;script src=\"script.js\"&gt;&lt;/script&gt;       &lt;!-- JS en fin de body --&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><p>Pourquoi le JS se met en <b>fin de body</b> ? Pour que le HTML soit chargé avant que JS essaie d'y accéder. Sinon, <code>document.getElementById('titre')</code> retournerait <code>null</code> !</p>"},
+		{h:"🔍 Les DevTools : ton meilleur ami", html:"<p>Les DevTools (F12) sont l'outil numéro 1 du développeur web. Voici les 4 onglets essentiels :</p><table style='width:100%;border-collapse:collapse;font-size:13px'><tr style='background:var(--notion-blue-bg)'><th style='padding:8px;text-align:left;border:1px solid var(--notion-border)'>Onglet</th><th style='padding:8px;text-align:left;border:1px solid var(--notion-border)'>Utilisation</th><th style='padding:8px;text-align:left;border:1px solid var(--notion-border)'>Raccourci</th></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Elements</td><td style='padding:8px;border:1px solid var(--notion-border)'>Inspecter et modifier HTML/CSS en temps réel</td><td style='padding:8px;border:1px solid var(--notion-border)'>Clic droit → Inspecter</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Console</td><td style='padding:8px;border:1px solid var(--notion-border)'>Erreurs JS, tester du code, voir les logs</td><td style='padding:8px;border:1px solid var(--notion-border)'>Ctrl+Shift+J</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Network</td><td style='padding:8px;border:1px solid var(--notion-border)'>Voir toutes les requêtes HTTP et leurs réponses</td><td style='padding:8px;border:1px solid var(--notion-border)'>Ctrl+Shift+I puis Network</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Sources</td><td style='padding:8px;border:1px solid var(--notion-border)'>Déboguer JS ligne par ligne avec breakpoints</td><td style='padding:8px;border:1px solid var(--notion-border)'>Ctrl+Shift+I puis Sources</td></tr></table><p style='margin-top:10px'>💡 Dans la Console, tu peux taper directement du JavaScript : essaie <code>2+2</code> ou <code>document.title</code> !</p>"}
 	],
 	cours:{
-		objectifs:["Expliquer le trajet d'une page web (client → serveur → réponse)","Distinguer frontend et backend","Installer VS Code et utiliser les DevTools"],
-		vocab:[{t:"Client",d:"Le navigateur (Chrome, Firefox…) qui envoie des requêtes au serveur."},{t:"Serveur",d:"Machine qui répond aux requêtes en envoyant HTML, CSS et JS."},{t:"Frontend",d:"Tout ce que l'utilisateur voit et avec lequel il interagit (HTML/CSS/JS)."},{t:"Backend",d:"La logique côté serveur : traitement, sécurité, base de données."},{t:"DevTools",d:"Outils du navigateur (F12) : inspecter, déboguer, analyser les requêtes réseau."}],
-		html:"<p>Quand tu tapes une URL, ton navigateur envoie une <b>requête HTTP</b>. Le serveur répond avec du HTML+CSS+JS que le navigateur interprète et affiche.</p><p><b>Les 3 langages du web</b> fonctionnent toujours ensemble :</p><ul><li><b>HTML</b> — structure (le squelette)</li><li><b>CSS</b> — style (l'apparence)</li><li><b>JS</b> — comportement (l'interactivité)</li></ul>",
-		erreurs:["Confondre frontend (navigateur) et backend (serveur) — ils ne s'exécutent pas dans le même environnement.","Penser que JS ne fonctionne que dans le navigateur — Node.js l'utilise aussi côté serveur.","Ne pas ouvrir les DevTools (F12) pour lire les erreurs — c'est ton meilleur outil de diagnostic."]
+		objectifs:[
+			"Expliquer précisément le trajet d'une page web (DNS → TCP → HTTP → rendu)",
+			"Distinguer frontend, backend et base de données avec des exemples concrets",
+			"Comprendre les rôles distincts de HTML (structure), CSS (style) et JS (comportement)",
+			"Installer et configurer VS Code avec les extensions indispensables",
+			"Maîtriser les 4 onglets essentiels des DevTools",
+			"Créer un projet HTML/CSS/JS avec une structure de fichiers propre"
+		],
+		vocab:[
+			{t:"HTTP/HTTPS",d:"Protocole de communication web. HTTPS = version sécurisée avec chiffrement SSL/TLS. Le S signifie 'Secure'."},
+			{t:"Client",d:"Le navigateur (Chrome, Firefox…) qui envoie des requêtes HTTP au serveur."},
+			{t:"Serveur",d:"Machine qui reçoit les requêtes et répond avec des fichiers (HTML, CSS, JS, données JSON)."},
+			{t:"DNS",d:"Domain Name System — l'annuaire du web qui traduit 'google.com' en adresse IP '142.250.74.46'."},
+			{t:"Frontend",d:"Tout ce que l'utilisateur voit et utilise — s'exécute dans le navigateur (HTML + CSS + JS)."},
+			{t:"Backend",d:"Logique côté serveur : authentification, traitement des données, sécurité, API REST."},
+			{t:"DevTools",d:"Outils intégrés au navigateur (F12) : inspecter le HTML/CSS, déboguer le JS, analyser les requêtes."},
+			{t:"Full Stack",d:"Développeur capable de travailler sur les 3 couches : frontend, backend et base de données."}
+		],
+		html:"<p><b>Le web fonctionne sur un modèle client ↔ serveur.</b> Quand tu tapes une URL :</p>"+
+"<ol><li>Le <b>DNS</b> traduit le nom de domaine en adresse IP</li><li>Le navigateur envoie une <b>requête HTTP GET</b></li><li>Le serveur répond avec le fichier HTML (code <b>200 OK</b>)</li><li>Le navigateur charge ensuite le CSS et le JS</li><li>La page est affichée et rendue interactive</li></ol>"+
+"<pre class='notion-code'><code>// Les codes HTTP essentiels à connaître\n200 OK           → succès\n301 Redirect     → redirection permanente\n404 Not Found    → ressource introuvable\n500 Server Error → erreur côté serveur</code></pre>"+
+"<p><b>Les 3 langages du web ont chacun un rôle précis :</b></p>"+
+"<pre class='notion-code'><code>&lt;!-- HTML : la STRUCTURE --&gt;\n&lt;button id='btn' class='btn-bleu'&gt;Clique !&lt;/button&gt;\n\n/* CSS : le STYLE */\n.btn-bleu { background:#097fe8; color:white; padding:10px 20px; border-radius:8px; }\n\n// JS : le COMPORTEMENT\ndocument.getElementById('btn').addEventListener('click', () => {\n  alert('Tu as cliqué !');\n});</code></pre>"+
+"<p><b>Architecture d'un projet web propre :</b></p>"+
+"<pre class='notion-code'><code>mon-projet/\n├── index.html       ← point d'entrée\n├── style.css        ← tous les styles\n├── script.js        ← tout le JavaScript\n└── images/          ← assets visuels</code></pre>"+
+"<p><b>DevTools — ton outil de diagnostic quotidien :</b> appuie sur F12 dans ton navigateur. L'onglet Console affiche toutes les erreurs JS. L'onglet Elements permet de modifier le HTML/CSS en direct pour tester des idées. L'onglet Network montre chaque requête HTTP avec sa durée et son statut.</p>",
+		erreurs:[
+			"Confondre frontend (navigateur) et backend (serveur) — ils ne s'exécutent pas dans le même environnement.",
+			"Mettre le JS dans le <head> sans attribut defer — il se charge avant le HTML et document.getElementById() retourne null.",
+			"Penser que JS ne fonctionne que dans le navigateur — Node.js l'utilise aussi côté serveur depuis 2009.",
+			"Ne jamais ouvrir les DevTools (F12) — c'est ton meilleur outil de diagnostic, utilise-le dès la première erreur.",
+			"Tout mettre dans un seul fichier HTML — sépare toujours HTML, CSS et JS dans 3 fichiers distincts.",
+			"Ignorer les codes d'erreur HTTP — un 404 signifie ressource introuvable, un 500 signifie bug côté serveur."
+		]
 	},
-	exo:"Crée un dossier <code>mon-site</code>, ouvre-le dans VS Code et crée un fichier <code>index.html</code>.",
-	project:"Affiche « Hello World » dans ton navigateur depuis ton premier fichier HTML.",
+	exo:"<b>Exercice :</b> Crée un projet <code>mon-site/</code> avec 3 fichiers : <code>index.html</code>, <code>style.css</code>, <code>script.js</code>. Dans index.html, ajoute un titre h1, un paragraphe et un bouton. Dans style.css, colorie le titre en bleu et arrondis le bouton. Dans script.js, affiche une alerte au clic sur le bouton. Ouvre le résultat avec Live Server.",
+	project:"🏆 Boss : une page de <b>carte de visite numérique</b> — ton nom, ta photo (ou un avatar emoji), une courte bio, et un bouton 'Me contacter' qui affiche ton email dans une alerte JS.",
 	quiz:[
 		{q:"Qui envoie la requête au serveur ?", o:["Le navigateur (client)","La base de données","Le CSS"], a:0, expl:"Le navigateur (client) envoie toujours la requête. Le serveur reçoit, traite et renvoie la réponse."},
 		{q:"Le frontend, c'est...", o:["La logique serveur","Ce que l'utilisateur voit","Une base de données"], a:1, expl:"Frontend = ce que l'utilisateur voit dans son navigateur. Backend = la logique côté serveur (invisible)."},
@@ -1460,19 +1493,47 @@ const MODULES = [
 	badge:"📝", badgeName:"CV en ligne",
 	starter:"<h1>Mon CV</h1>\n<p>Développeur·se en herbe 🚀</p>\n<h2>Mes compétences</h2>\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>",
 	lessons:[
-		{h:"🧱 Les balises", html:"<p>Le HTML structure le contenu avec des <b>balises</b>.</p><pre class='notion-code'><code>&lt;h1&gt;Titre&lt;/h1&gt;\n&lt;p&gt;Un paragraphe&lt;/p&gt;\n&lt;a href='...'&gt;Un lien&lt;/a&gt;\n&lt;img src='photo.jpg' alt='moi'&gt;</code></pre>"},
-		{h:"📋 Listes & formulaires", html:"<pre class='notion-code'><code>&lt;ul&gt;&lt;li&gt;Élément&lt;/li&gt;&lt;/ul&gt;\n&lt;input type='text' placeholder='Nom'&gt;\n&lt;button&gt;Envoyer&lt;/button&gt;</code></pre>"},
-		{h:"📄 Structure d'une page HTML", html:"<p>Toute page HTML commence par ce squelette standard :</p><pre class='notion-code'><code>&lt;!DOCTYPE html&gt;\n&lt;html lang='fr'&gt;\n  &lt;head&gt;\n    &lt;meta charset='UTF-8'&gt;\n    &lt;title&gt;Ma page&lt;/title&gt;\n    &lt;link rel='stylesheet' href='style.css'&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Contenu visible ici&lt;/h1&gt;\n    &lt;script src='script.js'&gt;&lt;/script&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p><code>&lt;head&gt;</code> = métadonnées invisibles. <code>&lt;body&gt;</code> = ce que l'utilisateur voit.</p>"},
-		{h:"🏷️ Classes & identifiants", html:"<p>Les attributs <code>class</code> et <code>id</code> permettent de cibler des éléments depuis CSS et JS :</p><pre class='notion-code'><code>&lt;div class='carte'&gt;Utilisable plusieurs fois&lt;/div&gt;\n&lt;div id='menu'&gt;Unique sur la page&lt;/div&gt;</code></pre><p>En CSS : <code>.carte {}</code> pour une classe, <code>#menu {}</code> pour un id.</p>"}
+		{h:"🧱 La structure d'une page", html:"<p>Une page HTML est une <b>arborescence</b> d'éléments imbriqués. Chaque balise représente une partie précise de la page :</p><pre class='notion-code'><code>&lt;body&gt;\n  &lt;header&gt;Logo + menu&lt;/header&gt;\n  &lt;main&gt;\n    &lt;article&gt;Contenu principal&lt;/article&gt;\n  &lt;/main&gt;\n  &lt;footer&gt;Pied de page&lt;/footer&gt;\n&lt;/body&gt;</code></pre><p>💡 Le navigateur lit le HTML <b>de haut en bas</b>. Une structure claire facilite le CSS, le JS et le référencement.</p>"},
+		{h:"🏷️ Balises sémantiques", html:"<p>Les balises sémantiques décrivent le <b>sens</b> du contenu, pas seulement son apparence :</p><ul><li><code>&lt;header&gt;</code> = en-tête de page ou de section</li><li><code>&lt;nav&gt;</code> = zone de navigation</li><li><code>&lt;main&gt;</code> = contenu principal unique</li><li><code>&lt;section&gt;</code> = groupe thématique</li><li><code>&lt;article&gt;</code> = contenu autonome</li><li><code>&lt;aside&gt;</code> = contenu secondaire</li><li><code>&lt;footer&gt;</code> = pied de page</li></ul><p>Pourquoi c'est important ? Pour l'<b>accessibilité</b>, le SEO et la lisibilité du code.</p>"},
+		{h:"🔗 Liens, images et chemins", html:"<p>Les attributs sont les petits 'réglages' des balises :</p><pre class='notion-code'><code>&lt;a href="https://exemple.com" target="_blank" rel="noopener"&gt;Visiter&lt;/a&gt;\n&lt;img src="photo.jpg" alt="Photo de profil de Léa"&gt;</code></pre><p><b>Chemins :</b> un chemin relatif part du fichier courant : <code>images/photo.jpg</code>. Un chemin absolu pointe vers une URL complète.</p><p><b>Règle or</b> : l'attribut <code>alt</code> doit décrire l'image, pas juste répéter 'image'.</p>"},
+		{h:"📝 Listes, titres et hiérarchie", html:"<p>La hiérarchie des titres suit un ordre logique :</p><pre class='notion-code'><code>&lt;h1&gt;Titre principal unique&lt;/h1&gt;\n&lt;h2&gt;Grande section&lt;/h2&gt;\n&lt;h3&gt;Sous-section&lt;/h3&gt;</code></pre><p>Un seul <code>h1</code> par page, puis <code>h2</code>, <code>h3</code>… sans sauter d'étape si possible.</p><p>Pour les listes : <code>&lt;ul&gt;</code> = liste à puces, <code>&lt;ol&gt;</code> = liste numérotée, <code>&lt;dl&gt;</code> = liste de définitions.</p>"},
+		{h:"🧩 Formulaires accessibles", html:"<p>Un formulaire HTML doit toujours avoir des <b>labels</b> associés à ses champs :</p><pre class='notion-code'><code>&lt;form&gt;\n  &lt;label for="email"&gt;Email&lt;/label&gt;\n  &lt;input id="email" type="email" required&gt;\n\n  &lt;label for="msg"&gt;Message&lt;/label&gt;\n  &lt;textarea id="msg" rows="4"&gt;&lt;/textarea&gt;\n\n  &lt;button type="submit"&gt;Envoyer&lt;/button&gt;\n&lt;/form&gt;</code></pre><p>Les attributs <code>required</code>, <code>type="email"</code> et <code>placeholder</code> améliorent l'expérience utilisateur, mais ne remplacent jamais un vrai <code>label</code>.</p>"},
+		{h:"📦 Structure de CV en HTML", html:"<p>HTML est parfait pour construire un <b>CV en ligne</b>. Pense en blocs :</p><pre class='notion-code'><code>&lt;header&gt;Nom + titre professionnel&lt;/header&gt;\n&lt;main&gt;\n  &lt;section id="experience"&gt;Expériences&lt;/section&gt;\n  &lt;section id="formation"&gt;Formations&lt;/section&gt;\n  &lt;section id="projets"&gt;Projets&lt;/section&gt;\n&lt;/main&gt;\n&lt;footer&gt;Contact + réseaux&lt;/footer&gt;</code></pre><p>Cette structure sera stylée au module CSS et rendue interactive plus tard avec JavaScript.</p>"}
 	],
 	cours:{
-		objectifs:["Structurer une page HTML avec les balises sémantiques correctes","Créer des listes, liens, images et formulaires accessibles","Comprendre la différence entre <head> et <body>"],
-		vocab:[{t:"Balise",d:"Élément HTML entre chevrons : <p>, <h1>, <img>. La plupart ont une balise ouvrante et une fermante."},{t:"Attribut",d:"Information sur une balise : href pour les liens, src pour les images, alt pour le texte alternatif."},{t:"Sémantique",d:"Utiliser la balise qui décrit le mieux le contenu : <nav>, <article>, <footer>…"},{t:"Alt",d:"Texte alternatif d'une image, lu par les lecteurs d'écran. Obligatoire pour l'accessibilité."},{t:"head",d:"Zone invisible de la page : métadonnées, titre de l'onglet, lien vers CSS et JS."}],
-		html:"<p>Toute page HTML suit ce squelette :</p><pre class='notion-code'><code>&lt;!DOCTYPE html&gt;\n&lt;html lang=&quot;fr&quot;&gt;\n  &lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot;&gt;\n    &lt;title&gt;Ma page&lt;/title&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Titre principal&lt;/h1&gt;\n    &lt;p&gt;Un paragraphe.&lt;/p&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>Les balises <b>sémantiques</b> aident les moteurs de recherche et les lecteurs d'écran : <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code>.</p>",
-		erreurs:["Utiliser <div> pour tout au lieu des balises sémantiques — préfère <nav>, <main>, <article>.","Oublier l'attribut alt sur les images — indispensable pour l'accessibilité.","Mettre plusieurs <h1> sans raison — il doit y en avoir un seul par page."]
+		objectifs:[
+			"Construire une page HTML propre avec une hiérarchie logique des contenus",
+			"Utiliser les balises sémantiques au bon endroit",
+			"Créer des liens, images et chemins relatifs correctement",
+			"Comprendre les titres, listes et formulaires accessibles",
+			"Savoir découper une page en sections réutilisables"
+		],
+		vocab:[
+			{t:"Balise",d:"Élément HTML entre chevrons : <p>, <h1>, <img>. La plupart ont une balise ouvrante et une fermante."},
+			{t:"Attribut",d:"Information ajoutée à une balise : href pour les liens, src pour les images, alt pour le texte alternatif."},
+			{t:"Sémantique",d:"Utiliser la balise qui décrit le mieux le contenu : <nav>, <article>, <footer>…"},
+			{t:"Alt",d:"Texte alternatif d'une image, lu par les lecteurs d'écran. Obligatoire pour l'accessibilité."},
+			{t:"head",d:"Zone invisible de la page : métadonnées, titre de l'onglet, lien vers CSS et JS."},
+			{t:"Structure",d:"Organisation logique des balises dans une page HTML : header, main, aside, footer, etc."},
+			{t:"Formulaire",d:"Groupe de champs permettant de saisir et envoyer des données à un serveur ou à un script."}
+		],
+		html:"<p><b>HTML est le squelette de la page.</b> Il donne le sens des contenus, mais pas leur apparence. Une page bien structurée aide le SEO, les lecteurs d'écran et le CSS à travailler proprement.</p>"+
+"<p>Voici la structure mentale à retenir :</p>"+
+"<pre class='notion-code'><code>BODY\n├── HEADER  → logo, titre, navigation\n├── MAIN    → contenu principal\n│   ├── SECTION / ARTICLE\n│   └── SECTION / ARTICLE\n└── FOOTER  → contact, mentions légales, réseaux</code></pre>"+
+"<p><b>Les balises sémantiques</b> remplacent les <code>div</code> génériques quand il existe un meilleur mot pour décrire la zone.</p>"+
+"<p><b>Pour les liens et images :</b> utilise toujours des chemins cohérents. Les chemins relatifs sont parfaits pour les projets locaux.</p>"+
+"<p><b>Pour les formulaires :</b> chaque champ doit avoir son <code>label</code> associé avec <code>for</code> et <code>id</code>. C'est essentiel pour l'accessibilité.</p>",
+		erreurs:[
+			"Utiliser <div> pour tout au lieu des balises sémantiques — préfère <nav>, <main>, <article>.",
+			"Oublier l'attribut alt sur les images — indispensable pour l'accessibilité.",
+			"Mettre plusieurs <h1> sans raison — il doit y en avoir un seul par page.",
+			"Oublier d'associer le label à l'input dans les formulaires — le lecteur d'écran ne saura pas quoi lire.",
+			"Écrire des liens qui ouvrent un nouvel onglet sans rel='noopener' — risque de sécurité.",
+			"Utiliser un chemin absolu pour une ressource locale alors qu'un chemin relatif est plus portable."
+		]
 	},
-	exo:"Écris une page avec un titre, un paragraphe sur toi, une liste de tes 3 hobbies et une image.",
-	project:"🏆 Boss : crée ton <b>CV en ligne</b> en HTML (titre, sections expérience/formation, liens).",
+	exo:"<b>Exercice :</b> Structure une page de présentation personnelle : un <code>header</code> avec ton nom, un <code>main</code> avec 2 sections (<code>À propos</code> et <code>Projets</code>), puis un <code>footer</code> avec tes contacts. Ajoute au moins 1 image avec un attribut <code>alt</code> pertinent, 1 lien externe et 1 formulaire de contact avec label + input + textarea + bouton.",
+	project:"🏆 Boss : crée une <b>page de portfolio HTML complète</b> avec navigation interne (<code>#apropos</code>), blocs sémantiques propres, formulaire accessible et une section 'Projets' contenant au moins 3 cartes de projets.",
 	quiz:[
 		{q:"Quelle balise pour le plus grand titre ?", o:["&lt;p&gt;","&lt;h1&gt;","&lt;title&gt;"], a:1, expl:"Les titres vont de <h1> (principal, unique par page) à <h6>. <title> est le titre de l'onglet, invisible dans la page."},
 		{q:"Quel attribut donne la destination d'un lien ?", o:["src","href","alt"], a:1, expl:"href (HyperText REFerence) indique la destination d'un lien. src indique la source d'une image ou d'un script."},
@@ -1488,19 +1549,50 @@ const MODULES = [
 	badge:"🌟", badgeName:"CV stylisé",
 	starter:"<style>\n  body { font-family: sans-serif; background: #f0f4ff; padding: 20px; }\n  h1 { color: #097fe8; border-bottom: 2px solid #097fe8; }\n  .carte { background: white; padding: 16px; border-radius: 8px; }\n</style>\n<h1>CSS en action</h1>\n<div class=\"carte\">\n  <p>Modifie les couleurs et les styles !</p>\n</div>",
 	lessons:[
-		{h:"🎨 Sélecteurs & propriétés", html:"<pre class='notion-code'><code>h1 { color: blue; font-size: 32px; }\n.carte { padding: 16px; border-radius: 8px; }</code></pre>"},
-		{h:"📐 Flexbox", html:"<p>Pour aligner des éléments facilement :</p><pre class='notion-code'><code>.row { display: flex; gap: 12px; justify-content: center; }</code></pre>"},
-		{h:"📏 Unités CSS", html:"<p>Choisir la bonne unité est crucial pour le responsive :</p><ul><li><b>px</b> — taille fixe, évite pour le texte</li><li><b>rem</b> — relatif à la base (1rem = 16px) : recommandé pour les tailles de texte</li><li><b>%</b> — relatif au parent : parfait pour les largeurs</li><li><b>vw / vh</b> — relatif à la fenêtre : utile pour les sections plein écran</li></ul><pre class='notion-code'><code>h1 { font-size: 2rem; }       /* 32px si base = 16px */\n.section { width: 100%; max-width: 900px; }</code></pre>"},
-		{h:"🔲 CSS Grid", html:"<p>Grid est idéal pour les mises en page à <b>plusieurs colonnes</b> :</p><pre class='notion-code'><code>.grille {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n@media (max-width: 600px) {\n  .grille { grid-template-columns: 1fr; }\n}</code></pre>"}
+		{h:"🎨 Sélecteurs, couleurs & cascade", html:"<p>Le CSS sert à <b>choisir</b> un élément puis à <b>modifier</b> son apparence.</p><pre class='notion-code'><code>h1 { color: #097fe8; }      /* sélecteur de balise */\n.carte { padding: 16px; }   /* sélecteur de classe */\n#hero { margin-top: 40px; } /* sélecteur d'id */</code></pre><p>La <b>cascade</b> décide quelle règle gagne : spécificité, importance, puis ordre dans le fichier.</p><ul><li>Balise : faible spécificité</li><li>Classe : spécificité moyenne</li><li>Id : spécificité forte</li></ul>"},
+		{h:"📦 Box model complet", html:"<p>Tout élément HTML est une <b>boîte</b>. Le box model détermine sa taille réelle :</p><pre class='notion-code'><code>contenu → padding → border → margin</code></pre><p>Exemple :</p><pre class='notion-code'><code>.carte {\n  width: 300px;\n  padding: 20px;\n  border: 2px solid #ddd;\n  margin: 16px;\n  box-sizing: border-box;\n}</code></pre><p><b>box-sizing: border-box</b> évite que le padding et la border agrandissent la largeur totale de manière inattendue.</p>"},
+		{h:"🧭 Flexbox pour aligner en 1 dimension", html:"<p>Flexbox est parfait pour aligner des éléments sur <b>une seule dimension</b> : une ligne <i>ou</i> une colonne.</p><pre class='notion-code'><code>.barre {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 12px;\n  flex-wrap: wrap;\n}</code></pre><p>À retenir : <code>justify-content</code> gère l'axe principal, <code>align-items</code> l'axe secondaire.</p><p>Exemples utiles : <code>center</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code>.</p>"},
+		{h:"🧱 Grid pour composer en 2 dimensions", html:"<p>Grid est le meilleur choix pour les layouts plus riches : cartes, galeries, tableaux de contenu.</p><pre class='notion-code'><code>.grille-projets {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(0, 1fr));\n  gap: 16px;\n}\n\n@media (max-width: 900px) {\n  .grille-projets { grid-template-columns: repeat(2, 1fr); }\n}\n@media (max-width: 600px) {\n  .grille-projets { grid-template-columns: 1fr; }\n}</code></pre><p><b>Grid</b> = contrôle des lignes et colonnes. Idéal pour des blocs qui doivent se réorganiser selon la taille de l'écran.</p>"},
+		{h:"📱 Responsive design & media queries", html:"<p>Un site responsive s'adapte à toutes les tailles d'écran.</p><pre class='notion-code'><code>@media (max-width: 768px) {\n  .menu { display: none; }\n  .menu-burger { display: block; }\n  .grille-projets { grid-template-columns: 1fr; }\n}</code></pre><p>Privilégie des unités <b>relatives</b> : <code>rem</code> pour le texte, <code>%</code> pour les largeurs, <code>vw</code>/<code>vh</code> pour les sections plein écran.</p>"},
+		{h:"🎭 Variables CSS & thèmes", html:"<p>Les variables CSS rendent ton design <b>cohérent</b> et facile à modifier :</p><pre class='notion-code'><code>:root {\n  --primary: #097fe8;\n  --bg: #ffffff;\n  --text: #191918;\n}\n\n.dark {\n  --bg: #0f1115;\n  --text: #f5f5f5;\n}</code></pre><p>Ensuite, réutilise-les partout : <code>color: var(--text);</code>, <code>background: var(--bg);</code>. C'est la base d'un <b>thème clair/sombre</b>.</p>"}
 	],
 	cours:{
-		objectifs:["Comprendre et utiliser les sélecteurs CSS et la cascade","Appliquer le box model, Flexbox et Grid","Rendre une page responsive avec les media queries"],
-		vocab:[{t:"Cascade",d:"Règle qui détermine quel style s'applique quand plusieurs règles ciblent le même élément (spécificité + ordre)."},{t:"Box model",d:"Modèle de boîte : contenu → padding → border → margin. Tout élément HTML en suit la règle."},{t:"Flexbox",d:"display:flex sur un conteneur : aligne ses enfants en ligne ou en colonne facilement."},{t:"Grid",d:"display:grid : crée une grille en colonnes et lignes, idéale pour les mises en page complexes."},{t:"Media query",d:"Règle CSS conditionnelle (@media) qui applique des styles selon la taille de l'écran."}],
-		html:"<p>Le CSS se compose de <b>sélecteurs</b> (qui cibler) et de <b>propriétés</b> (quoi modifier) :</p><pre class='notion-code'><code>h1 { color: blue; font-size: 2rem; }\n.carte { display: flex; gap: 12px; }</code></pre><p>La <b>cascade</b> : si deux règles ciblent le même élément, la plus <em>spécifique</em> ou la plus <em>récente</em> gagne. L'<code>id</code> bat la <code>class</code>, la <code>class</code> bat la <code>balise</code>.</p><p><b>Responsive</b> avec les media queries :</p><pre class='notion-code'><code>@media (max-width: 600px) {\n  .grille { grid-template-columns: 1fr; }\n}</code></pre>",
-		erreurs:["Oublier box-sizing:border-box — sans ça, padding et border augmentent la taille totale de façon surprenante.","Utiliser des px pour les tailles de texte — préfère rem pour le responsive.","Confondre Flexbox (1D : une ligne ou colonne) et Grid (2D : lignes ET colonnes)."]
+		objectifs:[
+			"Comprendre la cascade, la spécificité et l'héritage",
+			"Maîtriser le box model et les unités CSS les plus utiles",
+			"Utiliser Flexbox et Grid pour construire des layouts solides",
+			"Créer un design responsive avec media queries et unités relatives",
+			"Structurer un thème clair/sombre avec des variables CSS"
+		],
+		vocab:[
+			{t:"Cascade",d:"Règle de priorité qui décide quel style s'applique si plusieurs règles ciblent le même élément."},
+			{t:"Spécificité",d:"Score qui compare les sélecteurs : id > class > balise. Plus le score est élevé, plus la règle est forte."},
+			{t:"Box model",d:"Modèle de boîte : content → padding → border → margin."},
+			{t:"Flexbox",d:"Mode de layout 1D : aligne les enfants d'un conteneur sur une ligne ou une colonne."},
+			{t:"Grid",d:"Mode de layout 2D : organise les éléments en lignes et colonnes."},
+			{t:"Media query",d:"Condition CSS (@media) qui active des styles selon la largeur ou la hauteur de l'écran."},
+			{t:"Variable CSS",d:"Valeur réutilisable définie avec --nom et consommée via var(--nom). Très utile pour les thèmes."},
+			{t:"Responsive",d:"Conception qui adapte l'interface à toutes les tailles d'écran (mobile, tablette, desktop)."}
+		],
+		html:"<p><b>Le CSS transforme le HTML en interface agréable.</b> Pour bien écrire du CSS, pense d'abord en <b>boîtes</b>, puis en <b>alignement</b>, puis en <b>adaptation mobile</b>.</p>"+
+"<p><b>1) Commence par la cascade et la spécificité :</b> si deux règles se contredisent, l'id gagne sur la classe, la classe gagne sur la balise.</p>"+
+"<p><b>2) Connais parfaitement le box model :</b> le padding augmente l'espace intérieur, la border dessine le contour et margin sépare les éléments entre eux.</p>"+
+"<p><b>3) Choisis le bon outil de layout :</b> Flexbox pour aligner en 1D, Grid pour composer en 2D.</p>"+
+"<pre class='notion-code'><code>/* Exemple : carte simple et propre */\n.carte {\n  box-sizing: border-box;\n  padding: 20px;\n  border: 1px solid #e5e7eb;\n  border-radius: 16px;\n  box-shadow: 0 10px 30px rgba(0,0,0,.06);\n}\n\n/* Flexbox : ligne d'actions */\n.actions {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 12px;\n}\n\n/* Grid : galerie de cartes */\n.grille {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(0, 1fr));\n  gap: 16px;\n}</code></pre>"+
+"<p><b>4) Rends tout responsive :</b> une seule règle média peut transformer une mise en page desktop en version mobile claire.</p>"+
+"<pre class='notion-code'><code>@media (max-width: 768px) {\n  .grille { grid-template-columns: 1fr; }\n  .actions { flex-direction: column; align-items: stretch; }\n}</code></pre>"+
+"<p><b>5) Utilise les variables CSS pour centraliser ton thème :</b> c'est ce qui te permettra d'avoir un mode sombre propre plus tard.</p>",
+		erreurs:[
+			"Oublier box-sizing:border-box — sans ça, padding et border peuvent casser tes largeurs.",
+			"Utiliser des px partout, y compris pour le texte — préfère rem pour respecter les réglages du navigateur.",
+			"Croire que Flexbox et Grid font la même chose — Flexbox est 1D, Grid est 2D.",
+			"Mettre des media queries au hasard sans penser mobile-first — commence simple puis agrandis.",
+			"Écrire trop de sélecteurs imbriqués — garde le CSS lisible et évite les guerres de spécificité.",
+			"Créer des couleurs en dur partout — utilise des variables CSS pour pouvoir changer le thème facilement."
+		]
 	},
-	exo:"Ajoute du CSS à ton CV : une police, des couleurs, des marges et un layout en colonnes.",
-	project:"🏆 Boss : rends ton CV <b>beau et responsive</b> (lisible sur mobile).",
+	exo:"<b>Exercice :</b> Prends la page HTML du Module 1 et transforme-la en une vraie maquette : crée une barre de navigation, une section 'à propos', une grille de cartes projets et un footer. Utilise Flexbox pour la navbar et Grid pour la grille de cartes. Ajoute un mode mobile avec une media query.",
+	project:"🏆 Boss : crée un <b>portfolio responsive</b> avec un thème clair/sombre (variables CSS + classe .dark), une carte de profil stylée, trois cartes projets et une navigation agréable sur mobile.",
 	quiz:[
 		{q:"Quelle propriété change la couleur du texte ?", o:["background","color","font-size"], a:1, expl:"color change la couleur du texte. background-color change le fond. Ne les confonds pas."},
 		{q:"Flexbox sert à...", o:["Stocker des données","Aligner/disposer des éléments","Créer des variables"], a:1, expl:"display:flex sur un conteneur active Flexbox et permet d'aligner ses enfants en ligne ou en colonne avec gap, justify-content…"},
@@ -1516,19 +1608,51 @@ const MODULES = [
 	badge:"🧮", badgeName:"Logique",
 	starter:"<div id='out'></div>\n<script>\nlet nombre = 7;\ndocument.getElementById('out').textContent =\n  nombre % 2 === 0 ? nombre + ' est pair ✅' : nombre + ' est impair ✅';\n<\/script>",
 	lessons:[
-		{h:"📦 Variables & types", html:"<pre class='notion-code'><code>let nom = 'Alexis';\nconst age = 25;\nlet actif = true;</code></pre>"},
-		{h:"🔁 Fonctions & conditions", html:"<pre class='notion-code'><code>function saluer(n){\n  if(n) return 'Salut ' + n;\n  return 'Salut !';\n}</code></pre>"},
-		{h:"📚 Tableaux", html:"<p>Un tableau stocke plusieurs valeurs dans une variable :</p><pre class='notion-code'><code>const fruits = ['pomme', 'banane', 'kiwi'];\nfruits.push('mangue');   // ajouter\nfruits[0];               // 'pomme'\nfruits.length;           // 4\nfruits.pop();            // retire le dernier</code></pre>"},
-		{h:"🔁 Boucles", html:"<p>Pour répéter une action sur chaque élément :</p><pre class='notion-code'><code>for (let i = 0; i &lt; fruits.length; i++) {\n  console.log(fruits[i]);\n}\n\n// Version moderne (recommandée)\nfruits.forEach(f =&gt; console.log(f));\n\n// Transformer un tableau\nconst majuscules = fruits.map(f =&gt; f.toUpperCase());</code></pre>"}
+		{h:"📦 Variables, types & portée", html:"<p>En JavaScript, une variable est un <b>conteneur nommé</b> pour une valeur.</p><pre class='notion-code'><code>let nom = 'Alexis';   // modifiable\nconst age = 25;       // réassignation interdite\nlet actif = true;     // boolean\n\nif (true) {\n  let x = 1;          // portée de bloc\n}</code></pre><p>Les types de base à connaître : <code>string</code>, <code>number</code>, <code>boolean</code>, <code>null</code>, <code>undefined</code>, <code>object</code>.</p>"},
+		{h:"🧠 Opérateurs & comparaisons", html:"<p>JS a des opérateurs pour comparer et calculer :</p><pre class='notion-code'><code>5 + 2      // addition\n5 % 2      // reste de la division\n'5' + 2    // '52' (concaténation)\n3 === '3'  // false\n3 == '3'   // true (conversion implicite)</code></pre><p><b>À retenir :</b> préfère <code>===</code> à <code>==</code>. Le triple égal compare <b>la valeur ET le type</b>.</p>"},
+		{h:"🔁 Conditions & branchements", html:"<p>Les conditions permettent au programme de prendre des décisions :</p><pre class='notion-code'><code>if (age >= 18) {\n  console.log('Majeur');\n} else if (age >= 13) {\n  console.log('Ado');\n} else {\n  console.log('Enfant');\n}</code></pre><p>Tu peux aussi écrire des conditions courtes avec l'opérateur ternaire :</p><pre class='notion-code'><code>const message = age >= 18 ? 'Majeur' : 'Mineur';</code></pre>"},
+		{h:"🧰 Fonctions réutilisables", html:"<p>Une fonction regroupe du code réutilisable. Elle peut recevoir des paramètres et <b>retourner</b> une valeur.</p><pre class='notion-code'><code>function carre(n) {\n  return n * n;\n}\n\nconst saluer = nom => `Salut ${nom}`;\n\ncarre(4);      // 16\nsaluer('Lina'); // 'Salut Lina'</code></pre><p>⚠️ Sans <code>return</code>, la fonction retourne <code>undefined</code>.</p>"},
+		{h:"📚 Tableaux & méthodes utiles", html:"<p>Un tableau stocke plusieurs valeurs et chaque élément possède un <b>index</b> :</p><pre class='notion-code'><code>const fruits = ['pomme', 'banane', 'kiwi'];\nfruits[0];      // pomme\nfruits.push('mangue'); // ajoute à la fin\nfruits.pop();   // retire le dernier</code></pre><p>Méthodes essentielles :</p><ul><li><code>map()</code> — transforme</li><li><code>filter()</code> — garde selon une condition</li><li><code>find()</code> — récupère le premier élément qui correspond</li><li><code>forEach()</code> — parcourt sans retourner de nouveau tableau</li></ul>"},
+		{h:"🐞 Déboguer avec la console", html:"<p>La console est l'outil de base pour comprendre ce que fait ton code.</p><pre class='notion-code'><code>console.log('Debug');\nconsole.table([{nom:'A'}, {nom:'B'}]);\nconsole.error('Une erreur');\nconsole.warn('Attention');</code></pre><p>💡 Astuce : teste tes expressions directement dans la console : <code>2 + 2</code>, <code>document.title</code>, <code>typeof []</code>.</p>"}
 	],
 	cours:{
-		objectifs:["Déclarer et utiliser des variables avec let et const","Écrire des fonctions, conditions et boucles","Manipuler des tableaux et déboguer dans la console"],
-		vocab:[{t:"Variable",d:"Conteneur nommé pour stocker une valeur. const = immuable, let = modifiable."},{t:"Fonction",d:"Bloc de code réutilisable. Elle prend des paramètres et peut retourner une valeur."},{t:"Boucle",d:"Structure qui répète une action : for, while, forEach, map…"},{t:"Tableau",d:"Liste ordonnée de valeurs : [1, 'chat', true]. Index commence à 0."},{t:"typeof",d:"Opérateur qui retourne le type d'une valeur : 'number', 'string', 'boolean', 'object'…"}],
-		html:"<p>JS raisonne avec des <b>variables</b>, des <b>conditions</b> et des <b>boucles</b> :</p><pre class='notion-code'><code>const age = 20;\nif (age >= 18) {\n  console.log('Majeur');\n} else {\n  console.log('Mineur');\n}</code></pre><p>Les <b>tableaux</b> stockent plusieurs valeurs. <code>map()</code> les transforme, <code>filter()</code> les filtre :</p><pre class='notion-code'><code>const notes = [14, 18, 9, 12];\nconst admis = notes.filter(n => n >= 10); // [14, 18, 12]</code></pre>",
-		erreurs:["Utiliser var au lieu de let/const — var a une portée de fonction, pas de bloc, ce qui crée des bugs subtils.","Confondre = (affectation) et === (comparaison stricte) — erreur très fréquente.","Oublier le return dans une fonction — sans return, elle retourne undefined."]
+		objectifs:[
+			"Maîtriser les variables, les types et la portée",
+			"Écrire des comparaisons, conditions et opérateurs logiques",
+			"Créer des fonctions réutilisables avec paramètres et return",
+			"Manipuler les tableaux avec les méthodes les plus utiles",
+			"Déboguer avec la console et lire une erreur JS",
+			"Comprendre la différence entre == et ==="
+		],
+		vocab:[
+			{t:"Variable",d:"Conteneur nommé qui stocke une valeur. let peut changer, const non."},
+			{t:"Portée",d:"Zone dans laquelle une variable est accessible : globale, fonction, bloc."},
+			{t:"Fonction",d:"Bloc de code réutilisable qui peut recevoir des paramètres et retourner une valeur."},
+			{t:"Tableau",d:"Liste ordonnée de valeurs accessible par index à partir de 0."},
+			{t:"Boucle",d:"Structure qui répète du code sur une série d'éléments ou tant qu'une condition est vraie."},
+			{t:"typeof",d:"Opérateur qui renvoie le type d'une valeur sous forme de string."},
+			{t:"Strict equality",d:"Comparaison stricte avec === : valeur ET type doivent être identiques."},
+			{t:"Console",d:"Outil du navigateur pour afficher des logs, tester du code et déboguer."}
+		],
+		html:"<p><b>JavaScript donne le comportement à la page.</b> Pour bien apprendre JS, pense en 4 réflexes : <b>lire</b> une valeur, <b>comparer</b>, <b>répéter</b>, puis <b>réutiliser</b> avec des fonctions.</p>"+
+"<p>Voici les concepts les plus importants du module :</p>"+
+"<pre class='notion-code'><code>// Variables et portée\nlet compteur = 0;\nconst nom = 'Lina';\n\nif (true) {\n  let local = 123; // accessible seulement dans ce bloc\n}\n\n// Comparaison stricte\n3 === '3'   // false\n3 == '3'    // true (à éviter)</code></pre>"+
+"<p><b>Les fonctions</b> permettent d'éviter la répétition :</p>"+
+"<pre class='notion-code'><code>function carre(n) {\n  return n * n;\n}\n\nconst saluer = nom => `Salut ${nom}`;\n</code></pre>"+
+"<p><b>Les tableaux</b> servent à stocker des listes. Les méthodes les plus utiles sont <code>map</code>, <code>filter</code>, <code>find</code> et <code>forEach</code>.</p>"+
+"<p><b>Console</b> = ton laboratoire :</p>"+
+"<pre class='notion-code'><code>console.log('Hello');\nconsole.table([{nom:'A'}, {nom:'B'}]);\nconsole.error('Oops');</code></pre>",
+		erreurs:[
+			"Utiliser var au lieu de let/const — var a une portée de fonction, pas de bloc, ce qui crée des bugs subtils.",
+			"Confondre = (affectation) et === (comparaison stricte) — erreur très fréquente.",
+			"Oublier le return dans une fonction — sans return, elle retourne undefined.",
+			"Muter un tableau sans réfléchir — préfère les méthodes qui retournent un nouveau tableau quand c'est possible.",
+			"Taper du code au hasard dans la console sans lire les erreurs — les messages d'erreur sont tes meilleurs indices.",
+			"Ne pas comprendre la portée des variables — une variable let définie dans un bloc n'existe pas en dehors."
+		]
 	},
-	exo:"Écris une fonction qui prend un nombre et dit s'il est pair ou impair.",
-	project:"🏆 Boss : un mini <b>jeu « devine le nombre »</b> dans la console.",
+	exo:"<b>Exercice :</b> Écris 3 petites fonctions : une qui dit si un nombre est pair ou impair, une qui retourne le carré d'un nombre, et une qui ajoute une phrase de bienvenue à un prénom. Teste-les dans la console puis avec un bouton dans le starter.",
+	project:"🏆 Boss : crée un <b>mini jeu 'devine le nombre'</b> entièrement en JavaScript : le programme génère un nombre entre 1 et 20, l'utilisateur doit le deviner, et le jeu affiche trop petit / trop grand / gagné. Bonus : ajoute 5 tentatives et un bouton rejouer.",
 	quiz:[
 		{q:"Quel mot-clé pour une constante ?", o:["let","const","var"], a:1, expl:"const déclare une valeur immuable. let peut être réassignée. var est à éviter (portée de fonction, hoisting inattendu)."},
 		{q:"Que renvoie 3 === '3' ?", o:["true","false","erreur"], a:1, expl:"=== compare valeur ET type. 3 est un number, '3' est une string : types différents → false. == ferait une conversion implicite."},
@@ -1544,18 +1668,43 @@ const MODULES = [
 	badge:"✅", badgeName:"To-Do List",
 	starter:"<button onclick='ajouterTache()'>+ Ajouter une tâche</button>\n<ul id='liste'></ul>\n<script>\nfunction ajouterTache() {\n  const li = document.createElement('li');\n  li.textContent = 'Nouvelle tâche ✅';\n  document.getElementById('liste').appendChild(li);\n}\n<\/script>",
 	lessons:[
-		{h:"🎯 Sélectionner & modifier", html:"<pre class='notion-code'><code>const btn = document.querySelector('#go');\nbtn.addEventListener('click', () =&gt; {\n  document.body.style.background = 'pink';\n});</code></pre>"},
-		{h:"➕ Créer & supprimer des éléments", html:"<pre class='notion-code'><code>// Créer un élément\nconst li = document.createElement('li');\nli.textContent = 'Nouvelle tâche';\nli.classList.add('tache');\ndocument.querySelector('#liste').appendChild(li);\n\n// Supprimer\nli.remove();</code></pre>"},
-		{h:"📡 Événements courants", html:"<p>Au-delà du clic, il existe plein d'événements :</p><pre class='notion-code'><code>input.addEventListener('input', e =&gt; console.log(e.target.value));\nform.addEventListener('submit', e =&gt; { e.preventDefault(); /* ... */ });\ndocument.addEventListener('keydown', e =&gt; console.log(e.key));</code></pre>"}
+		{h:"🎯 Sélectionner & modifier le DOM", html:"<p>Le DOM est la représentation en mémoire de ta page HTML. Pour la manipuler, tu dois d'abord <b>sélectionner</b> un élément :</p><pre class='notion-code'><code>const titre = document.querySelector('h1');\nconst btn   = document.getElementById('go');</code></pre><p>Ensuite, tu peux modifier son contenu ou son style :</p><pre class='notion-code'><code>titre.textContent = 'Bonjour DOM';\ntitre.classList.add('highlight');\nbtn.disabled = true;</code></pre>"},
+		{h:"🖱️ Écouter les événements", html:"<p>Les <b>événements</b> (click, input, submit…) permettent de réagir aux actions de l'utilisateur :</p><pre class='notion-code'><code>const btn = document.querySelector('#go');\nbtn.addEventListener('click', () => {\n  console.log('Bouton cliqué');\n});</code></pre><p>Autres événements utiles : <code>input</code>, <code>change</code>, <code>submit</code>, <code>keydown</code>.</p>"},
+		{h:"➕ Créer, insérer & supprimer", html:"<p>Tu peux créer des éléments à la volée :</p><pre class='notion-code'><code>const li = document.createElement('li');\nli.textContent = 'Nouvelle tâche';\n\nconst liste = document.querySelector('#liste');\nliste.appendChild(li);      // ajoute à la fin\n// liste.prepend(li);      // ajoute au début</code></pre><p>Pour supprimer :</p><pre class='notion-code'><code>li.remove();   // retire l'élément du DOM</code></pre>"},
+		{h:"🧱 Construire une To-Do List", html:"<p>La To-Do List est un excellent exercice DOM :</p><pre class='notion-code'><code>const form  = document.querySelector('form');\nconst input = document.querySelector('#tache');\nconst liste = document.querySelector('#liste');\n\nform.addEventListener('submit', (e) => {\n  e.preventDefault();\n  const texte = input.value.trim();\n  if (!texte) return;\n  const li = document.createElement('li');\n  li.textContent = texte;\n  li.addEventListener('click', () => li.classList.toggle('done'));\n  liste.appendChild(li);\n  input.value = '';\n});</code></pre><p>Ce petit exemple combine : sélection, événements, création d'éléments et classes CSS.</p>"},
+		{h:"📦 Classes, attributs & data-*", html:"<p>Manipuler les <b>classes</b> et <b>attributs</b> est le cœur de l'interactivité :</p><pre class='notion-code'><code>element.classList.add('active');\nelement.classList.remove('hidden');\nelement.classList.toggle('open');</code></pre><p>Les attributs <code>data-*</code> permettent de stocker des petites infos dans le HTML :</p><pre class='notion-code'><code>&lt;button data-id="42"&gt;Supprimer&lt;/button&gt;\n\nconst btn = document.querySelector('button');\nconsole.log(btn.dataset.id); // '42'</code></pre>"},
+		{h:"🐞 Éviter les pièges du DOM", html:"<p>Quelques erreurs courantes :</p><ul><li>Appeler <code>querySelector</code> avant que le DOM soit chargé</li><li>Oublier <code>e.preventDefault()</code> sur un formulaire</li><li>Attacher des écouteurs dans une boucle sans réfléchir</li></ul><p>Solution : placer ton script en fin de <code>&lt;body&gt;</code> ou écouter l'événement <code>DOMContentLoaded</code>, et toujours vérifier ce que contient ta variable dans la console.</p>"}
 	],
 	cours:{
-		objectifs:["Sélectionner et modifier des éléments HTML depuis JS","Écouter les événements (clic, saisie, soumission)","Créer et supprimer des éléments dynamiquement, sauvegarder en localStorage"],
-		vocab:[{t:"DOM",d:"Document Object Model — représentation en arbre de la page HTML, manipulable depuis JS."},{t:"querySelector",d:"Sélectionne le premier élément correspondant à un sélecteur CSS : document.querySelector('.btn')."},{t:"addEventListener",d:"Attache une fonction à un événement sur un élément : click, input, submit, keydown…"},{t:"innerHTML",d:"Lit ou écrit le contenu HTML d'un élément. textContent pour le texte pur (plus sûr)."},{t:"localStorage",d:"Stockage côté navigateur, persistant entre les sessions. Clés et valeurs sous forme de chaînes."}],
-		html:"<p>Pour interagir avec la page, tu <b>sélectionnes</b> un élément et tu lui <b>attaches un événement</b> :</p><pre class='notion-code'><code>const btn = document.querySelector('#go');\nbtn.addEventListener('click', () => {\n  document.body.style.background = 'pink';\n});</code></pre><p>Pour <b>créer</b> un élément dynamiquement :</p><pre class='notion-code'><code>const li = document.createElement('li');\nli.textContent = 'Nouvelle tâche';\ndocument.querySelector('#liste').appendChild(li);</code></pre>",
-		erreurs:["Utiliser innerHTML avec des données utilisateur — risque d'injection XSS. Préfère textContent.","Oublier event.preventDefault() sur un formulaire — sans ça, la page se recharge.","Modifier le DOM dans une boucle pour chaque élément — c'est lent. Construis un string HTML et affecte-le une seule fois."]
+		objectifs:[
+			"Comprendre ce qu'est le DOM et comment le manipuler",
+			"Sélectionner des éléments et modifier leur contenu/leurs classes",
+			"Écouter les événements utilisateur (click, submit, keydown)",
+			"Créer, insérer et supprimer des éléments dynamiquement",
+			"Construire une mini To-Do List pour pratiquer"
+		],
+		vocab:[
+			{t:"DOM",d:"Document Object Model — représentation objet de la page HTML manipulable en JS."},
+			{t:"Sélecteur",d:"Expression passée à querySelector/querySelectorAll pour cibler un élément."},
+			{t:"Événement",d:"Signal émis par le navigateur : click, submit, input, keydown…"},
+			{t:"Handler",d:"Fonction exécutée en réponse à un événement."},
+			{t:"Propagation",d:"Mécanisme par lequel un événement remonte dans la hiérarchie du DOM."}
+		],
+		html:"<p><b>Le DOM</b> est un arbre d'objets qui représentent ta page. JavaScript peut le lire et le modifier pour créer de l'interactivité.</p>"+
+"<pre class='notion-code'><code>// Sélection\nconst titre = document.querySelector('h1');\nconst boutons = document.querySelectorAll('button');\n\n// Modification\ntitre.textContent = 'Hello DOM';\ntitre.classList.add('highlight');</code></pre>"+
+"<p><b>Les événements</b> sont au cœur de l'interactivité :</p>"+
+"<pre class='notion-code'><code>document.querySelector('#go').addEventListener('click', () => {\n  console.log('Clic !');\n});</code></pre>"+
+"<p>Construire une To-Do List t'oblige à combiner ces idées : sélectionner des éléments, réagir aux événements, créer de nouveaux éléments, modifier des classes.</p>",
+		erreurs:[
+			"Appeler document.getElementById() avant que le DOM soit chargé — place ton script à la fin du body ou écoute DOMContentLoaded.",
+			"Utiliser innerHTML avec des données non maîtrisées — risque de faille XSS.",
+			"Attacher un écouteur sur chaque élément individuellement alors qu'un seul écouteur sur le parent + delegation suffit.",
+			"Oublier e.preventDefault() sur les formulaires — la page se recharge et efface tout.",
+			"Ne jamais vérifier si querySelector a bien trouvé un élément avant de l'utiliser."
+		]
 	},
-	exo:"Fais un bouton qui ajoute un élément à une liste quand on clique.",
-	project:"🏆 Boss : une <b>To-Do List</b> interactive (ajouter / cocher / supprimer).",
+	exo:"<b>Exercice :</b> En partant du starter, ajoute un champ texte et un bouton 'Ajouter' qui crée un nouvel élément de liste à chaque clic. Ajoute une classe CSS 'done' quand on clique sur une tâche.",
+	project:"🏆 Boss : construis une <b>To-Do List complète</b> : ajout, suppression, marquage comme terminée, compteur de tâches restantes, et persistance dans localStorage.",
 	quiz:[
 		{q:"Quelle méthode sélectionne un élément CSS ?", o:["document.querySelector","console.log","Math.random"], a:0, expl:"querySelector retourne le PREMIER élément correspondant. querySelectorAll retourne TOUS les éléments (NodeList)."},
 		{q:"Comment réagir à un clic ?", o:["addEventListener('click', ...)","if click","onClick = true"], a:0, expl:"addEventListener est la méthode moderne. Elle permet plusieurs écouteurs sur le même élément, et est plus propre que l'attribut onclick."},
@@ -1571,19 +1720,44 @@ const MODULES = [
 	badge:"☀️", badgeName:"App météo",
 	starter:"<div id='out'>Chargement...</div>\n<script>\nasync function getData() {\n  const villes = [{nom:'Paris',temp:18},{nom:'Lyon',temp:22},{nom:'Nice',temp:28}];\n  return new Promise(r => setTimeout(() => r(villes), 400));\n}\nasync function afficher() {\n  const villes = await getData();\n  document.getElementById('out').innerHTML = villes.map(v =>\n    '<p>' + v.nom + ' : <b>' + v.temp + '°C</b></p>'\n  ).join('');\n}\nafficher();\n<\/script>",
 	lessons:[
-		{h:"✨ Syntaxe moderne", html:"<pre class='notion-code'><code>const carre = x =&gt; x * x;\nconst {nom, age} = user;\nconst total = [...a, ...b];</code></pre>"},
-		{h:"🌐 Appeler une API", html:"<pre class='notion-code'><code>const r = await fetch(url);\nconst data = await r.json();</code></pre>"},
-		{h:"⚠️ Gérer les erreurs réseau", html:"<p>Un appel réseau peut échouer — protège-toi avec <code>try/catch</code> :</p><pre class='notion-code'><code>async function getData(url) {\n  try {\n    const r = await fetch(url);\n    if (!r.ok) throw new Error('Erreur ' + r.status);\n    return await r.json();\n  } catch (e) {\n    console.error('Problème :', e.message);\n    return null;\n  }\n}</code></pre>"},
-		{h:"🔗 Envoyer des données (POST)", html:"<pre class='notion-code'><code>await fetch('/api/taches', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ titre: 'Apprendre fetch' })\n});</code></pre>"}
+		{h:"⚡ ES6 : let, const & fonctions fléchées", html:"<p>ES6 a introduit <b>let</b>, <b>const</b> et les <b>fonctions fléchées</b> :</p><pre class='notion-code'><code>const PI = 3.14;         // constante\nlet compteur = 0;         // variable modifiable\n\nconst carre = (n) => n * n;\nconst saluer = nom => `Salut ${nom}`;</code></pre><p>Les fonctions fléchées sont souvent utilisées pour les callbacks : <code>arr.map(x =&gt; x * 2)</code>.</p>"},
+		{h:"📦 Objets, déstructuration & syntaxe moderne", html:"<p>Les <b>objets</b> regroupent plusieurs infos sous un même nom :</p><pre class='notion-code'><code>const utilisateur = {\n  nom: 'Lina',\n  age: 22,\n  actif: true\n};\n\n// Déstructuration\nconst { nom, age } = utilisateur;\nconst tab = [1, 2, 3];\nconst [premier] = tab;\n\n// Paramètres par défaut\nfunction hello(nom = 'inconnu') {\n  return `Bonjour ${nom}`;\n}</code></pre>"},
+		{h:"⏳ Callbacks & Promises", html:"<p>Les opérations asynchrones (requêtes réseau, timers…) ne répondent pas immédiatement. Historiquement, on utilisait des <b>callbacks</b> :</p><pre class='notion-code'><code>setTimeout(() => {\n  console.log('3 secondes plus tard');\n}, 3000);</code></pre><p>Les <b>Promises</b> améliorent la lisibilité :</p><pre class='notion-code'><code>fetch('/api/taches')\n  .then(r => r.json())\n  .then(data => {\n    console.log(data);\n  })\n  .catch(err => {\n    console.error('Erreur réseau', err);\n  });</code></pre>"},
+		{h:"🌐 fetch & APIs", html:"<p><code>fetch</code> permet d'appeler une API HTTP et de récupérer du JSON :</p><pre class='notion-code'><code>fetch('https://jsonplaceholder.typicode.com/todos/1')\n  .then(r => {\n    if (!r.ok) throw new Error('HTTP ' + r.status);\n    return r.json();\n  })\n  .then(todo => {\n    console.log(todo.title);\n  })\n  .catch(err => console.error(err));</code></pre><p>💡 Toujours vérifier <code>r.ok</code> avant de lire le JSON.</p>"},
+		{h:"🧵 async / await", html:"<p><code>async/await</code> rend le code asynchrone plus lisible, proche du code synchrone :</p><pre class='notion-code'><code>async function chargerTodo() {\n  try {\n    const r = await fetch('https://jsonplaceholder.typicode.com/todos/1');\n    if (!r.ok) throw new Error('HTTP ' + r.status);\n    const todo = await r.json();\n    console.log(todo.title);\n  } catch (err) {\n    console.error('Erreur :', err.message);\n  }\n}</code></pre><p>⚠️ N'oublie pas le <code>try/catch</code> pour gérer les erreurs.</p>"},
+		{h:"🧪 Enchaîner plusieurs appels", html:"<p>Tu peux enchaîner plusieurs appels async, par exemple pour récupérer un utilisateur puis ses posts :</p><pre class='notion-code'><code>async function chargerUtilisateurEtPosts(id) {\n  const rUser = await fetch(`/api/users/${id}`);\n  const user = await rUser.json();\n  const rPosts = await fetch(`/api/users/${id}/posts`);\n  const posts = await rPosts.json();\n  console.log(user, posts);\n}</code></pre><p>Cet enchaînement d'appels est très courant dans les applis modernes.</p>"}
 	],
 	cours:{
-		objectifs:["Utiliser la syntaxe ES6+ (arrow functions, déstructuration, spread)","Appeler une API avec fetch et async/await","Gérer les états : chargement, succès, erreur, données vides"],
-		vocab:[{t:"async/await",d:"Syntaxe pour écrire du code asynchrone de façon lisible. async déclare la fonction, await attend la Promise."},{t:"fetch",d:"Fonction native pour envoyer des requêtes HTTP. Retourne une Promise<Response>."},{t:"Promise",d:"Objet représentant une opération asynchrone. États : pending, fulfilled (résolu), rejected (échoué)."},{t:"JSON",d:"Format texte d'échange de données basé sur la syntaxe JS. response.json() le convertit en objet JS."},{t:"try/catch",d:"Bloque les erreurs pour les gérer proprement : try { code risqué } catch(e) { gérer l'erreur }."}],
-		html:"<p>Un appel API complet gère 3 états : chargement, succès et erreur :</p><pre class='notion-code'><code>async function charger(url) {\n  try {\n    const r = await fetch(url);\n    if (!r.ok) throw new Error('Erreur ' + r.status);\n    const data = await r.json();\n    afficher(data);\n  } catch(e) {\n    afficherErreur(e.message);\n  }\n}</code></pre><p>La <b>déstructuration</b> et le <b>spread</b> simplifient le code :</p><pre class='notion-code'><code>const { nom, age } = utilisateur; // déstructuration\nconst copie = { ...utilisateur, age: 26 }; // spread</code></pre>",
-		erreurs:["Oublier d'attendre la 2e Promise : response.json() retourne aussi une Promise, il faut un await.","Ne pas vérifier r.ok avant d'appeler r.json() — même un 404 passe dans le then() de fetch.","Utiliser fetch sans try/catch — les erreurs réseau (offline, timeout) rejettent la Promise."]
+		objectifs:[
+			"Maîtriser la syntaxe ES6 (let/const, fonctions fléchées, déstructuration)",
+			"Comprendre le modèle asynchrone de JS (callbacks, Promises, async/await)",
+			"Appeler une API HTTP avec fetch et lire du JSON",
+			"Gérer les erreurs réseau et HTTP proprement",
+			"Enchaîner plusieurs appels asynchrones dans un flux lisible"
+		],
+		vocab:[
+			{t:"Callback",d:"Fonction passée en argument et appelée plus tard, souvent après une opération asynchrone."},
+			{t:"Promise",d:"Objet qui représente une valeur qui sera disponible plus tard : pending → fulfilled ou rejected."},
+			{t:"async",d:"Mot-clé qui marque une fonction comme asynchrone. Elle retourne toujours une Promise."},
+			{t:"await",d:"Mot-clé utilisable dans une fonction async qui attend la résolution d'une Promise."},
+			{t:"JSON",d:"Format texte pour échanger des données (objets, tableaux). Très utilisé dans les APIs web."},
+			{t:"API REST",d:"Interface HTTP organisée en ressources (GET, POST, PUT, DELETE) pour manipuler des données."}
+		],
+		html:"<p><b>JavaScript moderne</b> s'appuie massivement sur l'asynchrone : appels réseau, timers, accès disque…</p>"+
+"<p><b>Les Promises</b> sont la base : elles évitent le 'callback hell' et se combinent bien avec async/await.</p>"+
+"<pre class='notion-code'><code>fetch('/api/users')\n  .then(r => r.json())\n  .then(users => {\n    console.log(users);\n  })\n  .catch(err => console.error(err));</code></pre>"+
+"<p><b>async/await</b> rend ce style de code plus lisible :</p>"+
+"<pre class='notion-code'><code>async function chargerUsers() {\n  try {\n    const r = await fetch('/api/users');\n    if (!r.ok) throw new Error('HTTP ' + r.status);\n    const users = await r.json();\n    console.log(users);\n  } catch (err) {\n    console.error('Erreur:', err.message);\n  }\n}</code></pre>",
+		erreurs:[
+			"Oublier de retourner r.json() dans un then — sans return, la Promise suivante reçoit undefined.",
+			"Mélanger then() et await dans la même fonction sans nécessité — choisis un style et tiens-t'y.",
+			"Ne jamais vérifier r.ok avant de faire r.json() — en cas de 404 ou 500, ça déclenche d'autres erreurs.",
+			"Oublier try/catch autour de fetch avec async/await — les erreurs reçoivent unhandled rejection.",
+			"Appeler une API dans une boucle sans limiter le nombre d'appels — risque de surcharge et de ban de l'API."
+		]
 	},
-	exo:"Récupère des données d'une API publique et affiche-les.",
-	project:"🏆 Boss : une <b>app météo</b> qui interroge une API et affiche la température d'une ville.",
+	exo:"<b>Exercice :</b> Utilise <code>fetch</code> pour récupérer un todo depuis <code>https://jsonplaceholder.typicode.com/todos/1</code> et affiche son titre dans la page. Commence avec then()/catch(), puis réécris la même chose en async/await.",
+	project:"🏆 Boss : crée un petit <b>tableau de bord d'API</b> : un champ pour saisir un nom de ville et un bouton qui affiche la météo (ou un autre type de données depuis une API publique), avec gestion des états 'chargement', 'erreur' et 'résultat'.",
 	quiz:[
 		{q:"fetch() sert à...", o:["Styliser la page","Récupérer des données réseau","Déclarer une variable"], a:1, expl:"fetch() envoie une requête HTTP asynchrone et retourne une Promise<Response>. Il faut await pour attendre le résultat."},
 		{q:"await s'utilise dans...", o:["une fonction async","un for classique","un const"], a:0, expl:"await suspend l'exécution jusqu'à ce que la Promise soit résolue. Il ne peut s'utiliser que dans une fonction déclarée async."},
@@ -1598,18 +1772,42 @@ const MODULES = [
 	desc:"Versionner son code, commits, branches, publier en ligne.",
 	badge:"🔀", badgeName:"Premier repo",
 	lessons:[
-		{h:"💾 Les commandes de base", html:"<pre class='notion-code'><code>git init\ngit add .\ngit commit -m 'premier commit'\ngit push</code></pre>"},
-		{h:"🌿 Branches & fusion", html:"<p>Les branches permettent de travailler sur une fonctionnalité sans toucher au code principal :</p><pre class='notion-code'><code>git branch ma-feature       # créer une branche\ngit checkout ma-feature     # s'y déplacer\n# ... tu travailles ...\ngit checkout main\ngit merge ma-feature        # fusionner\ngit branch -d ma-feature    # supprimer</code></pre>"},
-		{h:"🌍 GitHub Pages — publier gratuitement", html:"<p>GitHub Pages héberge ton site statique directement depuis ton repo :</p><ol style='margin:8px 0 0;padding-left:20px'><li>Va dans <b>Settings → Pages</b> de ton repo</li><li>Choisis la branche <code>main</code> comme source</li><li>Ton site est en ligne sur <code>ton-pseudo.github.io/nom-repo</code> 🎉</li></ol>"}
+		{h:"💡 Git : pourquoi ?", html:"<p>Git est un <b>système de versionnement</b>. Il permet de :</p><ul><li>Revenir à un état précédent si tu casses quelque chose</li><li>Travailler à plusieurs sans écraser le code des autres</li><li>Garder un historique clair de l'évolution du projet</li></ul><p>Tu peux voir Git comme un 'Ctrl+Z' <b>infini</b>, mais structuré.</p>"},
+		{h:"💾 Cycle de base Git", html:"<p>Le cycle de base se résume à :</p><pre class='notion-code'><code>git status        # voir l'état\ngit add .        # préparer les fichiers\ngit commit -m 'message'  # enregistrer l'instantané\ngit push         # envoyer sur GitHub</code></pre><p><code>git status</code> est ta boussole : utilise-le en permanence.</p>"},
+		{h:"🌿 Branches & flux de travail", html:"<p>Une branche = une ligne de travail indépendante :</p><pre class='notion-code'><code>git checkout -b feature/formulaire   # nouvelle branche\n# ... tu codes ...\ngit commit -m 'Ajoute le formulaire de contact'\n\ngit checkout main\ngit merge feature/formulaire         # fusionne dans main</code></pre><p>Règle d'or : <b>ne travaille pas directement sur main</b> pour des grosses features.</p>"},
+		{h:"🐙 GitHub & remote", html:"<p>Git = outil local. GitHub = hébergeur de dépôts Git dans le cloud.</p><pre class='notion-code'><code>git remote add origin https://github.com/ton-pseudo/ton-repo.git\ngit push -u origin main</code></pre><p>Ensuite, <code>git push</code> suffit à envoyer les nouveaux commits.</p>"},
+		{h:"🚀 GitHub Pages — publier ton site", html:"<p>GitHub Pages permet d'héberger ton site statique :</p><ol style='margin:8px 0 0;padding-left:20px'><li>Push ton projet avec un <code>index.html</code> sur la branche <code>main</code></li><li>Dans GitHub, va dans <b>Settings → Pages</b></li><li>Choisis <b>Deploy from a branch</b> & <b>main / root</b></li><li>Attends quelques minutes : ton site est en ligne 🎉</li></ol>"},
+		{h:"🧼 .gitignore & bonnes pratiques", html:"<p>Le fichier <code>.gitignore</code> t'évite de versionner ce qu'il ne faut pas :</p><pre class='notion-code'><code># Exemple basique\nnode_modules/\n.env\n.DS_Store</code></pre><p>Ne committe jamais : <b>node_modules</b>, fichiers temporaires, secrets (clés API, mots de passe).</p>"}
 	],
 	cours:{
-		objectifs:["Versionner un projet avec les commandes Git essentielles","Travailler avec des branches et fusionner","Publier un dépôt sur GitHub et écrire un bon README"],
-		vocab:[{t:"commit",d:"Instantané nommé de l'état du projet. C'est une sauvegarde avec un message explicatif."},{t:"branch",d:"Ligne de développement parallèle. Permet de travailler sans toucher à la branche principale."},{t:"merge",d:"Fusion d'une branche dans une autre pour intégrer les changements."},{t:".gitignore",d:"Fichier qui liste les éléments ignorés par Git : node_modules/, .env, fichiers système."},{t:"pull request",d:"Demande de fusion sur GitHub : tu proposes tes changements, quelqu'un les valide."}],
-		html:"<p>Le cycle de base de Git :</p><pre class='notion-code'><code>git add .          # prépare les changements\ngit commit -m 'message clair'  # enregistre un snapshot\ngit push           # envoie sur GitHub</code></pre><p>Les <b>branches</b> isolent le travail :</p><pre class='notion-code'><code>git checkout -b ma-feature  # créer et basculer\n# ... développer ...\ngit checkout main\ngit merge ma-feature        # fusionner</code></pre>",
-		erreurs:["Écrire des messages de commit vagues ('update', 'fix') — un bon message dit QUOI et POURQUOI.","Commiter des secrets (.env, mots de passe) — utilise .gitignore dès le départ.","Travailler directement sur main — crée toujours une branche pour chaque fonctionnalité."]
+		objectifs:[
+			"Comprendre à quoi sert Git et quand l'utiliser",
+			"Savoir initialiser un repo, faire des commits et les pousser sur GitHub",
+			"Travailler avec des branches et les fusionner",
+			"Mettre en place un .gitignore propre pour un projet JS",
+			"Publier un site statique avec GitHub Pages"
+		],
+		vocab:[
+			{t:"commit",d:"Instantané nommé de l'état du projet. C'est une sauvegarde avec un message explicatif."},
+			{t:"branch",d:"Ligne de développement parallèle. Permet de travailler sans toucher à la branche principale."},
+			{t:"merge",d:"Fusion d'une branche dans une autre pour intégrer les changements."},
+			{t:"remote",d:"Dépôt distant (souvent sur GitHub) lié à ton repo local."},
+			{t:".gitignore",d:"Fichier qui liste les éléments ignorés par Git : node_modules/, .env, fichiers système."},
+			{t:"pull request",d:"Demande de fusion sur GitHub : tu proposes tes changements, quelqu'un les relit et les valide."}
+		],
+		html:"<p><b>Git</b> te permet de versionner ton code. GitHub te permet de le <b>montrer</b> et de <b>collaborer</b>.</p>"+
+"<pre class='notion-code'><code># Initialiser un nouveau repo\ngit init\n\n# Connecter à GitHub\ngit remote add origin https://github.com/ton-pseudo/ton-repo.git\n\n# Cycle quotidien\ngit status\ngit add .\ngit commit -m 'Explique ce que tu as fait'\ngit push</code></pre>"+
+"<p><b>Branches</b> : une branche par fonctionnalité, main reste toujours stable.</p>",
+		erreurs:[
+			"Écrire des messages de commit vagues ('update', 'fix') — un bon message dit QUOI et POURQUOI.",
+			"Commiter des secrets (.env, mots de passe) — utilise .gitignore dès le départ.",
+			"Travailler directement sur main pour tout — crée une branche pour chaque fonctionnalité ou bugfix.",
+			"Cloner un repo et modifier main sur ton fork sans jamais tirer (pull) les mises à jour de l'original.",
+			"Confondre Git (outil local) et GitHub (plateforme en ligne) — Git peut être utilisé sans GitHub." 
+		]
 	},
-	exo:"Mets ton CV sur un repo GitHub et publie-le avec GitHub Pages.",
-	project:"🏆 Boss : ton premier <b>repo public</b> en ligne avec un joli README.",
+	exo:"<b>Exercice :</b> Initialise Git dans ton projet, fais au moins 3 commits avec des messages clairs, puis pousse le repo sur GitHub (branche main) avec un README de base.",
+	project:"🏆 Boss : crée ton <b>premier repo public sérieux</b> : README complet (présentation, installation, captures d'écran), GitHub Pages activé, et un fichier .gitignore propre.",
 	quiz:[
 		{q:"Quelle commande enregistre un instantané du code ?", o:["git commit","git save","git delete"], a:0, expl:"git commit enregistre un snapshot nommé de ton travail. C'est comme une sauvegarde avec un message explicatif."},
 		{q:"GitHub sert à...", o:["Héberger et partager du code","Compiler du C++","Dessiner des maquettes"], a:0, expl:"GitHub = plateforme cloud pour stocker des dépôts Git, collaborer et montrer son travail. Git = outil local de versioning."},
@@ -1624,19 +1822,49 @@ const MODULES = [
 	desc:"Composants, props, state, hooks, applications dynamiques.",
 	badge:"🧩", badgeName:"App React",
 	lessons:[
-		{h:"🧩 Composants & props", html:"<pre class='notion-code'><code>function Carte({titre}){\n  return &lt;h3&gt;{titre}&lt;/h3&gt;;\n}</code></pre>"},
-		{h:"🔄 Le state (useState)", html:"<pre class='notion-code'><code>const [n, setN] = useState(0);\n&lt;button onClick={() =&gt; setN(n+1)}&gt;{n}&lt;/button&gt;</code></pre>"},
-		{h:"⚡ useEffect — effets de bord", html:"<p><code>useEffect</code> exécute du code <b>après le rendu</b> — parfait pour appeler une API :</p><pre class='notion-code'><code>useEffect(() =&gt; {\n  fetch('/api/taches')\n    .then(r =&gt; r.json())\n    .then(data =&gt; setTaches(data));\n}, []); // [] = seulement au premier rendu</code></pre>"},
-		{h:"📋 Afficher des listes", html:"<p>En React, on utilise <code>.map()</code> pour afficher une liste — et <code>key</code> est obligatoire :</p><pre class='notion-code'><code>function ListeTaches({ taches }) {\n  return (\n    &lt;ul&gt;\n      {taches.map(t =&gt; (\n        &lt;li key={t.id}&gt;{t.titre}&lt;/li&gt;\n      ))}\n    &lt;/ul&gt;\n  );\n}</code></pre>"}
+		{h:"🧩 Composants & props", html:"<p>Un <b>composant</b> est une fonction JS qui retourne du JSX. Les <b>props</b> sont ses paramètres — passés comme des attributs HTML :</p><pre class='notion-code'><code>// Déclaration du composant\nfunction Carte({ titre, auteur, couleur = 'blue' }) {  // valeur par défaut\n  return (\n    &lt;div style={{ borderColor: couleur }}&gt;\n      &lt;h3&gt;{titre}&lt;/h3&gt;\n      &lt;p&gt;Par {auteur}&lt;/p&gt;\n    &lt;/div&gt;\n  );\n}\n\n// Utilisation\n&lt;Carte titre=\"React\" auteur=\"Meta\" couleur=\"#097fe8\" /&gt;</code></pre><p>⚠️ Les props sont <b>en lecture seule</b> — un composant ne modifie jamais ses propres props.</p>"},
+		{h:"🔄 useState — l'état local", html:"<p><b>useState</b> crée une variable réactive : quand elle change, React met à jour l'affichage automatiquement.</p><pre class='notion-code'><code>function Compteur() {\n  const [count, setCount] = useState(0);  // [valeur, setter]\n\n  return (\n    &lt;div&gt;\n      &lt;p&gt;Compteur : {count}&lt;/p&gt;\n      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;+1&lt;/button&gt;\n      &lt;button onClick={() =&gt; setCount(0)}&gt;Reset&lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><p>Règle : <b>ne jamais modifier l'état directement</b> (<code>count = 1</code> ✗) — toujours passer par le setter (<code>setCount(1)</code> ✓).</p>"},
+		{h:"⚡ useEffect — effets de bord", html:"<p><code>useEffect</code> exécute du code <b>après le rendu</b>. Le tableau de dépendances contrôle quand il se déclenche :</p><pre class='notion-code'><code>useEffect(() =&gt; { /* effet */ });          // après chaque rendu\nuseEffect(() =&gt; { /* effet */ }, []);      // seulement au montage\nuseEffect(() =&gt; { /* effet */ }, [valeur]); // quand valeur change\n\n// Exemple réel : appel API au montage\nuseEffect(() =&gt; {\n  setLoading(true);\n  fetch('/api/taches')\n    .then(r =&gt; r.json())\n    .then(data =&gt; { setTaches(data); setLoading(false); })\n    .catch(() =&gt; setLoading(false));\n}, []);  // ← important : [] pour n'appeler qu'une fois</code></pre>"},
+		{h:"📋 Listes, formulaires & lifting state", html:"<p>Afficher une liste avec <code>.map()</code> — la prop <code>key</code> est <b>obligatoire</b> :</p><pre class='notion-code'><code>{items.map(item =&gt; (\n  &lt;li key={item.id}&gt;{item.nom}&lt;/li&gt;  // key unique !\n))}</code></pre><p><b>Formulaire contrôlé</b> — l'état React est la source de vérité :</p><pre class='notion-code'><code>const [valeur, setValeur] = useState('');\n&lt;input\n  value={valeur}\n  onChange={e =&gt; setValeur(e.target.value)}\n/&gt;</code></pre><p><b>Lifting state up</b> — pour partager un état entre composants, remonte-le dans leur parent commun et passe des callbacks en props.</p>"},
+		{h:"🏗️ Architecture d'une app React", html:"<p>Une app React bien structurée sépare les responsabilités :</p><pre class='notion-code'><code>App\n├── Header         (navigation, titre)\n├── ListeTaches    (affichage)\n│   └── Tache      (un item)\n└── Formulaire     (ajout)\n\n// App.jsx — état centralisé\nfunction App() {\n  const [taches, setTaches] = useState([]);\n  const ajout   = (t) =&gt; setTaches([...taches, t]);\n  const supprime = (id) =&gt; setTaches(taches.filter(t =&gt; t.id !== id));\n  return (\n    &lt;&gt;\n      &lt;Formulaire onAjouter={ajout} /&gt;\n      &lt;ListeTaches taches={taches} onSupprimer={supprime} /&gt;\n    &lt;/&gt;\n  );\n}</code></pre>"}
+		,{h:"🧭 React mental model", html:"<p>Pour bien progresser en React, garde ce modèle mental :</p><pre class='notion-code'><code>Props entrantes → rendu JSX → événements utilisateur → setState()\n→ React re-rend le composant → le DOM s'actualise</code></pre><p>Quand l'app grandit, pense en composants petits, isolés et réutilisables. Chaque composant devrait avoir une responsabilité claire.</p><p>Avant de coder, demande-toi : <b>où doit vivre l'état ?</b> Si plusieurs composants en ont besoin, remonte-le dans leur parent commun.</p>"}
 	],
 	cours:{
-		objectifs:["Créer des composants React avec JSX","Passer des données avec les props","Gérer l'état local avec useState et les effets avec useEffect"],
-		vocab:[{t:"Composant",d:"Fonction JS qui retourne du JSX. C'est la brique de base d'une app React."},{t:"JSX",d:"Syntaxe HTML-like dans JS, transpilée par Babel en appels React.createElement()."},{t:"props",d:"Paramètres d'un composant, passés par le parent. Flux unidirectionnel : parent → enfant."},{t:"useState",d:"Hook qui crée une variable d'état : const [val, setVal] = useState(init). Re-rend le composant à chaque changement."},{t:"useEffect",d:"Hook qui exécute du code après le rendu : appels API, abonnements, synchronisation localStorage."}],
-		html:"<p>Un composant = une fonction qui retourne du JSX :</p><pre class='notion-code'><code>function Compteur() {\n  const [n, setN] = useState(0);\n  return (\n    &lt;div&gt;\n      &lt;p&gt;{n}&lt;/p&gt;\n      &lt;button onClick={() => setN(n + 1)}&gt;+1&lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><p><b>Règle clé</b> : les props vont du parent vers l'enfant (sens unique). Pour remonter une info, passe une <em>fonction callback</em> en prop.</p>",
-		erreurs:["Modifier l'état directement (state.x = 1) — toujours utiliser le setter (setState) pour déclencher un re-rendu.","Oublier la prop key dans les listes — React en a besoin pour identifier les éléments.","Mettre des appels fetch directement dans le composant sans useEffect — ça crée une boucle infinie."]
+		objectifs:[
+			"Comprendre l'architecture en composants de React",
+			"Maîtriser le passage de données avec les props et les callbacks",
+			"Gérer l'état local avec useState et les effets de bord avec useEffect",
+			"Afficher des listes dynamiques et gérer des formulaires contrôlés",
+			"Structurer une mini-app React avec plusieurs composants imbriqués"
+		],
+		vocab:[
+			{t:"Composant",d:"Fonction JS qui retourne du JSX. Brique de base de React — tout est composant."},
+			{t:"JSX",d:"Syntaxe HTML-like dans JS. <p>{nom}</p> en JSX devient React.createElement('p', null, nom)."},
+			{t:"props",d:"Données passées du parent à l'enfant. Lecture seule — l'enfant ne modifie jamais ses propres props."},
+			{t:"useState",d:"Hook d'état : const [val, setVal] = useState(initial). Appeler setVal() déclenche un re-rendu."},
+			{t:"useEffect",d:"Hook d'effet : s'exécute après le rendu. [] = une fois au montage, [a] = quand a change."},
+			{t:"Virtual DOM",d:"Copie légère du DOM réel que React maintient. Il compare (diff) et ne met à jour que ce qui change."},
+			{t:"Re-rendu",d:"React re-exécute le composant quand son state ou ses props changent, maintenant l'affichage à jour."},
+			{t:"Lifting state up",d:"Remonter l'état dans le parent commun pour le partager entre composants frères via callbacks."}
+		],
+		html:"<p><b>React = des composants qui s'assemblent.</b> Chaque composant est une fonction JS qui retourne du JSX :</p>"+
+"<pre class='notion-code'><code>function Compteur({ titre }) {             // props en paramètre\n  const [n, setN] = useState(0);           // état local\n\n  useEffect(() => {                         // effet de bord\n    document.title = 'Compteur : ' + n;\n  }, [n]);                                 // déclenché quand n change\n\n  return (                                 // JSX retourné\n    &lt;div&gt;\n      &lt;h2&gt;{titre}&lt;/h2&gt;\n      &lt;p&gt;Valeur : {n}&lt;/p&gt;\n      &lt;button onClick={() =&gt; setN(n + 1)}&gt;+1&lt;/button&gt;\n      &lt;button onClick={() =&gt; setN(n - 1)}&gt;-1&lt;/button&gt;\n    &lt;/div&gt;\n  );\n}\n\n// Utilisation : &lt;Compteur titre=\"Mon compteur\" /&gt;</code></pre>"+
+"<p><b>Flux de données unidirectionnel :</b> les props descendent du parent vers l'enfant. Pour remonter une info, on passe une <em>fonction callback</em> en prop :</p>"+
+"<pre class='notion-code'><code>function Parent() {\n  const [taches, setTaches] = useState([]);\n  function ajouterTache(texte) {\n    setTaches([...taches, { id: Date.now(), texte }]);\n  }\n  return &lt;Formulaire onAjouter={ajouterTache} /&gt;;\n}\n\nfunction Formulaire({ onAjouter }) {\n  const [valeur, setValeur] = useState('');\n  return (\n    &lt;form onSubmit={e =&gt; { e.preventDefault(); onAjouter(valeur); setValeur(''); }}&gt;\n      &lt;input value={valeur} onChange={e =&gt; setValeur(e.target.value)} /&gt;\n      &lt;button&gt;Ajouter&lt;/button&gt;\n    &lt;/form&gt;\n  );\n}</code></pre>"+
+"<p><b>Afficher une liste avec .map() :</b> la prop <code>key</code> est obligatoire :</p>"+
+"<pre class='notion-code'><code>function ListeTaches({ taches, onSupprimer }) {\n  if (!taches.length) return &lt;p&gt;Aucune tâche !&lt;/p&gt;;\n  return (\n    &lt;ul&gt;\n      {taches.map(t =&gt; (\n        &lt;li key={t.id}&gt;\n          {t.texte}\n          &lt;button onClick={() =&gt; onSupprimer(t.id)}&gt;✕&lt;/button&gt;\n        &lt;/li&gt;\n      ))}\n    &lt;/ul&gt;\n  );\n}</code></pre>"+
+"<p><b>Appel API avec useEffect :</b></p>"+
+"<pre class='notion-code'><code>function Posts() {\n  const [posts, setPosts] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n  useEffect(() => {\n    fetch('https://jsonplaceholder.typicode.com/posts?_limit=5')\n      .then(r => { if (!r.ok) throw new Error('Erreur réseau'); return r.json(); })\n      .then(data => { setPosts(data); setLoading(false); })\n      .catch(err => { setError(err.message); setLoading(false); });\n  }, []);\n  if (loading) return &lt;p&gt;Chargement…&lt;/p&gt;;\n  if (error)   return &lt;p&gt;Erreur : {error}&lt;/p&gt;;\n  return &lt;ul&gt;{posts.map(p =&gt; &lt;li key={p.id}&gt;{p.title}&lt;/li&gt;)}&lt;/ul&gt;;\n}</code></pre>",
+		erreurs:[
+			"Modifier l'état directement (state.x = 1) — utilise toujours le setter : setX(nouvelleValeur).",
+			"Oublier la prop key dans les listes — React en a besoin pour identifier les éléments et optimiser le rendu.",
+			"Mettre des appels fetch directement dans le corps du composant sans useEffect — ça crée une boucle infinie.",
+			"Modifier les props dans l'enfant — les props sont en lecture seule. Passe un callback pour remonter des données.",
+			"Oublier le tableau de dépendances dans useEffect — sans [], l'effet s'exécute après chaque rendu."
+		]
 	},
-	exo:"Crée un compteur React avec un bouton +1 et -1.",
-	project:"🏆 Boss : recode ta <b>To-Do List en React</b> avec des composants.",
+	exo:"Crée une To-Do List React : input + bouton Ajouter, liste avec bouton Supprimer sur chaque tâche. Bonus : filtre Actives/Terminées.",
+	project:"🏆 Boss : une <b>app React complète</b> avec formulaire contrôlé, liste dynamique et appel à une API publique (ex: JSONPlaceholder).",
 	quiz:[
 		{q:"Un composant React renvoie...", o:["du JSX","du SQL","un fichier CSS"], a:0, expl:"Un composant = une fonction JS qui retourne du JSX. JSX ressemble à du HTML mais est transformé en JS par un compilateur."},
 		{q:"useState sert à...", o:["styliser un élément","gérer un état qui change","appeler une API"], a:1, expl:"useState retourne [valeur, setter]. Quand le setter est appelé avec une nouvelle valeur, React re-rend le composant."},
@@ -1651,18 +1879,41 @@ const MODULES = [
 	desc:"Le backend en JS : serveur, routes, API REST.",
 	badge:"🛰️", badgeName:"API REST",
 	lessons:[
-		{h:"🔌 Un serveur Express", html:"<pre class='notion-code'><code>const app = express();\napp.get('/api', (req,res) =&gt; {\n  res.json({ message: 'Salut !' });\n});\napp.listen(3000);</code></pre>"},
-		{h:"🔀 POST, PUT, DELETE & middleware", html:"<pre class='notion-code'><code>app.use(express.json()); // middleware : lit le body JSON\n\napp.post('/taches', (req, res) =&gt; {\n  const tache = req.body;       // données reçues\n  res.status(201).json(tache);\n});\n\napp.delete('/taches/:id', (req, res) =&gt; {\n  const { id } = req.params;    // paramètre d'URL\n  res.json({ supprimé: id });\n});</code></pre>"},
-		{h:"🔑 Variables d'environnement", html:"<p>Ne jamais mettre de mots de passe ou clés API dans le code — utilise un fichier <code>.env</code> :</p><pre class='notion-code'><code># .env (ne pas committer !)\nDB_URL=mongodb://localhost/mabase\nJWT_SECRET=motdepassefort123\n\n# Dans le code\nconst url = process.env.DB_URL;</code></pre><p>Installe <code>dotenv</code> et appelle <code>require('dotenv').config()</code> au démarrage.</p>"}
+		{h:"🚀 Pourquoi Node.js ?", html:"<p>Node.js permet d'exécuter du <b>JavaScript côté serveur</b>.</p><ul><li>Un seul langage pour frontend + backend</li><li>Parfait pour des APIs web rapides</li><li>Écosystème riche via npm</li></ul><p>On l'utilisera avec <b>Express</b> pour créer un serveur HTTP.</p>"},
+		{h:"🧩 Modules & npm", html:"<p>npm (Node Package Manager) gère les dépendances :</p><pre class='notion-code'><code>mkdir api-demo &amp;&amp; cd api-demo\nnpm init -y              # crée package.json\nnpm install express      # ajoute express</code></pre><p><code>package.json</code> liste les dépendances et les scripts de ton projet.</p>"},
+		{h:"🌐 Premier serveur Express", html:"<p>Un mini-serveur HTTP avec Express :</p><pre class='notion-code'><code>const express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.send('Hello depuis Node.js');\n});\n\napp.listen(3000, () => {\n  console.log('Serveur sur http://localhost:3000');\n});</code></pre><p><code>req</code> contient la requête, <code>res</code> permet de répondre.</p>"},
+		{h:"📦 JSON & routes d'API", html:"<p>Une route API renvoie souvent du JSON :</p><pre class='notion-code'><code>const taches = [\n  { id: 1, titre: 'Apprendre Node' },\n  { id: 2, titre: 'Coder une API' }\n];\n\napp.get('/api/taches', (req, res) => {\n  res.json(taches);      // renvoie du JSON\n});</code></pre><p>Le frontend pourra ensuite consommer cette API avec <code>fetch</code>.</p>"},
+		{h:"📝 Middleware & JSON body", html:"<p>Un <b>middleware</b> est une fonction qui s'exécute entre la requête et la réponse :</p><pre class='notion-code'><code>app.use(express.json());  // parse le JSON du body\n\napp.post('/api/taches', (req, res) => {\n  const tache = req.body;      // { titre: '...' }\n  // ... sauvegarder ...\n  res.status(201).json(tache);\n});</code></pre><p><code>express.json()</code> permet à <code>req.body</code> de contenir l'objet JSON envoyé par le frontend.</p>"},
+		{h:"🛡️ Gestion d'erreurs simple", html:"<p>Il est important de renvoyer les <b>bons codes HTTP</b> :</p><pre class='notion-code'><code>app.get('/api/taches/:id', (req, res) => {\n  const id = Number(req.params.id);\n  const tache = taches.find(t => t.id === id);\n  if (!tache) {\n    return res.status(404).json({ message: 'Tâche non trouvée' });\n  }\n  res.json(tache);\n});</code></pre><p>404 = ressource introuvable, 201 = créé, 500 = erreur serveur.</p>"}
 	],
 	cours:{
-		objectifs:["Créer un serveur Express avec des routes REST","Comprendre les verbes HTTP et les codes de statut","Utiliser les middlewares et les variables d'environnement"],
-		vocab:[{t:"Route",d:"Association entre une URL+méthode HTTP et une fonction handler : app.get('/api', handler)."},{t:"Middleware",d:"Fonction qui s'exécute entre la requête et la réponse : logging, auth, parsing du body JSON."},{t:"req / res",d:"Objets Express : req contient la requête (params, body, headers), res permet d'envoyer la réponse."},{t:"HTTP statuts",d:"200 = OK, 201 = Créé, 400 = Mauvaise requête, 401 = Non auth, 404 = Introuvable, 500 = Erreur serveur."},{t:".env",d:"Fichier de variables d'environnement (secrets, URLs). Ne jamais le commiter sur GitHub."}],
-		html:"<p>Un serveur Express minimal :</p><pre class='notion-code'><code>const express = require('express');\nconst app = express();\napp.use(express.json()); // middleware : lit le body JSON\n\napp.get('/api/taches', (req, res) => {\n  res.json(taches);\n});\n\napp.post('/api/taches', (req, res) => {\n  const tache = req.body;\n  taches.push(tache);\n  res.status(201).json(tache);\n});\n\napp.listen(3000);</code></pre>",
-		erreurs:["Oublier app.use(express.json()) — sans ça, req.body est undefined pour les requêtes POST.","Retourner une réponse sans code HTTP approprié (toujours 200) — utilise 201 pour Created, 404 pour Not Found.","Mettre la logique directement dans les routes — organise en contrôleurs séparés dès que le projet grandit."]
+		objectifs:[
+			"Comprendre ce que permet Node.js côté serveur",
+			"Initialiser un projet Node avec npm et Express",
+			"Créer un serveur HTTP simple avec Express",
+			"Exposer des routes d'API qui renvoient du JSON",
+			"Gérer basiquement les erreurs et codes HTTP"
+		],
+		vocab:[
+			{t:"Node.js",d:"Environnement d'exécution qui permet de lancer du JavaScript en dehors du navigateur (côté serveur)."},
+			{t:"npm",d:"Node Package Manager — outil pour installer et gérer les librairies JS."},
+			{t:"Express",d:"Framework minimaliste pour construire des serveurs HTTP et des APIs avec Node.js."},
+			{t:"Middleware",d:"Fonction qui intercepte la requête avant la réponse pour la transformer, la logger, la sécuriser, etc."},
+			{t:"Route",d:"Couple méthode + chemin (GET /api/users) qui décrit une action de l'API."}
+		],
+		html:"<p><b>Node.js</b> te permet d'écrire le backend en JavaScript. Avec Express, tu peux créer des APIs qui parlent en JSON avec le frontend.</p>"+
+"<p>Le trio de base pour une petite API :</p>"+
+"<pre class='notion-code'><code>const express = require('express');\nconst app = express();\napp.use(express.json());      // middleware JSON\napp.get('/api/ping', (req, res) => {\n  res.json({ message: 'pong' });\n});\napp.listen(3000, () => {\n  console.log('API sur http://localhost:3000');\n});</code></pre>",
+		erreurs:[
+			"Oublier npm init -y avant d'installer des paquets — sans package.json, ton projet n'est pas structuré.",
+			"Oublier app.use(express.json()) et s'étonner que req.body soit undefined.",
+			"Ne jamais vérifier req.params ou req.body — toujours valider les entrées.",
+			"Renvoyer toujours 200 même en cas d'erreur — utilise les bons codes HTTP (404, 400, 500…).",
+			"Mettre les secrets (clé API, mot de passe BDD) en dur dans le code — utilise des variables d'environnement."
+		]
 	},
-	exo:"Crée une route GET qui renvoie une liste de tâches en JSON.",
-	project:"🏆 Boss : une <b>API REST</b> complète (GET/POST/DELETE) pour des tâches.",
+	exo:"<b>Exercice :</b> Crée une petite API Express avec deux routes : <code>GET /api/ping</code> qui renvoie <code>{ message: 'pong' }</code> et <code>GET /api/heure</code> qui renvoie l'heure actuelle au format JSON.",
+	project:"🏆 Boss : construis une petite <b>API de tâches</b> avec Node+Express : routes pour lister, ajouter et récupérer une tâche par id. Bonus : persister les données dans un fichier JSON.",
 	quiz:[
 		{q:"Node.js permet d'exécuter JavaScript...", o:["côté serveur","uniquement dans le navigateur","dans Word"], a:0, expl:"Node.js utilise le moteur V8 de Chrome hors du navigateur : JS pour les serveurs, scripts, CLIs et outils de build."},
 		{q:"Express sert à...", o:["styliser des pages","créer des routes et un serveur","versionner du code"], a:1, expl:"Express est un framework minimaliste sur Node.js pour créer des routes, gérer les middlewares et envoyer des réponses HTTP."},
@@ -1677,18 +1928,47 @@ const MODULES = [
 	desc:"Stocker les données : SQL vs NoSQL, CRUD, MongoDB.",
 	badge:"💾", badgeName:"Données persistantes",
 	lessons:[
-		{h:"🗄️ Les opérations CRUD", html:"<p><b>C</b>reate, <b>R</b>ead, <b>U</b>pdate, <b>D</b>elete — les 4 actions de base sur des données.</p><pre class='notion-code'><code>db.tasks.insertOne({ titre: 'Coder' });\ndb.tasks.find();</code></pre>"},
-		{h:"🔍 SQL — les 4 requêtes essentielles", html:"<p>SQL est le langage des bases relationnelles (PostgreSQL, MySQL, SQLite) :</p><pre class='notion-code'><code>-- Lire\nSELECT * FROM taches WHERE fait = true;\n\n-- Ajouter\nINSERT INTO taches (titre, fait) VALUES ('Coder', false);\n\n-- Modifier\nUPDATE taches SET fait = true WHERE id = 1;\n\n-- Supprimer\nDELETE FROM taches WHERE id = 1;</code></pre>"},
-		{h:"🍃 MongoDB & Mongoose", html:"<p><b>Mongoose</b> est la librairie Node pour piloter MongoDB avec des schémas :</p><pre class='notion-code'><code>const TacheSchema = new mongoose.Schema({\n  titre: String,\n  fait: { type: Boolean, default: false }\n});\nconst Tache = mongoose.model('Tache', TacheSchema);\n\n// Créer\nawait Tache.create({ titre: 'Coder' });\n// Lire\nconst taches = await Tache.find();</code></pre>"}
+		{h:"🗄️ SQL vs NoSQL : choisir le bon outil", html:"<p>Deux grandes familles de bases de données :</p><table style='width:100%;border-collapse:collapse;font-size:13px'><tr style='background:var(--notion-blue-bg)'><th style='padding:8px;border:1px solid var(--notion-border)'>Critère</th><th style='padding:8px;border:1px solid var(--notion-border)'>SQL</th><th style='padding:8px;border:1px solid var(--notion-border)'>NoSQL</th></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Structure</td><td style='padding:8px;border:1px solid var(--notion-border)'>Tables, lignes, colonnes</td><td style='padding:8px;border:1px solid var(--notion-border)'>Documents JSON, collections</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Schéma</td><td style='padding:8px;border:1px solid var(--notion-border)'>Fixe et strict</td><td style='padding:8px;border:1px solid var(--notion-border)'>Flexible</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Relations</td><td style='padding:8px;border:1px solid var(--notion-border)'>JOIN entre tables</td><td style='padding:8px;border:1px solid var(--notion-border)'>Imbrication de documents</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Exemples</td><td style='padding:8px;border:1px solid var(--notion-border)'>PostgreSQL, MySQL, SQLite</td><td style='padding:8px;border:1px solid var(--notion-border)'>MongoDB, Firebase, Redis</td></tr></table><p style='margin-top:10px'>Conseil : commence avec <b>SQLite</b> pour les petits projets, <b>MongoDB</b> pour les API flexibles.</p>"},
+		{h:"🔍 SQL : les 4 requêtes CRUD", html:"<p>SQL (Structured Query Language) est le langage standard des bases relationnelles :</p><pre class='notion-code'><code>-- CREATE TABLE\nCREATE TABLE taches (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  titre TEXT NOT NULL,\n  fait BOOLEAN DEFAULT 0\n);\n\n-- INSERT (Create)\nINSERT INTO taches (titre) VALUES ('Apprendre SQL');\n\n-- SELECT (Read)\nSELECT * FROM taches WHERE fait = 0;\n\n-- UPDATE\nUPDATE taches SET fait = 1 WHERE id = 1;\n\n-- DELETE\nDELETE FROM taches WHERE id = 1;</code></pre><p>La clause <code>WHERE</code> filtre les lignes. Sans elle, <code>UPDATE</code> ou <code>DELETE</code> touche <b>toute la table</b>.</p>"},
+		{h:"🔗 Jointures SQL", html:"<p>Les <b>jointures</b> permettent de lier deux tables. Exemple : utilisateurs et leurs commandes.</p><pre class='notion-code'><code>SELECT u.nom, c.titre\nFROM commandes c\nJOIN utilisateurs u ON c.user_id = u.id\nWHERE u.id = 1;</code></pre><p><code>JOIN</code> est l'équivalent d'une relation : une commande appartient à un utilisateur via <code>user_id</code>.</p>"},
+		{h:"🍃 MongoDB : documents & collections", html:"<p>MongoDB stocke des <b>documents JSON</b> dans des collections (l'équivalent de tables) :</p><pre class='notion-code'><code>// Un document 'tache'\n{\n  _id: ObjectId('...'),\n  titre: 'Apprendre MongoDB',\n  tags: ['dev', 'bdd'],\n  fait: false\n}</code></pre><p>Avec le shell Mongo : <code>db.taches.find({ fait: false })</code></p>"},
+		{h:"🛠️ Mongoose : schémas et modèles", html:"<p>Mongoose ajoute des <b>schémas</b> et des <b>modèles</b> à MongoDB pour Node.js :</p><pre class='notion-code'><code>const mongoose = require('mongoose');\nawait mongoose.connect('mongodb://localhost:27017/myapp');\n\nconst TacheSchema = new mongoose.Schema({\n  titre:  { type: String, required: true },\n  fait:   { type: Boolean, default: false },\n  creeAt: { type: Date, default: Date.now }\n});\n\nconst Tache = mongoose.model('Tache', TacheSchema);\n\n// Opérations CRUD\nawait Tache.create({ titre: 'Coder' });\nconst taches = await Tache.find();\nawait Tache.findByIdAndUpdate(id, { fait: true });\nawait Tache.findByIdAndDelete(id);</code></pre>"},
+		{h:"🔐 Sécurité & bonnes pratiques", html:"<p>Quelques règles essentielles pour travailler avec une base de données en sécurité :</p><ul><li><b>Ne jamais stocker un mot de passe en clair</b> — toujours hasher avec bcrypt</li><li><b>Valider les données avant insertion</b> — vérifier types, longueurs, caractères</li><li><b>Utiliser des paramètres liés</b> contre l'injection SQL : <code>WHERE id = ?</code></li><li><b>Stocker la chaîne de connexion dans .env</b> — jamais en dur dans le code</li><li><b>Indexer les colonnes fréquemment filtrées</b> pour accélérer les requêtes</li></ul><pre class='notion-code'><code>// .env\nMONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/myapp\n\n// server.js\nconst mongoose = require('mongoose');\nawait mongoose.connect(process.env.MONGO_URI);</code></pre>"}
 	],
 	cours:{
-		objectifs:["Comprendre la différence entre SQL et NoSQL","Effectuer les opérations CRUD sur une base de données","Modéliser les données et sécuriser les accès"],
-		vocab:[{t:"CRUD",d:"Create, Read, Update, Delete — les 4 opérations de base sur des données."},{t:"SQL",d:"Structured Query Language — langage des bases relationnelles (tables, colonnes, relations)."},{t:"NoSQL",d:"Bases de données non relationnelles : documents (MongoDB), clé-valeur, graphes…"},{t:"Schéma",d:"Structure qui définit les champs, types et contraintes d'une table ou collection."},{t:"INDEX",d:"Structure qui accélère les recherches, comme l'index d'un livre."}],
-		html:"<p>Les <b>4 opérations SQL</b> essentielles :</p><pre class='notion-code'><code>SELECT * FROM taches WHERE fait = false;\nINSERT INTO taches (titre) VALUES ('Coder');\nUPDATE taches SET fait = true WHERE id = 1;\nDELETE FROM taches WHERE id = 1;</code></pre><p>Avec <b>Mongoose</b> (MongoDB) :</p><pre class='notion-code'><code>const Tache = mongoose.model('Tache', { titre: String, fait: Boolean });\nawait Tache.create({ titre: 'Coder' });\nconst toutes = await Tache.find();</code></pre>",
-		erreurs:["Stocker des mots de passe en clair — toujours les hacher avec bcrypt.","Ne pas valider les données avant de les insérer — vérifie toujours ce que tu reçois.","Confondre suppression logique (flag deleted=true) et suppression physique — les deux ont leur place."]
+		objectifs:[
+			"Distinguer SQL et NoSQL et savoir quand utiliser chaque approche",
+			"Écrire les 4 requêtes SQL fondamentales (SELECT, INSERT, UPDATE, DELETE)",
+			"Utiliser des jointures pour lier deux tables",
+			"Modéliser des données avec Mongoose et piloter MongoDB depuis Node.js",
+			"Appliquer les bonnes pratiques de sécurité (hashage, validation, .env)"
+		],
+		vocab:[
+			{t:"CRUD",d:"Create, Read, Update, Delete — les 4 opérations de base sur des données."},
+			{t:"SQL",d:"Structured Query Language — langage des bases relationnelles (tables, colonnes, relations)."},
+			{t:"NoSQL",d:"Bases de données non relationnelles : documents JSON, clé-valeur, graphes…"},
+			{t:"Schéma",d:"Structure qui définit les champs, types et contraintes d'une table ou collection."},
+			{t:"JOIN",d:"Jointure SQL : lie deux tables via une colonne commune (clé étrangère)."},
+			{t:"INDEX",d:"Structure qui accélère les recherches, comme l'index d'un livre."},
+			{t:"Mongoose",d:"Librairie Node.js qui ajoute schémas et modèles à MongoDB pour valider et structurer les données."},
+			{t:".env",d:"Fichier local qui stocke les variables d'environnement sensibles (URI de BDD, clés API)."}
+		],
+		html:"<p><b>Les 4 requêtes SQL à connaître par cœur :</b></p>"+
+"<pre class='notion-code'><code>SELECT * FROM taches WHERE fait = 0;\nINSERT INTO taches (titre) VALUES ('Coder');\nUPDATE taches SET fait = 1 WHERE id = 1;\nDELETE FROM taches WHERE id = 1;</code></pre>"+
+"<p><b>Jointure</b> : relier deux tables :</p>"+
+"<pre class='notion-code'><code>SELECT u.nom, t.titre FROM taches t\nJOIN utilisateurs u ON t.user_id = u.id;</code></pre>"+
+"<p><b>Avec Mongoose (MongoDB) :</b></p>"+
+"<pre class='notion-code'><code>const Tache = mongoose.model('Tache', {\n  titre: { type: String, required: true },\n  fait:  { type: Boolean, default: false }\n});\nawait Tache.create({ titre: 'Coder' });\nconst taches = await Tache.find();</code></pre>",
+		erreurs:[
+			"Stocker des mots de passe en clair — toujours les hacher avec bcrypt.",
+			"Écrire UPDATE ou DELETE sans WHERE — ça modifie ou supprime toute la table.",
+			"Mettre l'URI de connexion BDD en dur dans le code — utilise un fichier .env.",
+			"Insérer des données sans les valider côté serveur — vérifie types, longueurs, formats.",
+			"Ne pas indexer les colonnes fréquemment filtrées — les requêtes deviennent très lentes sur un gros volume de données."
+		]
 	},
-	exo:"Connecte ton API à une base et sauvegarde les tâches durablement.",
-	project:"🏆 Boss : ton API stocke les tâches dans une <b>vraie base de données</b>.",
+	exo:"<b>Exercice :</b> Connecte l'API du module 8 à MongoDB avec Mongoose : crée un schéma Tache (titre, fait, creeAt), remplace le tableau en mémoire par de vraies opérations Mongoose. Les tâches doivent survivre au redémarrage du serveur.",
+	project:"🏆 Boss : construis une <b>API full CRUD</b> connectée à MongoDB — liste, ajout, modification (marquer comme fait), suppression, et une route de recherche par mot-clé dans le titre.",
 	quiz:[
 		{q:"Que veut dire le R de CRUD ?", o:["Run","Read","Reset"], a:1, expl:"CRUD = Create (INSERT), Read (SELECT), Update (UPDATE), Delete (DELETE). Les 4 opérations de base sur des données."},
 		{q:"MongoDB est une base...", o:["NoSQL orientée documents","Un langage CSS","Un éditeur de code"], a:0, expl:"MongoDB stocke des documents JSON (BSON). Pas de tables ni de schéma rigide — flexible, idéal pour des données variables."},
@@ -1703,18 +1983,42 @@ const MODULES = [
 	desc:"Relier React + Node + BDD : ton app complète de A à Z.",
 	badge:"🌉", badgeName:"App full stack",
 	lessons:[
-		{h:"🔗 Le flux complet", html:"<p>Frontend React → appelle ton API Express via <code>fetch</code> → qui lit/écrit dans la base. Tu gères l'authentification et le déploiement.</p>"},
-		{h:"🔐 Authentification JWT", html:"<p>Le JWT (JSON Web Token) est le standard pour sécuriser une API REST :</p><pre class='notion-code'><code>// Connexion → serveur génère un token\nconst token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);\nres.json({ token });\n\n// Requêtes suivantes → client envoie le token\nfetch('/api/profil', {\n  headers: { Authorization: 'Bearer ' + token }\n});</code></pre>"},
-		{h:"🚀 Déployer son app", html:"<ul><li><b>Frontend React</b> → <b>Vercel</b> : connecte ton repo GitHub, deploy auto à chaque push</li><li><b>Backend Node/Express</b> → <b>Render</b> ou <b>Railway</b> : gratuit pour commencer</li><li><b>Base de données</b> → <b>MongoDB Atlas</b> (gratuit jusqu'à 512 Mo) ou <b>Supabase</b> (PostgreSQL gratuit)</li></ul><p>En 30 minutes tu peux avoir ton app complète en ligne 🌐</p>"}
+		{h:"🔗 Architecture full stack", html:"<p>Une app full stack repose sur 3 couches qui communiquent :</p><pre class='notion-code'><code>React (Frontend)          Express (Backend)         MongoDB (BDD)\n    │                          │                         │\n    ├── fetch POST /login ──▶  │  jwt.sign(userId)        │\n    │◀─── { token } ─────────  │                         │\n    │                          │                         │\n    ├── fetch GET /api/taches  │  Tache.find()  ─────────▶│\n    │◀─── [ {...}, {...} ] ─── │◀────────────────────────│</code></pre><p>Le <b>token JWT</b> circule dans les headers. La BDD ne parle qu'au backend. Le frontend ne voit jamais les secrets.</p>"},
+		{h:"🔐 Authentification JWT complète", html:"<p>Voici le flux d'authentification complet :</p><pre class='notion-code'><code>// ── INSCRIPTION ──────────────────────────────\napp.post('/api/register', async (req, res) => {\n  const hash = await bcrypt.hash(req.body.password, 10);\n  const user = await User.create({ email: req.body.email, password: hash });\n  res.status(201).json({ message: 'Créé' });\n});\n\n// ── CONNEXION ────────────────────────────────\napp.post('/api/login', async (req, res) => {\n  const user = await User.findOne({ email: req.body.email });\n  if (!user) return res.status(404).json({ message: 'Inconnu' });\n  const ok = await bcrypt.compare(req.body.password, user.password);\n  if (!ok) return res.status(401).json({ message: 'Mauvais mdp' });\n  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });\n  res.json({ token });\n});</code></pre>"},
+		{h:"🛡️ Middleware d'authentification", html:"<p>Un middleware restreint l'accès aux routes protégées :</p><pre class='notion-code'><code>function auth(req, res, next) {\n  const header = req.headers.authorization;\n  if (!header) return res.status(401).json({ message: 'Non authentifié' });\n  const token = header.split(' ')[1];\n  try {\n    const payload = jwt.verify(token, process.env.JWT_SECRET);\n    req.userId = payload.userId;\n    next();                       // continue vers la route\n  } catch {\n    res.status(401).json({ message: 'Token invalide' });\n  }\n}\n\n// Protéger une route :\napp.get('/api/profil', auth, async (req, res) => {\n  const user = await User.findById(req.userId);\n  res.json(user);\n});</code></pre>"},
+		{h:"🌐 CORS & variables d'env", html:"<p>Quand frontend et backend tournent sur des ports différents, le navigateur bloque les requêtes : c'est le CORS.</p><pre class='notion-code'><code>npm install cors\n\nconst cors = require('cors');\napp.use(cors({ origin: 'http://localhost:5173' }));</code></pre><p>Les secrets ne doivent jamais être dans le code. Utilise un fichier <code>.env</code> :</p><pre class='notion-code'><code>MONGO_URI=mongodb+srv://...\nJWT_SECRET=uneCleTresTresLongue\n\n// Node.js\nrequire('dotenv').config();\nconsole.log(process.env.JWT_SECRET);</code></pre>"},
+		{h:"🚀 Déployer son app full stack", html:"<p>Les hébergeurs gratuits pour débuter :</p><table style='width:100%;border-collapse:collapse;font-size:13px'><tr style='background:var(--notion-blue-bg)'><th style='padding:8px;border:1px solid var(--notion-border)'>Couche</th><th style='padding:8px;border:1px solid var(--notion-border)'>Service</th><th style='padding:8px;border:1px solid var(--notion-border)'>Gratuit ?</th></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Frontend React</td><td style='padding:8px;border:1px solid var(--notion-border)'>Vercel</td><td style='padding:8px;border:1px solid var(--notion-border)'>✅ illimité</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Backend Express</td><td style='padding:8px;border:1px solid var(--notion-border)'>Render / Railway</td><td style='padding:8px;border:1px solid var(--notion-border)'>✅ free tier</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>Base de données</td><td style='padding:8px;border:1px solid var(--notion-border)'>MongoDB Atlas</td><td style='padding:8px;border:1px solid var(--notion-border)'>✅ 512 Mo</td></tr><tr><td style='padding:8px;border:1px solid var(--notion-border)'>PostgreSQL</td><td style='padding:8px;border:1px solid var(--notion-border)'>Supabase / Neon</td><td style='padding:8px;border:1px solid var(--notion-border)'>✅ free tier</td></tr></table><p style='margin-top:10px'>⚠️ Pense à mettre tes variables d'env dans le dashboard du service d'hébergement, pas dans ton code !</p>"},
+		{h:"📁 Structure d'un projet full stack", html:"<p>Organisation recommandée pour un projet full stack propre :</p><pre class='notion-code'><code>mon-projet/\n├── client/            ← app React (Vite)\n│   ├── src/\n│   │   ├── components/\n│   │   ├── pages/\n│   │   └── api.js     ← fonctions fetch centralisées\n│   └── package.json\n├── server/            ← API Express\n│   ├── models/        ← schémas Mongoose\n│   ├── routes/        ← routes Express\n│   ├── middleware/    ← auth, erreurs\n│   └── server.js\n└── README.md</code></pre>"}
 	],
 	cours:{
-		objectifs:["Connecter un frontend React à une API Express","Implémenter une authentification par token JWT","Déployer une application full stack en ligne"],
-		vocab:[{t:"CORS",d:"Cross-Origin Resource Sharing — mécanisme qui contrôle les accès entre domaines. Active-le dans Express avec le package cors."},{t:"JWT",d:"JSON Web Token — token signé pour authentifier les requêtes API sans session serveur."},{t:"Variable d'env",d:"Variable configurée sur le serveur (non commitée). process.env.MA_VAR dans Node."},{t:"Déploiement",d:"Mise en ligne d'une app : Vercel (frontend), Render/Railway (backend), MongoDB Atlas (BDD)."},{t:"fetch (auth)",d:"Pour les routes protégées : ajoute Authorization: Bearer token dans les headers de chaque requête."}],
-		html:"<p>Le flux complet d'une app full stack :</p><pre class='notion-code'><code>React (Vercel) ──fetch──▶ Express API (Render)\n                              │\n                       MongoDB Atlas</code></pre><p><b>Authentification JWT</b> :</p><pre class='notion-code'><code>// Login → serveur envoie un token\nconst token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);\n\n// Requêtes suivantes → client l'envoie\nfetch('/api/profil', {\n  headers: { Authorization: 'Bearer ' + token }\n});</code></pre>",
-		erreurs:["Hardcoder les URLs du backend dans le frontend — utilise des variables d'environnement.","Exposer JWT_SECRET dans le code source — c'est le secret à protéger absolument.","Négliger CORS — configure-le dès le départ pour éviter les erreurs 'blocked by CORS policy'."]
+		objectifs:[
+			"Comprendre l'architecture React + Express + MongoDB",
+			"Implémenter l'inscription, la connexion et la protection de routes avec JWT",
+			"Gérer le CORS et les variables d'environnement correctement",
+			"Déployer une app full stack sur Vercel + Render + MongoDB Atlas",
+			"Structurer un projet full stack de façon maintenable"
+		],
+		vocab:[
+			{t:"JWT",d:"JSON Web Token — token signé pour authentifier les requêtes API sans session serveur."},
+			{t:"CORS",d:"Cross-Origin Resource Sharing — mécanisme qui contrôle les accès entre domaines."},
+			{t:"Middleware",d:"Fonction Express qui s'exécute avant la route cible."},
+			{t:"Variable d'env",d:"Variable configurée sur le serveur (non commitée). process.env.MA_VAR dans Node."},
+			{t:"bcrypt",d:"Librairie de hashage de mots de passe. Ne stocke jamais un mot de passe en clair."}
+		],
+		html:"<p><b>Le flux complet d'une app full stack :</b></p>"+
+"<pre class='notion-code'><code>React ──fetch──▶ Express (auth + routes) ──Mongoose──▶ MongoDB</code></pre>"+
+"<p><b>Connexion JWT</b> en 2 étapes :</p>"+
+"<pre class='notion-code'><code>// 1) Login → serveur génère un token\nconst token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });\n\n// 2) Client l'envoie dans chaque requête\nfetch('/api/profil', { headers: { Authorization: 'Bearer ' + token } });</code></pre>",
+		erreurs:[
+			"Oublier le package cors sur Express — le navigateur bloque toutes les requêtes cross-origin.",
+			"Stocker le JWT dans localStorage sans précaution — préfère httpOnly cookie en production.",
+			"Mettre les variables d'env dans le code — utilise toujours .env + variables de ton hébergeur.",
+			"Ne jamais hasher les mots de passe — utilise bcrypt avant d'insérer en base.",
+			"Faire des fetch sans vérifier le token JWT expiré côté client — gère les 401 et redirige vers /login."
+		]
 	},
-	exo:"Branche ton frontend React sur ton API + base de données.",
-	project:"🏆 Boss : une <b>app full stack déployée</b> en ligne (front + back + BDD).",
+	exo:"<b>Exercice :</b> Crée une app full stack minimale : une route Express POST /api/login qui renvoie un JWT, et une route protégée GET /api/profil qui n'est accessible qu'avec un token valide. Teste avec Postman ou depuis React.",
+	project:"🏆 Boss : une <b>app full stack complète</b> avec inscription, connexion JWT, liste de tâches par utilisateur, déployée sur Vercel + Render + MongoDB Atlas.",
 	quiz:[
 		{q:"Le frontend parle au backend via...", o:["des requêtes HTTP (fetch)","du CSS uniquement","Git"], a:0, expl:"React utilise fetch() pour envoyer des requêtes HTTP à l'API Express. Le backend répond en JSON."},
 		{q:"« Full stack » signifie maîtriser...", o:["frontend + backend + BDD","que du HTML/CSS","que du design"], a:0, expl:"Un dev full stack sait travailler sur toutes les couches : interface utilisateur, serveur, base de données et déploiement."},
@@ -1728,18 +2032,42 @@ const MODULES = [
 	desc:"Portfolio, CV tech, GitHub propre, prépa entretiens.",
 	badge:"💼", badgeName:"Prêt·e à postuler",
 	lessons:[
-		{h:"💼 Te rendre employable", html:"<ul><li>Un <b>portfolio</b> avec 3–4 projets soignés.</li><li>Un <b>GitHub</b> actif et bien rangé.</li><li>Un <b>CV tech</b> + LinkedIn à jour.</li><li>T'entraîner aux <b>entretiens</b> et aux exercices de code.</li></ul>"},
-		{h:"🎤 Les types d'entretiens techniques", html:"<ul><li><b>Live coding</b> — tu résous un problème en direct sur CoderPad. Parle à voix haute, les recruteurs notent ton raisonnement autant que la solution.</li><li><b>Take-home test</b> — mini-projet à rendre en 48–72h. Soigne la lisibilité et le README.</li><li><b>Code review</b> — tu lis et commentes du code existant. Montre que tu sais identifier les problèmes.</li></ul><p>💡 Pour t'entraîner : <b>LeetCode</b> (algo), <b>Frontend Mentor</b> (UI), <b>Codewars</b> (JS).</p>"},
-		{h:"💡 Ce que cherche vraiment un recruteur junior", html:"<p>Les recruteurs savent que tu n'as pas 5 ans d'expérience. Ils cherchent :</p><ul><li>✅ Des <b>projets concrets</b> (même simples) avec du code sur GitHub</li><li>✅ La <b>capacité à apprendre</b> vite et à poser les bonnes questions</li><li>✅ Une <b>curiosité sincère</b> pour la tech (veille, projets perso…)</li><li>✅ La <b>communication</b> : expliquer ce que tu fais et pourquoi</li></ul><p>Un CV sans projets vaut beaucoup moins qu'un portfolio imparfait mais réel.</p>"}
+		{h:"🎯 3 projets qui impressionnent", html:"<p>Un bon portfolio junior n'a pas besoin de 10 projets. Il faut <b>3–4 projets soignés</b>, chacun capable de se défendre en entretien.</p><p>Projets recommandés :</p><ul><li><b>To-Do List full stack</b> — démontre HTML/CSS/JS + API + BDD + déploiement</li><li><b>Clone d'une app connue</b> (météo, Trello, Reddit…) — montre que tu sais décortiquer un produit existant</li><li><b>Projet perso original</b> — montre ta curiosité et ta capacité à aller jusqu'au bout</li></ul><p>Chaque projet doit avoir : une <b>démo live</b>, le <b>code sur GitHub</b> et un <b>README clair</b>.</p>"},
+		{h:"📄 README qui vend ton projet", html:"<p>Un bon README suit ce plan :</p><pre class='notion-code'><code># Nom du Projet\n\n## Description\nUne phrase claire sur ce que fait l'app.\n\n## Demo\n👉 [Live Demo](https://...)\n\n## Stack technique\n- Frontend : React + CSS Modules\n- Backend : Node.js + Express\n- BDD : MongoDB Atlas\n\n## Installation\n\`\`\`bash\ngit clone https://github.com/...\ncd mon-projet\nnpm install\nnpm run dev\n\`\`\`\n\n## Captures d'écran\n![Accueil](./screenshots/home.png)</code></pre>"},
+		{h:"💼 CV tech & LinkedIn", html:"<p>Un CV tech pour un poste junior :</p><ul><li><b>1 page maximum</b>, PDF, nom de fichier propre (<code>CV_Prenom_Nom_Dev.pdf</code>)</li><li>Section <b>Compétences</b> : liste tes langages et frameworks (HTML, CSS, JS, React, Node.js, MongoDB)</li><li>Section <b>Projets</b> : 2–3 projets avec lien GitHub et démo</li><li>Section <b>Formation</b> : inclure ce parcours, certifications, formation en ligne</li><li>Un lien vers ton <b>GitHub</b> et ton <b>portfolio</b></li></ul><p>Sur LinkedIn : photo pro, titre précis (<em>Développeur Web Full Stack</em>), résumé en 3 lignes, tous tes projets en Featured.</p>"},
+		{h:"🎤 Préparer les entretiens techniques", html:"<p>Les types d'entretiens que tu vas rencontrer :</p><ul><li><b>Live coding</b> — problème à résoudre en direct (CoderPad, ScreenCode). Parle à voix haute, explique ton raisonnement même si tu bloques.</li><li><b>Take-home test</b> — mini projet en 48–72h. Soigne le README, les commits et la lisibilité.</li><li><b>Code review</b> — tu analyses du code existant et commentes les problèmes.</li><li><b>Questions de culture tech</b> — qu'est-ce que le DOM, la différence entre GET et POST, qu'est-ce qu'une Promise…</li></ul><p>Sites pour s'entraîner : <b>LeetCode</b> (algo), <b>Frontend Mentor</b> (UI), <b>Codewars</b> (JS).</p>"},
+		{h:"💡 Ce que cherche un recruteur junior", html:"<p>Les recruteurs savent que tu n'as pas 5 ans d'expérience. Voici ce qu'ils évaluent vraiment :</p><ul><li>✅ <b>Projets concrets</b> sur GitHub, même simples</li><li>✅ <b>Capacité à apprendre vite</b> et curiosité sincère</li><li>✅ <b>Communication claire</b> : expliquer ce que tu fais et pourquoi</li><li>✅ <b>Habitudes de bon développeur</b> : commits propres, README, tests, sécurité de base</li></ul><p>Un CV sans projets vaut beaucoup moins qu'un portfolio imparfait mais réel.</p>"},
+		{h:"🔥 Questions d'entretien fréquentes", html:"<p>Questions souvent posées en entretien junior :</p><ul><li>Explique la différence entre <code>==</code> et <code>===</code></li><li>Qu'est-ce que le DOM ?</li><li>Comment fonctionne <code>async/await</code> ?</li><li>Quelle différence entre <code>let</code>, <code>const</code> et <code>var</code> ?</li><li>Qu'est-ce qu'un composant React et comment passe-t-on des données entre composants ?</li><li>Comment fonctionne l'authentification JWT ?</li><li>C'est quoi le CORS ?</li><li>Quelle différence entre <code>GET</code> et <code>POST</code> ?</li></ul><p>Prépare une réponse courte (30 sec) pour chacune.</p>"}
 	],
 	cours:{
-		objectifs:["Créer un portfolio qui met en valeur tes projets","Préparer un CV technique et un profil GitHub soigné","Se préparer aux entretiens techniques junior"],
-		vocab:[{t:"Portfolio",d:"Site qui présente tes projets avec captures, démo live et liens GitHub. Ta vitrine professionnelle."},{t:"README",d:"Fichier Markdown à la racine d'un repo : description, installation, screenshots, technologies."},{t:"Live coding",d:"Exercice d'entretien où tu résous un problème en direct. Parle à voix haute — le raisonnement compte autant que la solution."},{t:"Take-home",d:"Mini-projet d'entretien à rendre en 48-72h. Soigne la lisibilité du code et le README."},{t:"Soft skills",d:"Capacité à communiquer, expliquer ton raisonnement, reconnaître ses limites et apprendre vite."}],
-		html:"<p>Un bon portfolio junior :</p><ul><li>3-4 projets soignés plutôt que 10 projets bâclés</li><li>Chaque projet avec une démo live + lien GitHub + description courte</li><li>Un README clair sur chaque repo (technologies, installation, captures)</li><li>Un design simple et lisible — la lisibilité prime sur l'originalité</li></ul><p>Pour les entretiens : entraîne-toi sur <b>LeetCode</b> (algo), <b>Frontend Mentor</b> (UI), <b>Codewars</b> (JS). Parle à voix haute pendant les exercices.</p>",
-		erreurs:["Mettre trop de projets non terminés sur GitHub — 3 repos propres valent mieux que 15 abandonnés.","Sous-estimer l'importance du README — c'est la première chose qu'un recruteur lit avant le code.","Mentir sur ses compétences dans le CV — un entretien le révèle immédiatement."]
+		objectifs:[
+			"Identifier quels projets mettre en avant dans son portfolio",
+			"Écrire un README complet et convaincant",
+			"Construire un CV tech et un profil GitHub/LinkedIn solides",
+			"Se préparer aux différents types d'entretiens techniques",
+			"Maîtriser les questions fréquentes en entretien junior"
+		],
+		vocab:[
+			{t:"Portfolio",d:"Site qui présente tes projets avec démo live, liens GitHub et description. Ta vitrine professionnelle."},
+			{t:"README",d:"Fichier Markdown à la racine d'un repo : description, installation, captures, stack technique."},
+			{t:"Live coding",d:"Exercice d'entretien en direct — parle à voix haute, le raisonnement compte autant que la solution."},
+			{t:"Take-home",d:"Mini-projet d'entretien à rendre en 48-72h. Soigne la lisibilité du code et le README."},
+			{t:"Soft skills",d:"Capacité à communiquer, expliquer son raisonnement, reconnaître ses limites et apprendre vite."}
+		],
+		html:"<p><b>L'objectif final : être crédible en entretien et avoir des projets qui parlent pour toi.</b></p>"+
+"<p>3 projets suffisent. Ce qui compte c'est la qualité : démo live + GitHub + README + code lisible.</p>"+
+"<p>Pour l'entretien, tu dois pouvoir répondre en 30 secondes à des questions comme :</p>"+
+"<ul><li>Explique la différence entre GET et POST</li><li>C'est quoi une Promise ?</li><li>Comment passe-t-on des données entre composants React ?</li></ul>",
+		erreurs:[
+			"Mettre 10 projets bâclés sur son portfolio — 3 projets soignés valent bien plus.",
+			"Ne pas avoir de démo live — un lien GitHub sans démo est bien moins convaincant.",
+			"GitHub avec des commits 'fix' et 'update' partout — des messages clairs montrent ton professionnalisme.",
+			"Postuler sans s'être entraîné aux questions techniques — prépare des réponses courtes et claires.",
+			"Ignorer le CV et LinkedIn — un recruteur vérifie toujours les 2 avant un entretien."
+		]
 	},
-	exo:"Assemble tes meilleurs projets dans un portfolio en ligne.",
-	project:"🏆 Boss final : <b>portfolio publié</b> + candidature envoyée. 🎉",
+	exo:"<b>Exercice :</b> Crée ou améliore le README de ton meilleur projet : description en 1 phrase, démo live, stack technique, instructions d'installation et au moins une capture d'écran.",
+	project:"🏆 Boss : un <b>portfolio en ligne complet</b> avec au minimum 3 projets soignés, une page À propos, tes liens GitHub/LinkedIn, un formulaire de contact fonctionnel, et un design responsive.",
 	quiz:[
 		{q:"Le meilleur argument en entretien junior ?", o:["Des projets concrets à montrer","Rien, les diplômes suffisent","Un long CV vide de projets"], a:0, expl:"Des projets sur GitHub prouvent tes compétences bien mieux qu'un diplôme. Un recruteur peut voir ton code directement."},
 		{q:"Un portfolio sert à...", o:["Prouver ce que tu sais faire","Stocker des photos","Coder plus vite"], a:0, expl:"Le portfolio montre tes projets en action. C'est ta vitrine professionnelle. 3-4 projets soignés valent mieux que 10 bâclés."},
