@@ -1469,7 +1469,7 @@ const MODULES = [
 			"Lire une URL sans la décomposer — tu perds vite le sens des chemins et paramètres."
 		]
 	},
-	exo:"<b>Exercice :</b> Crée un mini schéma du flux web (client → serveur → réponse) dans un commentaire HTML de ton index.html, puis ouvre les DevTools et repère la Console et Network.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Crée un fichier <code>index.html</code> et ouvre-le dans Chrome.</li><li>Appuie sur <code>F12</code> pour ouvrir les DevTools, puis va dans l'onglet <b>Network</b>.</li><li>Recharge la page — observe les requêtes (nom du fichier, méthode GET, code de statut 200).</li><li>Dans la <b>Console</b>, tape <code>document.title</code> et appuie sur Entrée.</li><li>Ajoute un commentaire HTML qui schématise le flux : <code>&lt;!-- Client → DNS → Serveur → Réponse HTTP --&gt;</code>.</li></ol>",
 	project:"🏆 Boss : une page d'accueil qui affiche clairement la séparation frontend / backend / base de données avec une mini carte mentale visuelle.",
 	quiz:[
 		{q:"Qui envoie la requête au serveur ?", o:["Le navigateur (client)","La base de données","Le CSS"], a:0, expl:"Le navigateur (client) envoie toujours la requête. Le serveur reçoit, traite et renvoie la réponse."},
@@ -1477,7 +1477,9 @@ const MODULES = [
 		{q:"F12 dans le navigateur ouvre...", o:["Le terminal système","Les DevTools","Word"], a:1, expl:"Les DevTools (F12) te donnent accès au HTML, CSS, console JS, requêtes réseau et bien plus — ton meilleur outil."},
 		{q:"VS Code est...", o:["Un navigateur web","Un éditeur de code","Une base de données"], a:1, expl:"VS Code (Visual Studio Code) est l'éditeur de code gratuit le plus populaire chez les développeurs web."},
 		{q:"HTML est l'abréviation de...", o:["HyperText Markup Language","High Tech Markdown Layout","Home Tool Markup Language"], a:0, expl:"HyperText Markup Language — le langage de balisage qui structure les pages web depuis 1991."},
-		{q:"Quel type de fichier ouvre-t-on dans le navigateur pour afficher une page web ?", o:[".txt",".html",".css"], a:1, expl:"Les fichiers .html sont le point d'entrée d'une page web. Le navigateur les interprète pour afficher le contenu."}
+		{q:"Quel type de fichier ouvre-t-on dans le navigateur pour afficher une page web ?", o:[".txt",".html",".css"], a:1, expl:"Les fichiers .html sont le point d'entrée d'une page web. Le navigateur les interprète pour afficher le contenu."},
+		{q:"Quelle méthode HTTP le navigateur utilise-t-il par défaut quand tu tapes une URL ?", o:["POST","GET","PUT"], a:1, expl:"GET est la méthode par défaut pour lire une ressource. POST sert à envoyer des données (formulaire, API). PUT/PATCH modifient, DELETE supprime."},
+		{q:"Quelle est la différence entre HTTP et HTTPS ?", o:["HTTPS ajoute le chiffrement SSL/TLS","HTTP est plus rapide et recommandé","Il n'y a aucune différence"], a:0, expl:"HTTPS chiffre les échanges via SSL/TLS. Sans HTTPS, les données transitent en clair et peuvent être interceptées. Tous les sites modernes doivent utiliser HTTPS."}
 	]
 },
 {
@@ -1519,7 +1521,7 @@ const MODULES = [
 			"Oublier de relier label et input dans un formulaire."
 		]
 	},
-	exo:"<b>Exercice :</b> Ajoute à ta page perso une section accessible avec un titre clair, une image avec alt, un lien externe et un formulaire avec label/input/textarea.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Crée une page HTML avec la structure de base (<code>html:5</code> + Tab dans VS Code).</li><li>Ajoute un <code>&lt;header&gt;</code> avec un <code>&lt;h1&gt;</code> contenant ton prénom.</li><li>Insère une image avec <code>&lt;img src='...' alt='...'&gt;</code> — vérifie que l'attribut <code>alt</code> est bien renseigné.</li><li>Ajoute un lien externe (<code>&lt;a href='https://...' target='_blank'&gt;</code>) qui s'ouvre dans un nouvel onglet.</li><li>Crée un formulaire avec un <code>&lt;label&gt;</code>, un <code>&lt;input&gt;</code> et un <code>&lt;textarea&gt;</code> — ajoute <code>required</code> sur les champs obligatoires.</li></ol>",
 	project:"🏆 Boss : une page de portfolio HTML complète avec navigation interne, sections sémantiques et formulaire de contact accessible.",
 	quiz:[
 		{q:"Quelle balise pour le plus grand titre ?", o:["&lt;p&gt;","&lt;h1&gt;","&lt;title&gt;"], a:1, expl:"Les titres vont de <h1> (principal, unique par page) à <h6>. <title> est le titre de l'onglet, invisible dans la page."},
@@ -1527,7 +1529,9 @@ const MODULES = [
 		{q:"Quelle balise pour insérer une image ?", o:["&lt;img&gt;","&lt;pic&gt;","&lt;photo&gt;"], a:0, expl:"<img> est auto-fermante. Elle prend src (chemin de l'image) et alt (texte alternatif, obligatoire)."},
 		{q:"&lt;ul&gt; crée une liste...", o:["ordonnée (1,2,3)","non ordonnée (puces)","de liens"], a:1, expl:"<ul> = unordered list (puces). <ol> = ordered list (numéros). <li> est l'élément de liste dans les deux cas."},
 		{q:"L'attribut alt d'une image sert à...", o:["Changer sa taille","Décrire l'image pour l'accessibilité","Créer un lien"], a:1, expl:"alt est lu par les lecteurs d'écran et s'affiche si l'image ne charge pas. C'est un critère d'accessibilité essentiel."},
-		{q:"Quelle balise crée un paragraphe ?", o:["&lt;p&gt;","&lt;span&gt;","&lt;div&gt;"], a:0, expl:"<p> crée un paragraphe. <span> est inline (dans une ligne). <div> est un conteneur générique sans sémantique."}
+		{q:"Quelle balise crée un paragraphe ?", o:["&lt;p&gt;","&lt;span&gt;","&lt;div&gt;"], a:0, expl:"<p> crée un paragraphe. <span> est inline (dans une ligne). <div> est un conteneur générique sans sémantique."},
+		{q:"Quelle balise délimite la zone visible de la page ?", o:["&lt;head&gt;","&lt;body&gt;","&lt;main&gt;"], a:1, expl:"<body> contient tout ce qui est affiché dans le navigateur. <head> contient les métadonnées (title, liens CSS). <main> est sémantique mais s'insère dans body."},
+		{q:"Quel attribut rend un champ de formulaire obligatoire ?", o:["mandatory","needed","required"], a:2, expl:"L'attribut required sur un <input> ou <textarea> empêche la soumission du formulaire si le champ est vide — sans la moindre ligne de JavaScript."}
 	]
 },
 {
@@ -1571,7 +1575,7 @@ const MODULES = [
 			"Mettre trop de sélecteurs imbriqués."
 		]
 	},
-	exo:"<b>Exercice :</b> Prends la page HTML du module 1 et crée une maquette responsive avec navbar Flexbox, grille Grid et une petite animation sur les cartes.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Relie un fichier <code>style.css</code> à ta page HTML avec <code>&lt;link rel='stylesheet' href='style.css'&gt;</code>.</li><li>Crée une navbar avec Flexbox : <code>display:flex; justify-content:space-between; align-items:center</code>.</li><li>Ajoute une grille de cartes avec Grid : <code>display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:16px</code>.</li><li>Ajoute une <code>@media (max-width:600px)</code> qui passe la navbar en colonne.</li><li>Crée une animation <code>@keyframes fadeIn</code> appliquée aux cartes avec <code>animation: fadeIn 0.3s ease</code>.</li></ol>",
 	project:"🏆 Boss : un portfolio responsive avec thème clair/sombre, animations subtiles et navigation mobile.",
 	quiz:[
 		{q:"Quelle propriété change la couleur du texte ?", o:["background","color","font-size"], a:1, expl:"color change la couleur du texte. background-color change le fond. Ne les confonds pas."},
@@ -1579,7 +1583,9 @@ const MODULES = [
 		{q:"Le 'box model' inclut...", o:["margin, border, padding, content","font, color, size","flex, grid, float"], a:0, expl:"De l'intérieur vers l'extérieur : content → padding → border → margin. Utilise box-sizing:border-box pour éviter les surprises."},
 		{q:"Pour rendre un site responsive on utilise...", o:["@media queries","@font-face","@import"], a:0, expl:"@media (max-width: 600px) { ... } applique des styles uniquement sous 600px de largeur."},
 		{q:"display:none fait quoi ?", o:["Cache l'élément et libère son espace","Rend l'élément transparent","L'agrandit"], a:0, expl:"display:none retire l'élément du flux (son espace est libéré). visibility:hidden le cache mais conserve son espace."},
-		{q:"Quelle propriété CSS espace les enfants d'un flex ou grid ?", o:["spacing","gap","margin-between"], a:1, expl:"gap est la propriété moderne pour espacer les enfants d'un Flex ou Grid. Elle remplace les marges manuelles sur chaque enfant."}
+		{q:"Quelle propriété CSS espace les enfants d'un flex ou grid ?", o:["spacing","gap","margin-between"], a:1, expl:"gap est la propriété moderne pour espacer les enfants d'un Flex ou Grid. Elle remplace les marges manuelles sur chaque enfant."},
+		{q:"Quelle valeur de `position` fixe un élément à la fenêtre (viewport) ?", o:["relative","absolute","fixed"], a:2, expl:"fixed retire l'élément du flux et le positionne par rapport au viewport (fenêtre). Utile pour les barres de navigation collantes. absolute se positionne par rapport au parent positionné le plus proche."},
+		{q:"Combien de colonnes crée `grid-template-columns: repeat(3, 1fr)` ?", o:["1","3","6"], a:1, expl:"repeat(3, 1fr) crée 3 colonnes de largeur égale (1 fraction chacune de l'espace disponible). C'est la base d'une grille responsive avec auto-fill."}
 	]
 },
 {
@@ -1640,7 +1646,7 @@ const MODULES = [
 			"Modifier un tableau partagé sans le copier quand il faut garder l'immuabilité."
 		]
 	},
-	exo:"<b>Exercice :</b> Écris une fonction qui prend un tableau de notes, filtre les notes >= 10, puis calcule la moyenne des admis. Utilise une déstructuration dans ton code.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Crée un tableau <code>notes</code> de 8 valeurs mixtes (ex: [12, 8, 15, 9, 17, 5, 11, 14]).</li><li>Filtre les notes >= 10 avec <code>.filter()</code> — stocke le résultat dans <code>admis</code>.</li><li>Calcule la moyenne avec <code>.reduce()</code>, divise par <code>admis.length</code>.</li><li>Affiche le résultat avec <code>console.log</code> ou injecte-le dans la page via <code>innerHTML</code>.</li><li>Refactorise : utilise la déstructuration <code>const { length } = admis</code> dans le calcul.</li></ol>",
 	project:"🏆 Boss : un mini jeu 'devine le nombre' avec limites, messages dynamiques et bouton rejouer.",
 	quiz:[
 		{q:"Quel mot-clé pour une constante ?", o:["let","const","var"], a:1, expl:"const déclare une valeur immuable. let peut être réassignée. var est à éviter (portée de fonction, hoisting inattendu)."},
@@ -1648,7 +1654,9 @@ const MODULES = [
 		{q:"Quelle structure pour répéter du code ?", o:["if / else","for / while","const"], a:1, expl:"for et while sont des boucles. if/else est une condition. const est une déclaration de variable."},
 		{q:"typeof 42 renvoie...", o:["'number'","'integer'","'string'"], a:0, expl:"typeof retourne le type en string : 'number', 'string', 'boolean', 'object', 'function', 'undefined'. Il n'y a pas de type 'integer' en JS."},
 		{q:"Que fait arr.map(fn) ?", o:["Filtre les éléments","Retourne un nouveau tableau transformé","Trie le tableau"], a:1, expl:"map() retourne un NOUVEAU tableau transformé. filter() filtre. forEach() parcourt sans retourner. Aucune ne modifie l'original."},
-		{q:"Comment accéder au premier élément d'un tableau ?", o:["arr[0]","arr.first()","arr(1)"], a:0, expl:"Les tableaux JS commencent à l'index 0. arr[0] = premier, arr[1] = deuxième, arr[arr.length-1] = dernier."}
+		{q:"Comment accéder au premier élément d'un tableau ?", o:["arr[0]","arr.first()","arr(1)"], a:0, expl:"Les tableaux JS commencent à l'index 0. arr[0] = premier, arr[1] = deuxième, arr[arr.length-1] = dernier."},
+		{q:"Que vaut `typeof null` en JavaScript ?", o:["'null'","'object'","'undefined'"], a:1, expl:"C'est un bug historique de JS qui n'a jamais été corrigé pour des raisons de compatibilité : typeof null retourne 'object'. Pour tester null, utilise `valeur === null`."},
+		{q:"Qu'est-ce que le hoisting en JavaScript ?", o:["Un type de boucle","La remontée des déclarations en haut du scope","Une méthode de tableau"], a:1, expl:"Le hoisting 'remonte' les déclarations var et les fonctions. Les fonctions sont entièrement hissées (corps inclus), var seulement la déclaration (valeur = undefined jusqu'à la ligne d'assignation)."}
 	]
 },
 {
@@ -1693,7 +1701,7 @@ const MODULES = [
 			"Ne pas vérifier si querySelector a trouvé un élément."
 		]
 	},
-	exo:"<b>Exercice :</b> Fais persister ta To-Do List dans LocalStorage et gère la suppression via délégation d'événements.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Crée une liste HTML de 5 tâches statiques (<code>&lt;ul id='liste'&gt;&lt;li&gt;...&lt;/li&gt;</code>).</li><li>Ajoute un bouton 'Supprimer' dans chaque <code>&lt;li&gt;</code>.</li><li>Utilise la <b>délégation d'événements</b> : un seul <code>addEventListener('click')</code> sur <code>#liste</code>.</li><li>Dans le handler, vérifie <code>event.target.matches('button')</code> et supprime le <code>&lt;li&gt;</code> parent avec <code>remove()</code>.</li><li>Sauvegarde la liste dans <code>localStorage</code> à chaque modification et restaure-la au rechargement de la page.</li></ol>",
 	project:"🏆 Boss : une To-Do List complète avec filtres, compteur et conservation après rafraîchissement.",
 	quiz:[
 		{q:"Quelle méthode sélectionne un élément CSS ?", o:["document.querySelector","console.log","Math.random"], a:0, expl:"querySelector retourne le PREMIER élément correspondant. querySelectorAll retourne TOUS les éléments (NodeList)."},
@@ -1701,7 +1709,9 @@ const MODULES = [
 		{q:"innerHTML permet de...", o:["Modifier le contenu HTML d'un élément","Appliquer du style","Supprimer un fichier"], a:0, expl:"innerHTML lit/écrit du HTML brut. textContent lit/écrit du texte pur (plus sûr, pas de risque XSS)."},
 		{q:"event.preventDefault() sert à...", o:["Empêcher le comportement par défaut du navigateur","Ajouter une classe CSS","Logger dans la console"], a:0, expl:"Sans preventDefault(), un clic sur <a> navigue, un submit recharge la page. preventDefault() annule ce comportement natif."},
 		{q:"Quelle propriété lit le texte d'un élément sans balises HTML ?", o:["innerHTML","textContent","innerText"], a:1, expl:"textContent retourne le texte pur. innerHTML inclut les balises HTML. innerText respecte le CSS (cache les display:none)."},
-		{q:"element.classList.add() permet de...", o:["Créer un élément","Ajouter une classe CSS à un élément","Supprimer un élément"], a:1, expl:"classList est l'objet moderne pour les classes : .add(), .remove(), .toggle(), .contains(). Plus sûr que modifier className."}
+		{q:"element.classList.add() permet de...", o:["Créer un élément","Ajouter une classe CSS à un élément","Supprimer un élément"], a:1, expl:"classList est l'objet moderne pour les classes : .add(), .remove(), .toggle(), .contains(). Plus sûr que modifier className."},
+		{q:"La délégation d'événements consiste à...", o:["Supprimer tous les écouteurs existants","Écouter les événements sur un parent pour gérer ses enfants","Dupliquer un événement sur plusieurs éléments"], a:1, expl:"Plutôt que d'attacher un écouteur à chaque enfant (coûteux et cassé si ajout dynamique), on en met un sur le parent et on utilise event.target pour identifier l'élément cliqué."},
+		{q:"Quelle méthode crée un nouvel élément HTML en JavaScript ?", o:["document.newElement()","document.createElement()","document.addElement()"], a:1, expl:"document.createElement('div') crée un élément en mémoire. Il faut ensuite l'insérer dans le DOM avec parent.appendChild(el) ou el.insertAdjacentElement()."}
 	]
 },
 {
@@ -1754,7 +1764,7 @@ const MODULES = [
 			"Ignorer Promise.all quand tu dois lancer plusieurs requêtes en parallèle."
 		]
 	},
-	exo:"<b>Exercice :</b> Récupère deux API en parallèle avec Promise.all puis réécris l'exemple en async/await.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Écris une fonction <code>async function getUtilisateurs()</code> qui appelle <code>https://jsonplaceholder.typicode.com/users</code>.</li><li>Vérifie <code>response.ok</code> avant d'appeler <code>response.json()</code> — lance une erreur sinon.</li><li>Encadre le tout dans un <code>try/catch</code> et affiche un message d'erreur clair si ça échoue.</li><li>Récupère en parallèle les utilisateurs ET les posts avec <code>Promise.all([fetch(...), fetch(...)])</code>.</li><li>Affiche les noms d'utilisateurs dans un <code>&lt;ul&gt;</code> en créant les <code>&lt;li&gt;</code> dynamiquement en JS.</li></ol>",
 	project:"🏆 Boss : un tableau de bord d'API avec chargement, erreur, résultat et requête multiple.",
 	quiz:[
 		{q:"fetch() sert à...", o:["Styliser la page","Récupérer des données réseau","Déclarer une variable"], a:1, expl:"fetch() envoie une requête HTTP asynchrone et retourne une Promise<Response>. Il faut await pour attendre le résultat."},
@@ -1762,7 +1772,9 @@ const MODULES = [
 		{q:"La déstructuration `const {nom} = obj` extrait...", o:["La propriété 'nom' de obj","Tous les objets","Un tableau"], a:0, expl:"const {a, b} = obj équivaut à const a = obj.a; const b = obj.b; — plus concis et lisible."},
 		{q:"Les arrow functions `=>` sont...", o:["Une syntaxe raccourcie pour les fonctions","Un type de boucle","Une déclaration de classe"], a:0, expl:"Les fonctions fléchées sont plus courtes et n'ont pas leur propre this — idéal pour les callbacks comme .map() et .filter()."},
 		{q:"Que retourne fetch() ?", o:["Une Promise","Un objet JSON directement","Une string"], a:0, expl:"fetch() retourne une Promise<Response>. Pour lire le JSON, il faut appeler response.json() qui retourne aussi une Promise."},
-		{q:"L'opérateur spread ... permet de...", o:["Déclarer une variable","Copier ou fusionner des tableaux et objets","Créer une boucle"], a:1, expl:"[...a, ...b] fusionne deux tableaux. {...obj, x:1} copie un objet en ajoutant ou modifiant des propriétés."}
+		{q:"L'opérateur spread ... permet de...", o:["Déclarer une variable","Copier ou fusionner des tableaux et objets","Créer une boucle"], a:1, expl:"[...a, ...b] fusionne deux tableaux. {...obj, x:1} copie un objet en ajoutant ou modifiant des propriétés."},
+		{q:"Que se passe-t-il si on oublie `await` devant `fetch()` ?", o:["Une erreur bloque immédiatement le code","On obtient une Promise non résolue, pas les données","fetch() s'exécute deux fois"], a:1, expl:"Sans await, fetch() retourne une Promise en attente. Le code continue avec une Promise à la place des données réelles — bug silencieux très courant chez les débutants."},
+		{q:"Quelle méthode convertit un objet JS en chaîne JSON ?", o:["JSON.parse()","JSON.stringify()","JSON.convert()"], a:1, expl:"JSON.stringify(obj) → chaîne JSON (sérialisation). JSON.parse(str) → objet JS (désérialisation). À retenir : stringify = objet vers texte, parse = texte vers objet."}
 	]
 },
 {
@@ -1804,7 +1816,7 @@ const MODULES = [
 			"Ignorer les conflits sans les comprendre."
 		]
 	},
-	exo:"<b>Exercice :</b> Crée une branche, fais un changement, merge-la dans main puis provoque et résous un conflit de test sur un petit fichier texte.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Initialise un repo : <code>git init mon-projet && cd mon-projet</code>.</li><li>Crée <code>index.html</code>, fais ton premier commit : <code>git add . && git commit -m 'init'</code>.</li><li>Crée une branche feature : <code>git checkout -b feature/navbar</code>, modifie un fichier, commite.</li><li>Reviens sur main et merge : <code>git checkout main && git merge feature/navbar</code>.</li><li>Provoque un conflit : modifie la même ligne dans main et dans une autre branche, puis résous-le manuellement dans l'éditeur (supprime les marqueurs <code>&lt;&lt;&lt;</code>, <code>===</code>, <code>&gt;&gt;&gt;</code>).</li></ol>",
 	project:"🏆 Boss : un repo public propre avec README, GitHub Pages et historique de commits lisible.",
 	quiz:[
 		{q:"Quelle commande enregistre un instantané du code ?", o:["git commit","git save","git delete"], a:0, expl:"git commit enregistre un snapshot nommé de ton travail. C'est comme une sauvegarde avec un message explicatif."},
@@ -1812,7 +1824,9 @@ const MODULES = [
 		{q:"git add . fait quoi ?", o:["Supprime tous les fichiers","Prépare les changements pour le commit","Pousse vers GitHub"], a:1, expl:"git add . met tous les fichiers modifiés en 'staging area'. Ensuite git commit les enregistre définitivement."},
 		{q:"Une branche git permet de...", o:["Travailler en parallèle sans affecter main","Supprimer du code","Accélérer le site"], a:0, expl:"Les branches isolent le travail. main reste stable pendant que tu développes une fonctionnalité sur une autre branche."},
 		{q:"git clone sert à...", o:["Supprimer un repo","Copier un repo distant en local","Créer une branche"], a:1, expl:"git clone télécharge tout le dépôt (code + historique complet) sur ton ordinateur pour travailler dessus."},
-		{q:"Quel fichier liste les éléments ignorés par git ?", o:[".ignore","README.md",".gitignore"], a:2, expl:".gitignore liste les fichiers/dossiers exclus du suivi Git : node_modules/, .env, .DS_Store… Crée-le à la racine du projet."}
+		{q:"Quel fichier liste les éléments ignorés par git ?", o:[".ignore","README.md",".gitignore"], a:2, expl:".gitignore liste les fichiers/dossiers exclus du suivi Git : node_modules/, .env, .DS_Store… Crée-le à la racine du projet."},
+		{q:"Que fait `git merge feature` lancé depuis la branche main ?", o:["Supprime la branche feature","Fusionne les commits de feature dans main","Crée une nouvelle branche depuis feature"], a:1, expl:"git merge intègre les commits d'une branche dans la branche courante. Si les deux branches ont modifié le même endroit, Git génère un conflit à résoudre manuellement."},
+		{q:"Que signifie HEAD dans git ?", o:["Le premier commit du projet","Le dernier commit de la branche courante","L'auteur du dernier commit"], a:1, expl:"HEAD pointe vers le dernier commit de la branche active. git log le montre en tête. git reset HEAD~1 revient un commit en arrière (sans perdre les modifications locales)."}
 	]
 },
 {
@@ -1870,7 +1884,7 @@ const MODULES = [
 			"Oublier de nettoyer un effet."
 		]
 	},
-	exo:"<b>Exercice :</b> Ajoute un formulaire contrôlé à ton mini projet React, partage un état entre deux composants et remonte la logique via un contexte.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Crée un composant <code>Formulaire</code> avec un <code>&lt;input&gt;</code> contrôlé (<code>value</code> + <code>onChange</code> via <code>useState</code>).</li><li>Affiche en temps réel ce que l'utilisateur tape (sous le champ).</li><li>Crée un composant parent <code>App</code> qui passe une callback <code>onAjout</code> en prop à <code>Formulaire</code>.</li><li>À chaque soumission, remonte la valeur vers <code>App</code> et ajoute-la à une liste affichée.</li><li>Déplace l'état des tâches dans un <code>Context</code> pour éviter le prop drilling si tu ajoutes un composant <code>Compteur</code>.</li></ol>",
 	project:"🏆 Boss : une mini app React avec thème global, liste dynamique et filtres, structurée en composants réutilisables.",
 	quiz:[
 		{q:"Un composant React renvoie...", o:["du JSX","du SQL","un fichier CSS"], a:0, expl:"Un composant = une fonction JS qui retourne du JSX. JSX ressemble à du HTML mais est transformé en JS par un compilateur."},
@@ -1878,7 +1892,9 @@ const MODULES = [
 		{q:"Les props sont...", o:["Des données passées au composant de l'extérieur","L'état local du composant","Des balises HTML spéciales"], a:0, expl:"Les props vont du PARENT vers l'ENFANT (sens unique). Pour remonter une info, on passe une fonction callback en prop."},
 		{q:"useEffect se déclenche...", o:["Après chaque rendu (ou selon les dépendances)","Au chargement de la page uniquement","À chaque clic utilisateur"], a:0, expl:"useEffect(fn, []) : une fois. useEffect(fn, [a]) : quand a change. useEffect(fn) : après chaque rendu (attention aux boucles)."},
 		{q:"JSX permet de...", o:["Écrire du HTML-like dans du JavaScript","Styliser des composants","Connecter une BDD"], a:0, expl:"JSX n'est pas du HTML. C'est du sucre syntaxique transpilé en appels React.createElement() par Babel ou un bundler."},
-		{q:"Pour passer des données d'un composant parent à enfant, on utilise...", o:["useState","les props","useEffect"], a:1, expl:"Les props = paramètres d'un composant. function Carte({titre}) reçoit titre via <Carte titre='Hello' />."}
+		{q:"Pour passer des données d'un composant parent à enfant, on utilise...", o:["useState","les props","useEffect"], a:1, expl:"Les props = paramètres d'un composant. function Carte({titre}) reçoit titre via <Carte titre='Hello' />."},
+		{q:"À quoi sert `React.memo` ?", o:["Mémoriser le résultat d'un calcul coûteux","Éviter le re-render d'un composant si ses props n'ont pas changé","Gérer l'état global de l'application"], a:1, expl:"React.memo est un HOC qui mémoïse le rendu. Si les props reçues sont identiques au rendu précédent, React saute le rendu. Utile pour des listes longues ou des composants coûteux."},
+		{q:"Quelle est la règle fondamentale des hooks React ?", o:["Les utiliser uniquement dans des classes","Ne les appeler qu'au niveau racine d'un composant, jamais dans des conditions","Les importer depuis un CDN externe"], a:1, expl:"Les hooks doivent être appelés dans le même ordre à chaque rendu. Les placer dans des if, des boucles ou des fonctions imbriquées casse cet ordre — React lancera une erreur explicite."}
 	]
 },
 {
@@ -1929,7 +1945,7 @@ const MODULES = [
 			"Ne pas valider req.body."
 		]
 	},
-	exo:"<b>Exercice :</b> Ajoute à ton API deux routes organisées avec Router et valide le body d'un POST.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Initialise : <code>npm init -y && npm install express</code>.</li><li>Crée <code>server.js</code> avec une route <code>GET /api/taches</code> qui renvoie un tableau statique.</li><li>Ajoute <code>express.json()</code> et une route <code>POST /api/taches</code> qui valide que <code>req.body.titre</code> existe (400 sinon).</li><li>Organise : crée un dossier <code>routes/</code> avec <code>taches.js</code> et importe-le dans <code>server.js</code> avec <code>app.use('/api', router)</code>.</li><li>Teste toutes tes routes avec <b>Thunder Client</b> ou <b>Postman</b> — vérifie les codes de retour (200, 201, 400).</li></ol>",
 	project:"🏆 Boss : une API de tâches avec routes séparées, validation et gestion d'erreurs propre.",
 	quiz:[
 		{q:"Node.js permet d'exécuter JavaScript...", o:["côté serveur","uniquement dans le navigateur","dans Word"], a:0, expl:"Node.js utilise le moteur V8 de Chrome hors du navigateur : JS pour les serveurs, scripts, CLIs et outils de build."},
@@ -1937,7 +1953,9 @@ const MODULES = [
 		{q:"Une API REST répond généralement en...", o:["JSON","HTML pur","CSS"], a:0, expl:"JSON est le format standard pour les échanges entre frontend et backend. res.json(data) dans Express définit Content-Type: application/json."},
 		{q:"app.get('/route', fn) gère les requêtes...", o:["GET","POST","DELETE"], a:0, expl:"GET = lire, POST = créer, PUT/PATCH = modifier, DELETE = supprimer. Ces 4 verbes HTTP correspondent aux opérations CRUD."},
 		{q:"npm install installe...", o:["Node.js lui-même","Les dépendances listées dans package.json","Un serveur web"], a:1, expl:"npm install lit package.json et télécharge toutes les dépendances dans node_modules/. npm install <pkg> en ajoute une nouvelle."},
-		{q:"Quel code HTTP signifie 'créé avec succès' ?", o:["200","201","404"], a:1, expl:"200 = OK, 201 = Created, 400 = Bad Request, 401 = Non auth, 403 = Forbidden, 404 = Not Found, 500 = Erreur serveur."}
+		{q:"Quel code HTTP signifie 'créé avec succès' ?", o:["200","201","404"], a:1, expl:"200 = OK, 201 = Created, 400 = Bad Request, 401 = Non auth, 403 = Forbidden, 404 = Not Found, 500 = Erreur serveur."},
+		{q:"Que fait `app.use(express.json())` ?", o:["Active le mode JSON dans Node","Parse automatiquement le body JSON des requêtes entrantes","Convertit toutes les réponses en JSON"], a:1, expl:"Sans express.json(), req.body est undefined pour les requêtes avec Content-Type: application/json. Ce middleware parse le corps JSON entrant et le place dans req.body."},
+		{q:"À quoi sert un middleware dans Express ?", o:["À styliser les pages HTML","À intercepter req et res avant la route finale","À créer des connexions à la base de données"], a:1, expl:"Un middleware est une fonction (req, res, next) qui s'exécute entre la réception de la requête et l'envoi de la réponse : logging, authentification, validation, gestion CORS..."}
 	]
 },
 {
@@ -1988,7 +2006,7 @@ const MODULES = [
 			"Oublier les index sur les colonnes filtrées souvent."
 		]
 	},
-	exo:"<b>Exercice :</b> Ajoute un index sur le champ titre et crée une petite transaction logique sur un exemple.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Installe <code>mongoose</code> (MongoDB) ou <code>pg</code> (PostgreSQL) selon ta stack.</li><li>Crée un schéma <code>Tache</code> avec les champs <code>titre</code> (string, requis) et <code>faite</code> (boolean, défaut false).</li><li>Branche-le à ton API Express du module 8 : remplace le tableau statique par de vraies requêtes en base.</li><li>Ajoute un index sur <code>titre</code> pour accélérer les recherches.</li><li>Écris une requête filtrée : <code>WHERE faite = true</code> (SQL) ou <code>.find({ faite: true })</code> (Mongoose) — vérifie le résultat.</li></ol>",
 	project:"🏆 Boss : API CRUD complète avec recherche, index et agrégations simples.",
 	quiz:[
 		{q:"Que veut dire le R de CRUD ?", o:["Run","Read","Reset"], a:1, expl:"CRUD = Create (INSERT), Read (SELECT), Update (UPDATE), Delete (DELETE). Les 4 opérations de base sur des données."},
@@ -1996,7 +2014,9 @@ const MODULES = [
 		{q:"SQL signifie...", o:["Structured Query Language","Styled Query Layout","Simple Query Logic"], a:0, expl:"SQL = Structured Query Language. C'est le langage des bases relationnelles. SELECT, INSERT, UPDATE, DELETE sont les commandes de base."},
 		{q:"Une PRIMARY KEY sert à...", o:["Identifier chaque ligne de façon unique","Trier les données","Supprimer une table"], a:0, expl:"La clé primaire identifie chaque ligne de façon unique. Elle sert de référence pour les jointures entre tables."},
 		{q:"Quel mot-clé SQL filtre les lignes d'un résultat ?", o:["ORDER BY","WHERE","GROUP BY"], a:1, expl:"WHERE filtre. ORDER BY trie. GROUP BY regroupe. JOIN combine des tables. LIMIT limite le nombre de résultats."},
-		{q:"Différence principale entre SQL et NoSQL ?", o:["SQL = tableaux relationnels, NoSQL = documents flexibles","SQL est plus récent","NoSQL ne stocke pas les nombres"], a:0, expl:"SQL = structure rigide, relations fortes, intégrité des données. NoSQL = flexible, horizontal, idéal pour les données variables."}
+		{q:"Différence principale entre SQL et NoSQL ?", o:["SQL = tableaux relationnels, NoSQL = documents flexibles","SQL est plus récent","NoSQL ne stocke pas les nombres"], a:0, expl:"SQL = structure rigide, relations fortes, intégrité des données. NoSQL = flexible, horizontal, idéal pour les données variables."},
+		{q:"Qu'est-ce qu'un index dans une base de données ?", o:["Une liste de toutes les tables","Une structure qui accélère les recherches sur une colonne","Un type de jointure entre tables"], a:1, expl:"Un index crée une structure interne (B-tree) accélérant les requêtes SELECT sur une colonne. Contrepartie : il ralentit légèrement les INSERT/UPDATE/DELETE car l'index doit être mis à jour."},
+		{q:"À quoi sert une transaction dans une base de données ?", o:["Trier les résultats d'une requête","Garantir que plusieurs opérations s'exécutent toutes ou aucune","Dupliquer une table entière"], a:1, expl:"Principe ACID (Atomicité) : si une opération échoue dans la transaction, toutes les modifications sont annulées (ROLLBACK). Si tout réussit : COMMIT. Essentiel pour les virements bancaires, commandes e-commerce, etc."}
 	]
 },
 {
@@ -2056,14 +2076,16 @@ const MODULES = [
 			"Déployer sans tests de base."
 		]
 	},
-	exo:"<b>Exercice :</b> Ajoute un middleware d'auth et un test simple sur une route protégée.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Installe <code>jsonwebtoken</code> et <code>bcrypt</code> : <code>npm install jsonwebtoken bcryptjs</code>.</li><li>Crée une route <code>POST /auth/login</code> qui vérifie les identifiants et retourne un JWT.</li><li>Écris un middleware <code>authMiddleware</code> qui vérifie l'en-tête <code>Authorization: Bearer &lt;token&gt;</code>.</li><li>Protège une route existante avec ce middleware — teste avec et sans token dans Postman.</li><li>Déploie l'API sur Railway ou Render et configure les variables d'environnement (<code>JWT_SECRET</code>, <code>DB_URL</code>) dans le dashboard.</li></ol>",
 	project:"🏆 Boss : app full stack avec auth, profil utilisateur et déploiement complet.",
 	quiz:[
 		{q:"Le frontend parle au backend via...", o:["des requêtes HTTP (fetch)","du CSS uniquement","Git"], a:0, expl:"React utilise fetch() pour envoyer des requêtes HTTP à l'API Express. Le backend répond en JSON."},
 		{q:"« Full stack » signifie maîtriser...", o:["frontend + backend + BDD","que du HTML/CSS","que du design"], a:0, expl:"Un dev full stack sait travailler sur toutes les couches : interface utilisateur, serveur, base de données et déploiement."},
 		{q:"CORS est un mécanisme qui...", o:["Contrôle les accès entre origines différentes","Compresse les images","Gère les mots de passe"], a:0, expl:"CORS bloque par défaut les requêtes entre domaines différents. Active-le dans Express avec le package cors."},
 		{q:"Que signifie le code HTTP 404 ?", o:["Succès","Ressource non trouvée","Erreur serveur interne"], a:1, expl:"404 = Not Found. 200 = OK. 201 = Created. 400 = Bad Request. 401 = Non authentifié. 500 = Erreur interne du serveur."},
-		{q:"L'HTTPS protège les données en...", o:["Les compressant","Les chiffrant via SSL/TLS","Les supprimant après envoi"], a:1, expl:"HTTPS chiffre la communication via SSL/TLS. Sans HTTPS, les données transitent en clair et peuvent être interceptées."}
+		{q:"L'HTTPS protège les données en...", o:["Les compressant","Les chiffrant via SSL/TLS","Les supprimant après envoi"], a:1, expl:"HTTPS chiffre la communication via SSL/TLS. Sans HTTPS, les données transitent en clair et peuvent être interceptées."},
+		{q:"À quoi sert un reverse proxy comme nginx ?", o:["Créer des animations CSS","Rediriger les requêtes vers le bon service et servir les fichiers statiques","Compiler du TypeScript en JavaScript"], a:1, expl:"nginx redirige le trafic HTTP(S) vers les bons services (Node.js sur port 3000, etc.), sert les fichiers statiques très efficacement et gère les certificats SSL."},
+		{q:"Que stocke-t-on dans un fichier `.env` ?", o:["Le code source principal","Les variables d'environnement sensibles (clés API, mots de passe)","Les styles CSS globaux"], a:1, expl:".env contient les secrets (DB_PASSWORD, JWT_SECRET, API_KEY). Il ne doit JAMAIS être commité — il doit être dans .gitignore dès le premier commit."}
 	]
 },
 {
@@ -2104,14 +2126,17 @@ const MODULES = [
 			"Sous-estimer l'importance du README et de LinkedIn."
 		]
 	},
-	exo:"<b>Exercice :</b> Réécris le README de ton meilleur projet pour qu'il explique la démo, l'installation, la stack et les captures.",
+	exo:"<b>Exercice pas à pas :</b><ol><li>Choisis 3 projets à mettre en avant (idéalement 1 HTML/CSS, 1 JS pur, 1 React ou Full Stack).</li><li>Pour chaque projet : rédige un README avec description, stack, instructions d'installation et lien de démo.</li><li>Déploie chaque projet (GitHub Pages, Vercel ou Netlify) et vérifie que le lien de démo fonctionne.</li><li>Crée ta page portfolio : section <b>Projets</b> avec captures d'écran, section <b>À propos</b> et formulaire de contact.</li><li>Prépare ta présentation entretien : en 2 minutes, explique un projet (problème résolu, stack choisie, difficulté surmontée).</li></ol>",
 	project:"🏆 Portfolio en ligne complet avec 3 projets soignés, page À propos, liens GitHub/LinkedIn et formulaire de contact.",
 	quiz:[
 		{q:"Le meilleur argument en entretien junior ?", o:["Des projets concrets à montrer","Rien, les diplômes suffisent","Un long CV vide de projets"], a:0, expl:"Des projets sur GitHub prouvent tes compétences bien mieux qu'un diplôme. Un recruteur peut voir ton code directement."},
 		{q:"Un portfolio sert à...", o:["Prouver ce que tu sais faire","Stocker des photos","Coder plus vite"], a:0, expl:"Le portfolio montre tes projets en action. C'est ta vitrine professionnelle. 3-4 projets soignés valent mieux que 10 bâclés."},
 		{q:"Pour préparer les entretiens techniques...", o:["Pratiquer des exercices de code (LeetCode, etc.)","Mémoriser Wikipedia","Dessiner des maquettes"], a:0, expl:"LeetCode, Codewars, Frontend Mentor… La pratique régulière de petits exercices prépare efficacement aux épreuves techniques."},
 		{q:"Un bon README de projet doit contenir...", o:["Description, installation, utilisation","Uniquement du code commenté","Le CV de l'auteur"], a:0, expl:"Un README complet : description, technologies utilisées, installation, utilisation, captures d'écran, et lien vers la démo."},
-		{q:"Pourquoi publier ses projets sur GitHub ?", o:["Montrer son travail et sa régularité","C'est obligatoire par la loi","Pour vendre des licences"], a:0, expl:"GitHub = preuve publique de ton travail. Les recruteurs regardent tes repos et ta régularité. C'est ton historique professionnel."}
+		{q:"Pourquoi publier ses projets sur GitHub ?", o:["Montrer son travail et sa régularité","C'est obligatoire par la loi","Pour vendre des licences"], a:0, expl:"GitHub = preuve publique de ton travail. Les recruteurs regardent tes repos et ta régularité. C'est ton historique professionnel."},
+		{q:"Qu'est-ce que GitHub Pages ?", o:["Un éditeur de code en ligne","Un service d'hébergement gratuit de sites statiques via GitHub","Un gestionnaire de bases de données cloud"], a:1, expl:"GitHub Pages déploie automatiquement un site statique (HTML/CSS/JS) depuis un dépôt GitHub. Idéal pour héberger son portfolio gratuitement avec un domaine github.io."},
+		{q:"Le SEO sert à...", o:["Styliser une page web","Optimiser la visibilité d'un site dans les moteurs de recherche","Sécuriser les connexions HTTPS"], a:1, expl:"Search Engine Optimization : balises meta, titres bien structurés, attributs alt des images, performances et accessibilité — tout ce qui aide Google à comprendre et bien classer ton site."},
+		{q:"Un bon projet portfolio doit inclure...", o:["Du code minifié sans documentation","Un README clair, une démo en ligne et un code propre sur GitHub","Un seul fichier HTML de 5000 lignes"], a:1, expl:"Les recruteurs veulent voir : la démo qui tourne (GitHub Pages, Vercel...), le code organisé sur GitHub et un README qui explique le projet, la stack et comment le lancer."}
 	]
 }
 ];
