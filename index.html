@@ -1626,7 +1626,13 @@ const MODULES = [
 "<ul><li><code>typeof null === 'object'</code> — un bug historique de JS</li>"+
 "<li><code>NaN !== NaN</code> — le seul cas en JS où une valeur n'est pas égale à elle-même</li>"+
 "<li><code>[] + {} === '[object Object]'</code> — conversion implicite surprenante</li>"+
-"<li><code>0 == false</code> mais <code>0 !== false</code> — toujours utiliser <code>===</code></li></ul>"",
+"<li><code>0 == false</code> mais <code>0 !== false</code> — toujours utiliser <code>===</code></li></ul>""+
+"<p><b>Étude de cas : refactoriser un script spaghetti</b></p>"+
+"<p>Au début, on écrit souvent tout dans une seule fonction :</p>"+
+"<pre class='notion-code'><code>function traiterCommande(cmd) {\n  // 1. Valider\n  if (!cmd.client || !cmd.lignes || cmd.lignes.length === 0) {\n    console.error('Commande invalide');\n    return;\n  }\n  // 2. Calculer le total\n  let total = 0;\n  for (let i = 0; i < cmd.lignes.length; i++) {\n    total += cmd.lignes[i].prix * cmd.lignes[i].qte;\n  }\n  // 3. Afficher\n  console.log('Client', cmd.client);\n  console.log('Total', total);\n}</code></pre>"+
+"<p>En vrai projet, on préfère découper en petites fonctions testables :</p>"+
+"<pre class='notion-code'><code>function estCommandeValide(cmd) {\n  return cmd.client && cmd.lignes && cmd.lignes.length &gt; 0;\n}\nfunction calculerTotal(cmd) {\n  return cmd.lignes.reduce((s, l) =&gt; s + l.prix * l.qte, 0);\n}\nfunction afficherRecap(cmd) {\n  console.log('Client', cmd.client);\n  console.log('Total', calculerTotal(cmd));\n}\nfunction traiterCommande(cmd) {\n  if (!estCommandeValide(cmd)) {\n    console.error('Commande invalide');\n    return;\n  }\n  afficherRecap(cmd);\n}</code></pre>"+
+"<p>Ce style est beaucoup plus simple à tester et à faire évoluer.</p>"",
 		erreurs:[
 			"Utiliser var au lieu de let/const.",
 			"Confondre = et ===.",
@@ -1850,7 +1856,13 @@ const MODULES = [
 "<p><b>Cas limites à connaître :</b></p>"+
 "<ul><li>Modifier directement le state sans <code>setState</code> ne déclenche pas de re-render</li>"+
 "<li>Un <code>useEffect</code> sans dépendances capte toujours les valeurs initiales — problème de stale closure</li>"+
-"<li>Un composant re-render à chaque mise à jour du parent, même si ses props n'ont pas changé — utilise <code>React.memo</code> si c'est coûteux</li></ul>"",
+"<li>Un composant re-render à chaque mise à jour du parent, même si ses props n'ont pas changé — utilise <code>React.memo</code> si c'est coûteux</li></ul>""+
+"<p><b>Étude de cas : lifting state mal placé</b></p>"+
+"<p>Une erreur fréquente est de mettre trop d'état haut dans l'arbre React. Résultat : un clic anodin relance le rendu de toute la page.</p>"+
+"<pre class='notion-code'><code>// Mauvais : App gère tout l'état\nfunction App() {\n  const [filtre, setFiltre] = useState('');\n  const [taches, setTaches] = useState([]);\n  const [theme, setTheme] = useState('light');\n  // ... beaucoup d'autres états\n  return (/* toute l'app se re-render à chaque changement */);\n}</code></pre>"+
+"<p>En pratique, on isole les responsabilités :</p>"+
+"<pre class='notion-code'><code>function App() {\n  const [theme, setTheme] = useState('light');\n  return (\n    &lt;ThemeContext.Provider value={{ theme, setTheme }}&gt;\n      &lt;Layout&gt;\n        &lt;TodoPage /&gt;  {/* gère filtre + taches */}\n      &lt;/Layout&gt;\n    &lt;/ThemeContext.Provider&gt;\n  );\n}</code></pre>"+
+"<p>On peut ensuite mettre la logique métier (chargement, filtrage, tri) dans des custom hooks, et laisser les composants d'UI se concentrer sur l'affichage.</p>"",
 		erreurs:[
 			"Modifier les props dans l'enfant.",
 			"Oublier key dans les listes.",
@@ -1903,7 +1915,13 @@ const MODULES = [
 "<p><b>Cas limites à connaître :</b></p>"+
 "<ul><li>Un middleware sans <code>next()</code> bloque la chaîne silencieusement</li>"+
 "<li>Les routes <code>app.use</code> sont appliquées dans l'ordre d'écriture</li>"+
-"<li>Sans <code>express.json()</code>, <code>req.body</code> est <code>undefined</code></li></ul>"",
+"<li>Sans <code>express.json()</code>, <code>req.body</code> est <code>undefined</code></li></ul>""+
+"<p><b>Étude de cas : API Express mieux structurée</b></p>"+
+"<p>Un backend débutant met souvent toute la logique dans le même fichier :</p>"+
+"<pre class='notion-code'><code>// server.js\napp.post('/api/taches', async (req, res) =&gt; {\n  const titre = req.body.titre;\n  if (!titre) return res.status(400).json({ message: 'Titre requis' });\n  try {\n    const tache = await Tache.create({ titre });\n    res.status(201).json(tache);\n  } catch (e) {\n    console.error(e);\n    res.status(500).json({ message: 'Erreur serveur' });\n  }\n});</code></pre>"+
+"<p>En vrai projet, on sépare route, contrôleur et service :</p>"+
+"<pre class='notion-code'><code>// routes/taches.js\nrouter.post('/', creerTache);\n// controllers/taches.js\nexport async function creerTache(req, res, next) {\n  try {\n    const tache = await tacheService.creer(req.body);\n    res.status(201).json(tache);\n  } catch (err) {\n    next(err);\n  }\n}</code></pre>"+
+"<p>Avec cette découpe, tester la logique métier devient beaucoup plus simple.</p>"",
 		erreurs:[
 			"Oublier npm init.",
 			"Oublier express.json().",
@@ -2022,7 +2040,15 @@ const MODULES = [
 "<p><b>Cas limites à connaître :</b></p>"+
 "<ul><li>Un token JWT expiré renvoie 401 — le client doit gérer la déconnexion proprement</li>"+
 "<li>Sans gestion d'erreur globale Express, les <code>async</code> routes rejettent silencieusement</li>"+
-"<li>Le CORS bloque uniquement côté navigateur — les appels serveur-à-serveur ne sont pas concernés</li></ul>"",
+"<li>Le CORS bloque uniquement côté navigateur — les appels serveur-à-serveur ne sont pas concernés</li></ul>""+
+"<p><b>Étude de cas : bug full stack classique</b></p>"+
+"<p>Un cas très courant : le frontend appelle <code>/tasks</code> alors que l'API expose <code>/api/taches</code>, ou bien le backend tourne sur un autre port sans CORS configuré.</p>"+
+"<pre class='notion-code'><code>// Frontend\nfetch('http://localhost:3000/tasks')  // 404 ou CORS\n// Backend\napp.get('/api/taches', ...);</code></pre>"+
+"<p><b>Stratégie de debug</b> :</p><ul>"+
+"<li>Vérifier l'URL exacte et le port dans l'onglet Network</li>"+
+"<li>Tester la route directement dans Postman / Thunder Client</li>"+
+"<li>Logguer les requêtes côté backend (middleware de logging)</li></ul>"+
+"<p>Quand tout est correct en local, reproduis la même configuration en production (variables d'env, URL complètes, CORS).</p>"",
 		erreurs:[
 			"Oublier le CORS.",
 			"Stocker les secrets en dur.",
