@@ -1050,6 +1050,29 @@ section:first-child {
 .dfr-desc { font-size:11.5px; color:var(--notion-text-soft); margin:8px 0 0; line-height:1.5; }
 .dfr-check { position:absolute; top:9px; right:9px; font-size:13px; }
 
+/* Quêtes journalières */
+.quetes-header { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
+.quetes-header h2 { margin:0; }
+.quetes-reset { font-size:12px; color:var(--notion-text-soft); }
+.quetes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+@media (max-width:640px){ .quetes-grid { grid-template-columns:1fr; } }
+.quete-card { border-radius:12px; padding:16px; background:var(--notion-surface); border:1px solid var(--notion-border-soft); box-shadow:var(--notion-shadow); display:flex; flex-direction:column; gap:10px; transition:border-color 200ms; }
+.quete-card.quete-claimed { border-color:#2a9d76; background:var(--notion-green-bg); }
+.quete-top { display:flex; align-items:flex-start; gap:10px; }
+.quete-emoji { font-size:26px; flex-shrink:0; line-height:1; margin-top:1px; }
+.quete-info { flex:1 1 0; min-width:0; }
+.quete-label { font-weight:700; font-size:13px; margin:0 0 2px; }
+.quete-hint { font-size:11px; color:var(--notion-text-soft); margin:0; }
+.quete-xp { font-size:12px; font-weight:700; color:var(--notion-blue); white-space:nowrap; flex-shrink:0; background:var(--notion-blue-bg); padding:2px 8px; border-radius:999px; align-self:flex-start; }
+.quete-bar-wrap { background:var(--notion-border-soft); border-radius:999px; height:6px; overflow:hidden; }
+.quete-bar-fill { height:100%; background:var(--notion-blue); border-radius:999px; transition:width 400ms ease; }
+.quete-card.quete-claimed .quete-bar-fill { background:#2a9d76; }
+.quete-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.quete-count { font-size:11px; color:var(--notion-text-soft); }
+.quete-claim-btn { font-size:12px; font-weight:700; padding:5px 14px; border-radius:8px; border:none; cursor:pointer; background:var(--notion-blue); color:#fff; transition:opacity 150ms; }
+.quete-claim-btn:disabled { opacity:.38; cursor:not-allowed; background:var(--notion-border); color:var(--notion-text-soft); }
+.quete-claimed-label { font-size:12px; font-weight:700; color:#2a9d76; }
+
 /* Sprint 7.5 — Live Preview sandbox enhancements */
 .sandbox-console {
 	margin-top:8px;
@@ -1163,6 +1186,15 @@ section:first-child {
 		<h2>🎖️ Badges de projet</h2>
 		<p class="notion-muted">Débloque un badge à chaque mini-projet (« boss de fin de module ») terminé.</p>
 		<div class="badge-grid" id="badgeGrid"></div>
+	</section>
+
+	<section id="questesSection">
+		<div class="quetes-header">
+			<h2>⚡ Quêtes journalières</h2>
+			<span class="quetes-reset" id="questesReset">Renouvellement dans —h —min</span>
+		</div>
+		<p class="notion-muted">3 défis quotidiens pour rester dans le rythme. Complète-les pour gagner des XP bonus — ils se renouvellent chaque jour à minuit.</p>
+		<div class="quetes-grid" id="questesGrid"></div>
 	</section>
 
 	<section id="filRougeSection">
@@ -1566,6 +1598,109 @@ const FIL_ROUGE = [
 	{emoji:"🏆", nom:"Version finale",    step:"Étape 12 / 12", tag:"Portfolio • Emploi",   desc:"Le dashboard est ton projet phare — 12 compétences démontrées à un recruteur."},
 ];
 
+// ── Quêtes journalières ─────────────────────────────────────────────────────
+const QUEST_POOL = [
+	{id:'visit',   emoji:'👋', label:'Connecte-toi aujourd\'hui',           xp:10,  target:1,  hint:'Auto-complétée à chaque visite.'},
+	{id:'sandbox', emoji:'💻', label:'Ouvre le bac à sable',                 xp:20,  target:1,  hint:'Lance un module avec un bac à sable.'},
+	{id:'quiz',    emoji:'🧠', label:'Réponds à 3 questions correctement',   xp:40,  target:3,  hint:'Réponds aux questions du quiz d\'un module.'},
+	{id:'module',  emoji:'✅', label:'Valide 1 module aujourd\'hui',         xp:50,  target:1,  hint:'Complète un module et clique sur Valider.'},
+	{id:'streak',  emoji:'🔥', label:'Maintiens ta série (≥ 2 jours)',       xp:25,  target:1,  hint:'Reviens chaque jour pour garder ta flamme.'},
+	{id:'explore', emoji:'📂', label:'Explore 2 modules différents',          xp:30,  target:2,  hint:'Ouvre 2 modules différents dans la journée.'},
+	{id:'xp',      emoji:'⚡', label:'Gagne 75 XP aujourd\'hui',            xp:35,  target:75, hint:'Valide des modules pour accumuler des XP.'},
+	{id:'notes',   emoji:'📝', label:'Prends des notes dans un module',       xp:15,  target:1,  hint:'Ouvre l\'onglet Notes et écris quelque chose.'},
+];
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+function _pickDailyQuestIds(date){
+	const pool = QUEST_POOL.slice(); const out = []; let n = (date.replace(/-/g,'') | 0);
+	while(out.length < 3){ n = (Math.imul(n, 1664525) + 1013904223) >>> 0; out.push(pool.splice(n % pool.length, 1)[0]); }
+	return out.map(q => q.id);
+}
+
+function initDailyQuests(){
+	const today = todayStr();
+	if(!state.dailyQuests || state.dailyQuests.date !== today){
+		state.dailyQuests = { date:today, ids:_pickDailyQuestIds(today), progress:{}, claimed:{}, exploredIds:[] };
+		save();
+	}
+}
+
+function getQuestDef(id){ return QUEST_POOL.find(q => q.id === id); }
+
+function trackQuest(id, amount){
+	if(!state.dailyQuests) return;
+	if(!state.dailyQuests.ids.includes(id)) return;
+	if(state.dailyQuests.claimed[id]) return;
+	const def = getQuestDef(id); if(!def) return;
+	const prev = state.dailyQuests.progress[id] || 0;
+	if(prev >= def.target) return;
+	const next = Math.min(prev + amount, def.target);
+	state.dailyQuests.progress[id] = next;
+	save(); renderQuetes();
+	if(next >= def.target) toast('⚡ Quête accomplie — ' + def.label + ' !');
+}
+
+function trackQuestExplore(modId){
+	if(!state.dailyQuests) return;
+	if(!state.dailyQuests.ids.includes('explore')) return;
+	if(state.dailyQuests.claimed['explore']) return;
+	if(!state.dailyQuests.exploredIds) state.dailyQuests.exploredIds = [];
+	if(state.dailyQuests.exploredIds.includes(modId)) return;
+	state.dailyQuests.exploredIds.push(modId);
+	trackQuest('explore', 1);
+}
+
+function claimQuest(id){
+	if(!state.dailyQuests) return;
+	const def = getQuestDef(id); if(!def) return;
+	const prog = state.dailyQuests.progress[id] || 0;
+	if(prog < def.target || state.dailyQuests.claimed[id]) return;
+	state.dailyQuests.claimed[id] = true;
+	state.bonusXP = (state.bonusXP || 0) + def.xp;
+	save();
+	toast('🎁 +' + def.xp + '\u00a0XP bonus\u00a0! Quête réclamée\u00a0!');
+	renderAll();
+}
+
+function timeUntilMidnight(){
+	const now = new Date(); const mid = new Date(); mid.setHours(24,0,0,0); const d = mid - now;
+	return Math.floor(d/3600000) + 'h\u00a0' + Math.floor((d%3600000)/60000) + 'min';
+}
+
+function renderQuetes(){
+	const grid = document.getElementById('questesGrid');
+	const rst  = document.getElementById('questesReset');
+	if(!grid || !state.dailyQuests) return;
+	if(rst) rst.textContent = 'Renouvellement dans ' + timeUntilMidnight();
+	const {ids, progress, claimed} = state.dailyQuests;
+	grid.innerHTML = ids.map(function(id){
+		const def = getQuestDef(id); if(!def) return '';
+		const prog = progress[id] || 0;
+		const pct  = Math.min(100, Math.round(prog / def.target * 100));
+		const done = prog >= def.target;
+		const rcld = !!claimed[id];
+		const foot = rcld
+			? '<span class="quete-claimed-label">\u2705 Réclamée</span>'
+			: '<span class="quete-count">' + prog + '\u00a0/\u00a0' + def.target + '</span>' +
+			  '<button class="quete-claim-btn"' + (done ? '' : ' disabled') + ' onclick="claimQuest(\'' + id + '\')">Réclamer</button>';
+		return '<div class="quete-card' + (rcld ? ' quete-claimed' : '') + '">' +
+			'<div class="quete-top">' +
+				'<span class="quete-emoji">' + def.emoji + '</span>' +
+				'<div class="quete-info"><p class="quete-label">' + def.label + '</p><p class="quete-hint">' + def.hint + '</p></div>' +
+				'<span class="quete-xp">+' + def.xp + '\u00a0XP</span>' +
+			'</div>' +
+			'<div class="quete-bar-wrap"><div class="quete-bar-fill" style="width:' + pct + '%"></div></div>' +
+			'<div class="quete-footer">' + foot + '</div>' +
+			'</div>';
+	}).join('');
+}
+
+setInterval(function(){
+	const el = document.getElementById('questesReset');
+	if(el) el.textContent = 'Renouvellement dans ' + timeUntilMidnight();
+}, 60000);
+
 const GOAL = LEVELS[LEVELS.length-1].xp;
 const KEY = "fullstack_progress_v1";
 let state = load();
@@ -1576,12 +1711,14 @@ function load(){
 		if(!('freeUnlock' in s)) s.freeUnlock = false;
 		if(!('streak' in s)) s.streak = 1;
 		if(!('lastVisit' in s)) s.lastVisit = null;
+		if(!('bonusXP' in s)) s.bonusXP = 0;
+		if(!('dailyQuests' in s)) s.dailyQuests = null;
 		return s;
-	} catch(e){ return {done:[], freeUnlock:false, streak:1, lastVisit:null}; }
+	} catch(e){ return {done:[], freeUnlock:false, streak:1, lastVisit:null, bonusXP:0, dailyQuests:null}; }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 function isDone(id){ return state.done.includes(id); }
-function totalXP(){ return MODULES.filter(m=>isDone(m.id)).reduce((s,m)=>s+m.xp,0); }
+function totalXP(){ return MODULES.filter(m=>isDone(m.id)).reduce((s,m)=>s+m.xp,0) + (state.bonusXP||0); }
 function currentLevel(xp){ let lv=LEVELS[0]; for(const l of LEVELS){ if(xp>=l.xp) lv=l; } return lv; }
 function nextLevel(xp){ for(const l of LEVELS){ if(xp<l.xp) return l; } return null; }
 
@@ -1859,7 +1996,7 @@ function renderFilRouge() {
 }
 
 function renderAll(){
-	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderFilRouge(); renderProfile();
+	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderQuetes(); renderFilRouge(); renderProfile();
 	const cb = document.getElementById('freeUnlockToggle');
 	if(cb) cb.checked = !!state.freeUnlock;
 	updateThemeBtn();
@@ -1874,7 +2011,7 @@ const NOTES_KEY = 'fullstack_notes_v1';
 function loadSandbox(id){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_KEY))||{}; return s[id]||null; }catch(e){ return null; } }
 function saveSandbox(id, code){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_KEY))||{}; s[id]=code; localStorage.setItem(SANDBOX_KEY,JSON.stringify(s)); }catch(e){} }
 function loadNotes(id){ try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; return s[id]||''; }catch(e){ return ''; } }
-function saveNotes(id){ const ta=document.getElementById('notesArea'); if(!ta) return; try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; s[id]=ta.value; localStorage.setItem(NOTES_KEY,JSON.stringify(s)); }catch(e){} }
+function saveNotes(id){ trackQuest('notes', 1); const ta=document.getElementById('notesArea'); if(!ta) return; try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; s[id]=ta.value; localStorage.setItem(NOTES_KEY,JSON.stringify(s)); }catch(e){} }
 function switchTab(btn, tab){
 	btn.closest('.mod-tabs').querySelectorAll('.mod-tab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
 	const body = btn.closest('.sheet-body');
@@ -1897,6 +2034,8 @@ function openMod(id){
 	_openTrigger = document.activeElement;
 	_currentModId = id;
 	const m = MODULES.find(x=>x.id===id);
+	trackQuestExplore(id);
+	if(m && m.starter) trackQuest('sandbox', 1);
 	quizState = {};
 	pickQuiz(m);
 	document.getElementById("mTitle").textContent = m.emoji + " " + m.name;
@@ -2057,6 +2196,7 @@ function answer(mid, qi, oi){
 	if(quizState[qi]!==undefined) return;
 	const correct = activeQuiz[qi].a;
 	quizState[qi] = (oi===correct);
+	if(oi===correct) trackQuest('quiz', 1);
 	activeQuiz[qi].o.forEach((_,k)=>{
 		const el = document.getElementById('q'+qi+'o'+k);
 		el.classList.add('disabled');
@@ -2091,6 +2231,7 @@ function updateValid(m){
 function complete(id){
 	if(!isDone(id)){
 		const prevLv = currentLevel(totalXP());
+		const _qm = MODULES.find(x=>x.id===id); if(_qm){ trackQuest('module',1); trackQuest('xp',_qm.xp); }
 		state.done.push(id);
 		save();
 		celebrate();
@@ -2109,7 +2250,7 @@ function closeMod(){
 	if(_openTrigger && typeof _openTrigger.focus === 'function'){ _openTrigger.focus(); _openTrigger = null; }
 }
 
-function resetAll(){ if(confirm("Réinitialiser toute ta progression ?")){ state={done:[],freeUnlock:false,streak:1,lastVisit:new Date().toISOString().slice(0,10)}; save(); renderAll(); } }
+function resetAll(){ if(confirm("Réinitialiser toute ta progression ?")){ state={done:[],freeUnlock:false,streak:1,lastVisit:new Date().toISOString().slice(0,10),bonusXP:0,dailyQuests:null}; save(); initDailyQuests(); renderAll(); } }
 
 let toastT;
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600); }
@@ -2146,6 +2287,9 @@ document.addEventListener('keydown', e => {
 });
 initTheme();
 updateStreak();
+initDailyQuests();
+trackQuest('visit', 1);
+if(state.streak >= 2) trackQuest('streak', 1);
 renderAll();
 </script>
 
