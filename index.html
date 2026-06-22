@@ -4,12 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deviens Développeur Web Full Stack — De zéro à embauché</title>
+<meta name="description" content="Un parcours ludique en 12 modules pour apprendre HTML, CSS, JavaScript, React, Node.js et les bases de données, avec quiz, XP, badges et certificat final.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Deviens Développeur Web Full Stack — De zéro à embauché">
+<meta property="og:description" content="Apprends le développement web full stack à travers 12 modules interactifs, des quiz, un système d'XP, des badges et un certificat final.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Deviens Développeur Web Full Stack — De zéro à embauché">
+<meta name="twitter:description" content="12 modules interactifs pour apprendre HTML, CSS, JavaScript, React, Node.js et les bases de données.">
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#097fe8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ApprendsCode">
+<!-- Polices : Cabinet Grotesk (titres) + Satoshi (texte) via Fontshare -->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
 <style>
 /*
  * _base.css — Global design tokens, element defaults, page shell, and tiny utilities.
@@ -125,9 +137,7 @@ body {
 	margin: 0;
 	background: var(--notion-bg);
 	color: var(--notion-text);
-	font-family:
-		ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
-		"Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+	font-family: 'Satoshi', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	font-size: 16px;
 	line-height: 1.5;
 	transition:
@@ -279,13 +289,16 @@ h1 {
 	font-size: clamp(42px, 7vw, 72px);
 	line-height: 1.1;
 	letter-spacing: -0.035em;
-	font-weight: 700;
+	font-weight: 800;
+	font-family: 'Cabinet Grotesk', ui-sans-serif, sans-serif;
 }
 h2 {
 	margin: 44px 0 10px;
 	font-size: 32px;
 	line-height: 1.25;
 	letter-spacing: -0.025em;
+	font-family: 'Cabinet Grotesk', ui-sans-serif, sans-serif;
+	font-weight: 700;
 }
 h3 {
 	margin: 0 0 6px;
@@ -908,7 +921,7 @@ section:first-child {
 }
 /* ===== App gamifié — styles spécifiques ===== */
 .hero-wrap { text-align:center; padding: 60px 0 10px; }
-.hero-wrap h1 { font-size: clamp(34px, 6vw, 60px); background: linear-gradient(120deg,#097fe8,#9b5de5,#f15bb5); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-wrap h1 { font-size: clamp(34px, 6vw, 60px); font-family:'Cabinet Grotesk',sans-serif; font-weight:800; background: linear-gradient(120deg,#097fe8,#9b5de5,#f15bb5); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .hero-sub { font-size: 19px; color: var(--notion-text-soft); max-width: 640px; margin: 0 auto 8px; }
 
 /* Dashboard sticky */
@@ -935,8 +948,10 @@ section:first-child {
 @media (max-width: 720px){ .mod-grid{ grid-template-columns:1fr; } }
 .mod-card { position:relative; border:1px solid var(--notion-border-soft); border-radius:14px; background: var(--notion-surface); box-shadow: var(--notion-shadow); padding:18px; cursor:pointer; transition: transform 120ms, box-shadow 120ms, border-color 120ms; overflow:hidden; }
 .mod-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.08); border-color: var(--notion-border); }
-.mod-card.done { border-color: #2a9d76; }
-.mod-card.done::after { content:"✓ Terminé"; position:absolute; top:12px; right:12px; background: var(--notion-green-bg); color:#2a9d76; font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; }
+.mod-card.done { border-color: #2a9d76; background: linear-gradient(135deg, var(--notion-surface) 0%, rgba(42,157,118,0.04) 100%); }
+.mod-card.done::after { content:"✓ Terminé"; position:absolute; top:12px; right:12px; background: rgba(42,157,118,0.12); color:#2a9d76; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; border: 1px solid rgba(42,157,118,0.25); }
+.mod-card.in-progress { border-color: #097fe8; border-width: 1.5px; }
+.mod-card.in-progress::after { content:"▶ En cours"; position:absolute; top:12px; right:12px; background: var(--notion-blue-bg); color:var(--notion-blue); font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; border: 1px solid rgba(9,127,232,0.2); }
 .mod-emoji { font-size:30px; }
 .mod-num { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color: var(--notion-blue); margin-top:8px; }
 .mod-name { font-size:17px; font-weight:700; margin:2px 0 6px; }
@@ -1012,6 +1027,14 @@ section:first-child {
   #exportBtn, #importBtn { display:none; }
 }
 
+
+/* ── Barre progression modules dans le dashboard sticky ─ */
+.dash-modules-prog { display:flex; flex-direction:column; gap:4px; min-width:130px; }
+.dash-modules-label { font-size:11px; font-weight:700; color:var(--notion-text-soft); white-space:nowrap; }
+.dash-modules-nums { font-size:11px; font-weight:700; color:var(--notion-text-soft); }
+.dash-modules-track { height:5px; border-radius:999px; background:var(--notion-gray-bg); overflow:hidden; box-shadow:inset 0 0 0 1px var(--notion-border-soft); }
+.dash-modules-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#2a9d76,#097fe8); transition:width 600ms ease; }
+@media(max-width:480px){ .dash-modules-prog { display:none; } }
 /* Sprint 4 — Skip-link, recherche modules, bac à sable */
 .skip-link { position:absolute; top:-999px; left:16px; z-index:9999; padding:8px 18px; background:var(--notion-blue); color:#fff; border-radius:0 0 8px 8px; font-weight:700; font-size:14px; text-decoration:none; }
 .skip-link:focus { top:0; outline:2px solid var(--notion-blue); outline-offset:2px; }
@@ -1095,6 +1118,28 @@ section:first-child {
 .sandbox-tall textarea,
 .sandbox-tall iframe { min-height:320px !important; }
 
+
+/* ── Bandeau Reprendre enrichi ───────────────────────── */
+.resume-banner {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px; margin: 20px auto 0; max-width: 680px;
+    padding: 18px 22px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--notion-blue-bg) 0%, rgba(155,93,229,0.07) 100%);
+    border: 1px solid rgba(9,127,232,0.2);
+    box-shadow: 0 2px 12px rgba(9,127,232,0.08);
+}
+.resume-left { flex: 1; min-width: 200px; }
+.resume-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--notion-blue); margin-bottom: 4px; }
+.resume-title { font-size: 18px; font-weight: 700; color: var(--notion-text); line-height: 1.3; margin-bottom: 10px; }
+.resume-progress { margin-top: 6px; }
+.resume-prog-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--notion-text-soft); margin-bottom: 6px; }
+.resume-prog-track { height: 7px; border-radius: 999px; background: rgba(9,127,232,0.12); overflow: hidden; }
+.resume-prog-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #097fe8, #9b5de5); transition: width 600ms ease; }
+.resume-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 10px; background: var(--notion-blue); color: #fff; font-size: 14px; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; transition: background 150ms, transform 100ms; flex-shrink: 0; }
+.resume-btn:hover { background: color-mix(in srgb, var(--notion-blue) 82%, black); transform: translateY(-1px); }
+.resume-btn:active { transform: translateY(0); }
+@media (max-width: 560px) { .resume-banner { flex-direction: column; } .resume-btn { width: 100%; justify-content: center; } }
+
 /* Sprint 8 — Mode Cours, onglets, vocab, quiz-expl, carnet de bord */
 .mod-tabs { display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--notion-border); padding-bottom:0; flex-wrap:wrap; }
 .mod-tab { background:transparent; border:none; border-bottom:2px solid transparent; padding:8px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; font-weight:600; color:var(--notion-text-faint); transition:all 150ms; margin-bottom:-1px; font-family:inherit; }
@@ -1119,6 +1164,84 @@ section:first-child {
 .notes-area:focus { outline:none; border-color:var(--notion-blue); }
 .notes-section { margin-top:24px; border-top:1px solid var(--notion-border-soft); padding-top:16px; }
 @media (max-width:500px){ .mod-tab { font-size:12px; padding:7px 10px; } }
+
+/* ── Récapitulatif erreurs quiz ─────────────────────────── */
+.quiz-recap { margin-top:16px; border-radius:10px; overflow:hidden; border:1px solid var(--notion-border-soft); }
+.quiz-recap-header { display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--notion-orange-bg); border-bottom:1px solid var(--notion-border-soft); font-size:13px; font-weight:700; color:var(--notion-orange); }
+.quiz-recap-item { padding:10px 14px; border-bottom:1px solid var(--notion-border-soft); font-size:13px; }
+.quiz-recap-item:last-child { border-bottom:none; }
+.quiz-recap-q { font-weight:600; color:var(--notion-text); margin-bottom:4px; }
+.quiz-recap-wrong { color:var(--notion-red); font-size:12px; margin-bottom:2px; }
+.quiz-recap-right { color:#2a9d76; font-size:12px; }
+.quiz-recap-expl { font-size:12px; color:var(--notion-text-soft); margin-top:4px; padding:6px 10px; border-radius:6px; background:var(--notion-blue-bg); border-left:3px solid var(--notion-blue); }
+
+/* ── Modale confetti finale (parcours complet) ──────────── */
+.final-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity 300ms ease; }
+.final-overlay.open { opacity:1; pointer-events:auto; }
+.final-card { background:var(--notion-surface); border-radius:20px; padding:40px 36px; max-width:480px; width:100%; text-align:center; box-shadow:0 24px 64px rgba(0,0,0,.2); transform:scale(.92); transition:transform 300ms cubic-bezier(.16,1,.3,1); }
+.final-overlay.open .final-card { transform:scale(1); }
+.final-card-emoji { font-size:64px; margin-bottom:12px; display:block; }
+.final-card h2 { font-size:28px; font-weight:800; margin:0 0 8px; font-family:'Cabinet Grotesk',sans-serif; }
+.final-card p { color:var(--notion-text-soft); font-size:15px; margin:0 0 24px; line-height:1.6; max-width:none; }
+.final-card-stats { display:flex; justify-content:center; gap:28px; margin:20px 0 28px; flex-wrap:wrap; }
+.final-stat-val { font-size:28px; font-weight:800; color:var(--notion-blue); font-family:'Cabinet Grotesk',sans-serif; }
+.final-stat-lbl { font-size:11px; color:var(--notion-text-faint); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+.final-card-actions { display:flex; flex-direction:column; gap:10px; }
+.final-share-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 20px; border-radius:10px; font-size:14px; font-weight:700; border:none; cursor:pointer; transition:background 150ms, transform 100ms; }
+.final-share-btn:hover { transform:translateY(-1px); }
+.final-share-btn.primary { background:var(--notion-blue); color:#fff; }
+.final-share-btn.primary:hover { background:color-mix(in srgb, var(--notion-blue) 82%, black); }
+.final-share-btn.secondary { background:var(--notion-surface-hover); color:var(--notion-text); }
+.final-share-btn.secondary:hover { background:var(--notion-border); }
+@media(max-width:480px){ .final-card { padding:28px 20px; } .final-card h2 { font-size:22px; } }
+
+/* ── Bouton "Module suivant" après validation ───────────── */
+.next-mod-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; width: 100%; margin-top: 14px;
+    padding: 14px 18px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--notion-blue-bg) 0%, rgba(155,93,229,0.07) 100%);
+    border: 1px solid rgba(9,127,232,0.2);
+    cursor: pointer; transition: background 150ms, transform 100ms, box-shadow 150ms;
+    font-family: inherit;
+}
+.next-mod-btn:hover { background: linear-gradient(135deg, rgba(9,127,232,0.15) 0%, rgba(155,93,229,0.12) 100%); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(9,127,232,0.12); }
+.next-mod-btn:active { transform: translateY(0); }
+.next-mod-left { text-align: left; }
+.next-mod-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--notion-blue); margin-bottom: 3px; }
+.next-mod-name { font-size: 15px; font-weight: 700; color: var(--notion-text); }
+.next-mod-xp { font-size: 12px; color: var(--notion-text-soft); margin-top: 2px; }
+.next-mod-arrow { font-size: 22px; color: var(--notion-blue); flex-shrink: 0; }
+
+/* ── Mode révision global ───────────────────────────────── */
+.review-btn { display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:10px; border:none; cursor:pointer; background:var(--notion-green-bg); color:#2a9d76; font-weight:700; font-family:inherit; }
+.review-btn:hover { background:color-mix(in srgb, var(--notion-green-bg) 82%, var(--notion-green)); }
+.review-modal { position:fixed; inset:0; z-index:250; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(0,0,0,.5); backdrop-filter:blur(4px); }
+.review-modal.open { display:flex; }
+.review-card { width:min(760px,100%); max-height:90vh; overflow:auto; background:var(--notion-surface); border-radius:18px; padding:24px; box-shadow:0 24px 64px rgba(0,0,0,.25); }
+.review-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.review-grid { display:grid; gap:10px; }
+.review-q { border:1px solid var(--notion-border-soft); border-radius:12px; padding:14px; background:var(--notion-bg-soft); }
+.review-q .review-q-title { font-weight:700; margin-bottom:8px; }
+.review-meta { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.review-pill { font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--notion-blue-bg); color:var(--notion-blue); }
+.review-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.review-actions button { border:none; }
+
+/* ── Indicateur notes sur les cartes modules ────────────── */
+.mod-notes-dot { position:absolute; bottom:12px; right:12px; font-size:13px; opacity:.7; }
+
+/* ── Durée estimée sur les cartes modules ───────────────── */
+.mod-duration { font-size:11px; color:var(--notion-text-faint); margin-top:2px; }
+
+/* ── Animation d'entrée des cartes modules ──────────────── */
+@keyframes fadeInUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+.mod-card {
+    animation: fadeInUp 300ms ease both;
+}
 </style></head>
 <body>
 <a class="skip-link" href="#modules">Aller au contenu principal</a>
@@ -1140,6 +1263,13 @@ section:first-child {
 			<div class="dash-badges-count">🎖️ <span id="badgeCount">0</span>/12</div>
 			<div class="dash-streak" id="dashStreak">📅 1 jour</div>
 		</div>
+		<div class="dash-modules-prog">
+			<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+				<span class="dash-modules-label">Modules</span>
+				<span class="dash-modules-nums"><span id="dashModDone">0</span>/12</span>
+			</div>
+			<div class="dash-modules-track"><div class="dash-modules-fill" id="dashModFill" style="width:0%"></div></div>
+		</div>
 		<div class="dash-controls">
 			<button class="btn-icon" id="themeToggle" onclick="toggleTheme()" aria-label="Passer en mode sombre">🌙</button>
 			<button class="btn-reset" id="exportBtn" onclick="exportProgress()" title="Exporter la progression en JSON" aria-label="Exporter la progression">↓ Export</button>
@@ -1160,6 +1290,7 @@ section:first-child {
 			<div><strong>Comment ça marche ?</strong><p>Ouvre un module, lis la leçon, fais les exercices dans VS Code, réussis le quiz, puis clique sur <em>Valider le module</em> pour empocher ton XP. Ta progression est sauvegardée automatiquement dans ce navigateur.</p></div>
 		</div>
 		<div id="resumeBox"></div>
+		<div style="margin-top:12px"><button class="review-btn" id="globalReviewBtn" onclick="openGlobalReview()">🧪 Mode révision global</button></div>
 	</section>
 
 	<section id="modules">
@@ -1224,6 +1355,43 @@ section:first-child {
 
 <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
 
+<!-- Modale de félicitations parcours complet -->
+<div class="final-overlay" id="finalOverlay" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
+  <div class="final-card">
+    <span class="final-card-emoji">🎓</span>
+    <h2 id="finalTitle">Parcours complet !</h2>
+    <p>Félicitations — tu as terminé les 12 modules et tu es maintenant prêt·e à postuler en tant que <strong>Junior Full Stack Developer</strong> !</p>
+    <div class="final-card-stats">
+      <div><div class="final-stat-val" id="finalXP">—</div><div class="final-stat-lbl">XP gagnée</div></div>
+      <div><div class="final-stat-val" id="finalLevel">—</div><div class="final-stat-lbl">Niveau</div></div>
+      <div><div class="final-stat-val" id="finalBadges">—</div><div class="final-stat-lbl">Badges</div></div>
+    </div>
+    <div class="final-card-actions">
+      <button class="final-share-btn primary" onclick="printCert(); closeFinalModal()">🎓 Imprimer mon certificat</button>
+      <button class="final-share-btn secondary" id="finalShareBtn" onclick="shareFinalAchievement()">🔗 Partager ma réussite</button>
+      <button class="final-share-btn secondary" onclick="closeFinalModal()" style="font-size:13px;padding:8px 16px">Fermer</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="review-modal" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+  <div class="review-card">
+    <div class="review-head">
+      <div>
+        <h2 id="reviewTitle" style="margin:0">Mode révision global</h2>
+        <p class="notion-muted" style="margin:6px 0 0">Questions tirées aléatoirement dans tous les modules déjà terminés.</p>
+      </div>
+      <button class="x-close" onclick="closeGlobalReview()" aria-label="Fermer">✕</button>
+    </div>
+    <div class="review-meta" id="reviewMeta"></div>
+    <div id="reviewQuiz"></div>
+    <div class="review-actions">
+      <button class="notion-button" onclick="generateGlobalReview()">🔄 Nouveau tirage</button>
+      <button class="notion-button" data-variant="secondary" onclick="closeGlobalReview()">Fermer</button>
+    </div>
+  </div>
+</div>
 <div id="certificate">
   <div style="font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:60px 40px;border:3px double #097fe8;border-radius:16px;text-align:center">
     <div style="font-size:56px;margin-bottom:8px">🎓</div>
@@ -1741,6 +1909,14 @@ function renderDash(){
 	const streak = state.streak || 1;
 	const ds = document.getElementById('dashStreak');
 	if(ds) ds.textContent = (streak >= 2 ? '🔥' : '📅') + ' ' + streak + ' jour' + (streak > 1 ? 's' : '');
+	// Barre progression modules
+	const modDoneCount = state.done.length;
+	const modTotal = MODULES.length;
+	const modPct = Math.round(modDoneCount / modTotal * 100);
+	const dmDone = document.getElementById('dashModDone');
+	const dmFill = document.getElementById('dashModFill');
+	if(dmDone) dmDone.textContent = modDoneCount;
+	if(dmFill) dmFill.style.width = modPct + '%';
 }
 
 let modFilter = '';
@@ -1757,17 +1933,24 @@ function renderModules(){
 		return false;
 	});
 	if(!mods.length){ g.innerHTML = '<p class="notion-muted" style="padding:20px;text-align:center;grid-column:1/-1">Aucun module ne correspond à cette recherche.</p>'; return; }
+	// Module "en cours" = premier non terminé et déverrouillé
+	const nextModId = (() => { const nx = MODULES.find(m2=>!isDone(m2.id)&&isUnlocked(m2.id)); return nx ? nx.id : null; })();
 	g.innerHTML = mods.map(m => {
 		const done = isDone(m.id);
 		const locked = !done && !isUnlocked(m.id);
-		const label = m.name + (done ? ' — Terminé' : locked ? ' — Verrouillé' : '');
-		return '<div class="mod-card'+(done?' done':'')+(locked?' mod-locked':'')+'" tabindex="0" role="button" aria-label="'+label+'" onclick="tryOpenMod('+m.id+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tryOpenMod('+m.id+')}">'+
+		const inProgress = !done && !locked && m.id === nextModId && state.done.length > 0;
+		const statusClass = done ? ' done' : inProgress ? ' in-progress' : locked ? ' mod-locked' : '';
+		const footLabel = done ? 'Terminé ✅' : inProgress ? '▶ En cours' : locked ? 'Verrouillé' : 'À faire';
+		const label = m.name + (done ? ' — Terminé' : inProgress ? ' — En cours' : locked ? ' — Verrouillé' : '');
+		return '<div class="mod-card'+statusClass+'" tabindex="0" role="button" aria-label="'+label+'" style="animation-delay:'+(mods.indexOf(m)*40)+'ms" onclick="tryOpenMod('+m.id+')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();tryOpenMod('+m.id+')}">'+
 			'<div class="mod-emoji">'+m.emoji+'</div>'+
 			'<div class="mod-num">'+m.num+'</div>'+
+			'<div class="mod-duration">⏱ ~'+(Math.max(15, Math.round(m.xp/10)*5))+' min</div>'+
 			'<div class="mod-name">'+m.name+'</div>'+
 			'<p class="mod-desc">'+m.desc+'</p>'+
-			'<div class="mod-foot"><span class="mod-xp">+'+m.xp+' XP</span><span class="notion-faint">'+(done?'Terminé ✅':locked?'Verrouillé':'À faire')+'</span></div>'+
-			'<div class="mod-progress"><div style="width:'+(done?100:0)+'%"></div></div>'+
+			'<div class="mod-foot"><span class="mod-xp">+'+m.xp+' XP</span><span class="notion-faint">'+footLabel+'</span></div>'+
+			'<div class="mod-progress"><div style="width:'+(done?100:inProgress?15:0)+'%"></div></div>'+
+		(() => { try{ const ns=JSON.parse(localStorage.getItem('fullstack_notes_v1'))||{}; return ns[m.id] ? '<div class="mod-notes-dot" title="Tu as des notes sur ce module">📝</div>' : ''; }catch(e){ return ''; } })() +
 		'</div>';
 	}).join('');
 }
@@ -1795,11 +1978,29 @@ function renderResume(){
 	const box = document.getElementById('resumeBox');
 	if(!box) return;
 	if(state.done.length === 0){ box.innerHTML = ''; return; }
+	const totalMods = MODULES.length;
+	const doneMods = state.done.length;
+	const pct = Math.round(doneMods / totalMods * 100);
 	const next = MODULES.find(m=>!isDone(m.id));
 	if(next){
-		box.innerHTML = '<div style="margin-top:16px"><button class="notion-button" data-size="large" onclick="tryOpenMod('+next.id+')" style="margin:0 auto">&#9654; Reprendre — '+next.emoji+' '+next.name+'</button></div>';
+		box.innerHTML =
+			'<div class="resume-banner">' +
+				'<div class="resume-left">' +
+					'<div class="resume-label">Là où tu en es</div>' +
+					'<div class="resume-title">' + next.emoji + ' ' + next.name + '</div>' +
+					'<div class="resume-progress">' +
+						'<div class="resume-prog-row"><span>' + doneMods + ' module' + (doneMods>1?'s':'') + ' terminé' + (doneMods>1?'s':'') + '</span><span>' + pct + '%</span></div>' +
+						'<div class="resume-prog-track"><div class="resume-prog-fill" style="width:' + pct + '%"></div></div>' +
+					'</div>' +
+				'</div>' +
+				'<button class="resume-btn" onclick="tryOpenMod(' + next.id + ')">&#9654; Reprendre le module</button>' +
+			'</div>';
 	} else {
-		box.innerHTML = '<div class="notion-callout" data-tone="green" style="margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto"><div>&#127881;</div><div><strong>Parcours complet !</strong><p>Tous les modules sont termin&#233;s. Tu es pr&#234;t&#183;e &#224; postuler !</p></div></div>'+
+		box.innerHTML =
+			'<div class="notion-callout" data-tone="green" style="margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto">' +
+				'<div>&#127881;</div>' +
+				'<div><strong>Parcours complet !</strong><p>Tous les modules sont terminés. Tu es prêt·e à postuler !</p></div>' +
+			'</div>' +
 			'<div style="text-align:center;margin-top:14px"><button onclick="printCert()" class="notion-button" style="margin:0 auto">🎓 Imprimer mon certificat</button></div>';
 	}
 }
@@ -1956,6 +2157,69 @@ function importProgress(){
 	input.click();
 }
 
+
+let reviewState = {};
+let reviewQuiz = [];
+
+function getGlobalQuizPool(){
+	return MODULES.filter(m => isDone(m.id)).flatMap(m => m.quiz.map(q => ({...q, _module:m})));
+}
+
+function openGlobalReview(){
+	if(!state.done.length){ toast('Termine au moins un module pour lancer la révision globale.'); return; }
+	generateGlobalReview();
+	document.getElementById('reviewModal').classList.add('open');
+}
+
+function closeGlobalReview(){
+	document.getElementById('reviewModal').classList.remove('open');
+}
+
+function generateGlobalReview(){
+	const pool = getGlobalQuizPool().slice();
+	reviewState = {};
+	reviewQuiz = [];
+	const target = Math.min(5, pool.length);
+	while(reviewQuiz.length < target && pool.length){
+		const i = Math.floor(Math.random()*pool.length);
+		reviewQuiz.push(pool.splice(i,1)[0]);
+	}
+	renderGlobalReview();
+}
+
+function renderGlobalReview(){
+	const box = document.getElementById('reviewQuiz');
+	const meta = document.getElementById('reviewMeta');
+	if(!box || !meta) return;
+	meta.innerHTML = '<span class="review-pill">' + reviewQuiz.length + ' questions</span>' +
+		'<span class="review-pill">' + MODULES.filter(m=>isDone(m.id)).length + ' modules validés</span>' +
+		'<span class="review-pill">' + totalXP() + ' XP</span>';
+	box.innerHTML = reviewQuiz.map((qq,qi) => {
+		const mod = qq._module;
+		return '<div class="review-q">' +
+			'<div class="review-q-title">' + (qi+1) + '. ' + qq.q + '</div>' +
+			'<div class="review-meta"><span class="review-pill">' + mod.num + '</span><span class="review-pill">' + mod.name + '</span></div>' +
+			qq.o.map((opt,oi) => '<button class="q-opt" onclick="answerGlobal(' + qi + ',' + oi + ')" id="rq' + qi + 'o' + oi + '">' + opt + '</button>').join('') +
+			'<div class="quiz-expl" id="rexpl' + qi + '"></div>' +
+		'</div>';
+	}).join('');
+}
+
+function answerGlobal(qi, oi){
+	if(reviewState[qi] !== undefined) return;
+	const qq = reviewQuiz[qi];
+	reviewState[qi] = (oi === qq.a);
+	qq.o.forEach((_,k)=>{
+		const b = document.getElementById('rq'+qi+'o'+k);
+		if(!b) return;
+		b.disabled = true;
+		if(k === qq.a) { b.style.background='var(--notion-green-bg)'; b.style.border='1px solid #2a9d76'; }
+		else if(k === oi && oi !== qq.a) { b.style.background='var(--notion-red-bg)'; b.style.border='1px solid var(--notion-red)'; }
+	});
+	const expl = document.getElementById('rexpl'+qi);
+	if(expl && qq.expl) { expl.style.display='block'; expl.textContent = '💡 ' + qq.expl; }
+}
+
 function printCert(){
 	const name = prompt('Ton prénom pour le certificat :', 'Alexis') || 'Alexis';
 	const xp = totalXP();
@@ -1966,6 +2230,47 @@ function printCert(){
 	document.getElementById('certBadges').textContent = state.done.length + '/12';
 	document.getElementById('certDate').textContent = 'Délivré le ' + new Date().toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
 	window.print();
+}
+
+
+function openFinalModal(){
+	const xp = totalXP();
+	const lv = currentLevel(xp);
+	document.getElementById('finalXP').textContent = xp + ' XP';
+	document.getElementById('finalLevel').textContent = lv.emoji + ' Niv.' + lv.n;
+	document.getElementById('finalBadges').textContent = state.done.length + '/12';
+	document.getElementById('finalOverlay').classList.add('open');
+	// Big confetti
+	if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+		const colors=['#097fe8','#9b5de5','#f15bb5','#00bbf9','#00f5d4','#fee440','#2a9d76'];
+		for(let i=0;i<120;i++){
+			const c=document.createElement('div'); c.className='confetti';
+			c.style.left=Math.random()*100+'vw';
+			c.style.background=colors[i%colors.length];
+			c.style.transform='rotate('+Math.random()*360+'deg)';
+			c.style.width=(8+Math.random()*8)+'px';
+			c.style.height=(10+Math.random()*10)+'px';
+			c.style.borderRadius=Math.random()>0.5?'50%':'2px';
+			document.body.appendChild(c);
+			const dur=2200+Math.random()*2000;
+			const delay=Math.random()*600;
+			c.animate([{top:'-20px',opacity:1,transform:'rotate(0deg)'},{top:'100vh',opacity:.8,transform:'rotate('+(Math.random()*720-360)+'deg)'}],{duration:dur,delay:delay,easing:'cubic-bezier(.3,.7,.5,1)'});
+			setTimeout(()=>c.remove(),dur+delay);
+		}
+	}
+	setTimeout(()=>{ const btn=document.querySelector('.final-card .final-share-btn.primary'); if(btn) btn.focus(); },350);
+}
+
+function closeFinalModal(){
+	document.getElementById('finalOverlay').classList.remove('open');
+}
+
+function shareFinalAchievement(){
+	const xp = totalXP();
+	const lv = currentLevel(xp);
+	const text = '🎓 Je viens de terminer le parcours "Deviens Développeur Web Full Stack" avec ' + xp + ' XP et le niveau ' + lv.emoji + ' ' + lv.name + ' ! #DevFullStack #ApprendsCode';
+	if(navigator.share){ navigator.share({ title:'Certificat Full Stack', text:text, url:window.location.href }); }
+	else { navigator.clipboard.writeText(text + ' → ' + window.location.href).then(()=>toast('✅ Texte copié dans le presse-papiers !')).catch(()=>{ window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank'); }); }
 }
 
 function renderFilRouge() {
@@ -1993,6 +2298,17 @@ function renderFilRouge() {
 			'<p class="dfr-desc">' + fr.desc + '</p>' +
 			'</div>';
 	}).join('');
+}
+
+
+function scrollToCurrentModule(){
+	const nextModId = (() => { const nx = MODULES.find(m=>!isDone(m.id)&&isUnlocked(m.id)); return nx ? nx.id : null; })();
+	if(nextModId === null) return;
+	requestAnimationFrame(() => {
+		const cards = document.querySelectorAll('.mod-card');
+		const card = Array.from(cards).find(c => c.getAttribute('aria-label') && c.getAttribute('aria-label').includes(MODULES.find(m=>m.id===nextModId).name));
+		if(card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+	});
 }
 
 function renderAll(){
@@ -2024,7 +2340,7 @@ function switchTab(btn, tab){
 function pickQuiz(m){
 	const pool = m.quiz.slice();
 	activeQuiz = [];
-	while(activeQuiz.length < Math.min(2, pool.length)){
+	while(activeQuiz.length < Math.min(4, pool.length)){
 		const i = Math.floor(Math.random() * pool.length);
 		activeQuiz.push(pool.splice(i, 1)[0]);
 	}
@@ -2214,15 +2530,44 @@ function quizAnswered(m){ return activeQuiz.every((_,i)=>quizState[i]!==undefine
 function updateValid(m){
 	const box = document.getElementById("validBox");
 	if(isDone(m.id)){
+		const nextMod = MODULES.find(nx => nx.id === m.id + 1);
+		const nextBtn = nextMod && !isDone(nextMod.id)
+			? '<button class="next-mod-btn" onclick="closeMod();setTimeout(()=>tryOpenMod('+nextMod.id+'),180)">'+
+				'<div class="next-mod-left">'+
+					'<div class="next-mod-label">Module suivant</div>'+
+					'<div class="next-mod-name">'+nextMod.emoji+' '+nextMod.name+'</div>'+
+					'<div class="next-mod-xp">+'+nextMod.xp+' XP</div>'+
+				'</div>'+
+				'<span class="next-mod-arrow">→</span>'+
+			  '</button>'
+			: '';
 		box.innerHTML = '<div class="notion-callout" data-tone="green"><div>✅</div><div><strong>Module terminé !</strong><p>Tu as gagné '+m.xp+' XP et le badge '+m.badge+' '+m.badgeName+'.</p></div></div>'+
+			nextBtn +
 			'<button class="mod-reset-btn" onclick="resetMod('+m.id+')">↩ Remettre ce module à zéro</button>';
 		return;
 	}
 	if(quizAnswered(m) && quizPassed(m)){
-		box.innerHTML = '<button onclick="complete('+m.id+')" style="width:100%;font-size:15px;padding:12px">🎯 Valider le module (+'+m.xp+' XP)</button>';
+		box.innerHTML = '<div class="notion-callout" data-tone="green" style="margin-bottom:12px"><div>🎯</div><div><strong>Parfait !</strong><p>Toutes les réponses sont correctes.</p></div></div>'+
+			'<button onclick="complete('+m.id+')" style="width:100%;font-size:15px;padding:12px">🎯 Valider le module (+'+m.xp+' XP)</button>';
 	} else if(quizAnswered(m)){
-		box.innerHTML = '<div class="notion-callout" data-tone="red"><div>🔁</div><div><p>Quelques erreurs au quiz. Relis la leçon ci-dessus et réessaie !</p></div></div>'+
-			'<button onclick="retryQuiz('+m.id+')" style="width:100%;margin-top:10px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">🔄 Réessayer le quiz</button>';
+		// Récapitulatif détaillé des erreurs
+		const wrongItems = activeQuiz.map((qq,qi) => {
+			if(quizState[qi] === true) return '';
+			const givenIdx = Object.keys(quizState).map(Number).includes(qi) ? activeQuiz[qi].o.findIndex((_,k)=>k!==qq.a && quizState[qi]===false) : -1;
+			return '<div class="quiz-recap-item">'+
+				'<div class="quiz-recap-q">'+(qi+1)+'. '+qq.q+'</div>'+
+				'<div class="quiz-recap-wrong">✗ Ta réponse : '+qq.o[Object.keys(quizState).map(Number).reduce((acc,k)=>k===qi?k:acc,qi) !== undefined ? activeQuiz[qi].o.findIndex((_v,k)=>{ return !quizState[qi] && k!==qq.a; }) : 0]+'</div>'+
+				'<div class="quiz-recap-right">✓ Bonne réponse : '+qq.o[qq.a]+'</div>'+
+				(qq.expl ? '<div class="quiz-recap-expl">💡 '+qq.expl+'</div>' : '')+
+			'</div>';
+		}).filter(Boolean).join('');
+		const errCount = activeQuiz.filter((_,i)=>quizState[i]===false).length;
+		box.innerHTML =
+			'<div class="quiz-recap">'+
+				'<div class="quiz-recap-header">⚠️ '+errCount+' erreur'+(errCount>1?'s':'')+' à retravailler</div>'+
+				wrongItems+
+			'</div>'+
+			'<button onclick="retryQuiz('+m.id+')" style="width:100%;margin-top:12px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">🔄 Réessayer le quiz</button>';
 	} else {
 		box.innerHTML = '<p class="notion-faint">Réponds au quiz pour pouvoir valider le module.</p>';
 	}
@@ -2238,6 +2583,10 @@ function complete(id){
 		toast('🎉 +' + MODULES.find(m=>m.id===id).xp + ' XP ! Module validé');
 		const newLv = currentLevel(totalXP());
 		if(newLv.n > prevLv.n) setTimeout(()=>toast('🆙 Niveau '+newLv.n+' — '+newLv.emoji+' '+newLv.name+' !'), 2800);
+		// Parcours complet ? → modale de félicitations
+		if(state.done.length === MODULES.length){
+			setTimeout(()=>openFinalModal(), 1200);
+		}
 	}
 	renderAll();
 	const m = MODULES.find(x=>x.id===id);
@@ -2271,6 +2620,9 @@ function celebrate(){
 }
 
 document.addEventListener('keydown', e => {
+	// Fermer la modale finale avec Escape
+	const fo = document.getElementById('finalOverlay');
+	if(fo && fo.classList.contains('open') && e.key === 'Escape'){ closeFinalModal(); return; }
 	const ov = document.getElementById('ov');
 	if(!ov.classList.contains('open')) return;
 	if(e.key === 'Escape'){ closeMod(); return; }
