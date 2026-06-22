@@ -1032,23 +1032,23 @@ section:first-child {
   body { background:#fff !important; }
 }
 
-/* Fil rouge — Encyclopédie botanique */
-.encyclo-header { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
-.encyclo-header h2 { margin:0; }
-.encyclo-count { font-size:13px; font-weight:700; color:var(--notion-blue); background:var(--notion-blue-bg); padding:3px 10px; border-radius:999px; white-space:nowrap; }
-.encyclo-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:14px; }
-@media (max-width:820px){ .encyclo-grid { grid-template-columns:repeat(3,1fr); } }
-@media (max-width:560px){ .encyclo-grid { grid-template-columns:repeat(2,1fr); } }
-.encyclo-card { border-radius:12px; padding:14px; background:var(--notion-surface); border:1px solid var(--notion-border-soft); box-shadow:var(--notion-shadow); position:relative; overflow:hidden; transition:transform 140ms,box-shadow 140ms,border-color 140ms; cursor:pointer; }
-.encyclo-card.enc-locked { opacity:.42; filter:grayscale(.85); cursor:not-allowed; }
-.encyclo-card.enc-done { border-color:#2a9d76; }
-.encyclo-card:not(.enc-locked):hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.09); border-color:var(--notion-border); }
-.enc-emoji { font-size:34px; display:block; margin-bottom:8px; line-height:1; }
-.enc-name { font-weight:700; font-size:13px; margin:0 0 1px; }
-.enc-latin { font-style:italic; font-size:11px; color:var(--notion-text-soft); margin:0 0 8px; }
-.enc-tag { display:inline-flex; align-items:center; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:999px; background:var(--notion-green-bg); color:#2a9d76; }
-.enc-legende { font-size:11.5px; color:var(--notion-text-soft); margin:8px 0 0; line-height:1.5; }
-.enc-check { position:absolute; top:9px; right:9px; font-size:13px; }
+/* Fil rouge — Mini-Dashboard de Développeur */
+.dash-fr-header { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
+.dash-fr-header h2 { margin:0; }
+.dash-fr-count { font-size:13px; font-weight:700; color:var(--notion-blue); background:var(--notion-blue-bg); padding:3px 10px; border-radius:999px; white-space:nowrap; }
+.dash-fr-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:14px; }
+@media (max-width:820px){ .dash-fr-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:560px){ .dash-fr-grid { grid-template-columns:repeat(2,1fr); } }
+.dash-fr-card { border-radius:12px; padding:14px; background:var(--notion-surface); border:1px solid var(--notion-border-soft); box-shadow:var(--notion-shadow); position:relative; overflow:hidden; transition:transform 140ms,box-shadow 140ms,border-color 140ms; cursor:pointer; }
+.dash-fr-card.dfr-locked { opacity:.42; filter:grayscale(.85); cursor:not-allowed; }
+.dash-fr-card.dfr-done { border-color:#2a9d76; }
+.dash-fr-card:not(.dfr-locked):hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.09); border-color:var(--notion-border); }
+.dfr-emoji { font-size:34px; display:block; margin-bottom:8px; line-height:1; }
+.dfr-name { font-weight:700; font-size:13px; margin:0 0 1px; }
+.dfr-step { font-size:11px; color:var(--notion-text-soft); margin:0 0 8px; }
+.dfr-tag { display:inline-flex; align-items:center; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:999px; background:var(--notion-blue-bg); color:var(--notion-blue); }
+.dfr-desc { font-size:11.5px; color:var(--notion-text-soft); margin:8px 0 0; line-height:1.5; }
+.dfr-check { position:absolute; top:9px; right:9px; font-size:13px; }
 
 /* Sprint 7.5 — Live Preview sandbox enhancements */
 .sandbox-console {
@@ -1165,13 +1165,13 @@ section:first-child {
 		<div class="badge-grid" id="badgeGrid"></div>
 	</section>
 
-	<section id="encyclopedieSection">
-		<div class="encyclo-header">
-			<h2>📖 Encyclopédie botanique</h2>
-			<span class="encyclo-count" id="encycloCount">0 / 12 plantes découvertes</span>
+	<section id="filRougeSection">
+		<div class="dash-fr-header">
+			<h2>💻 Mini-Dashboard de Développeur</h2>
+			<span class="dash-fr-count" id="dashFrCount">0 / 12 widgets construits</span>
 		</div>
-		<p class="notion-muted">Chaque module te permet de maîtriser une technique — et d'ajouter une plante à ton encyclopédie. Regarde-la s'enrichir au fil de ta progression.</p>
-		<div class="encyclo-grid" id="encycloGrid"></div>
+		<p class="notion-muted">Chaque module t'apprend une technique clé — et ajoute un widget à ton dashboard de développeur. Regarde-le prendre vie au fil de ta progression.</p>
+		<div class="dash-fr-grid" id="dashFrGrid"></div>
 	</section>
 
 	<section id="profileSection"></section>
@@ -1550,20 +1550,20 @@ const MODULES = [
 }
 ];
 
-// ── Fil rouge : données de l'encyclopédie botanique (indexé par module id) ────
+// ── Fil rouge : Mini-Dashboard de Développeur (indexé par module id) ────
 const FIL_ROUGE = [
-	{plante:"🌿", nom:"Fougère",   latin:"Pteridium aquilinum",    tag:"HTML • Structure",      legende:"Les balises <h1> et <p> créent la première fiche de l'encyclopédie — le squelette d'une plante."},
-	{plante:"🌳", nom:"Chêne",     latin:"Quercus robur",           tag:"HTML • Sémantique",     legende:"<article>, <dl> et <figure> organisent la fiche du Chêne comme une vraie page de référence."},
-	{plante:"🌹", nom:"Rose",      latin:"Rosa gallica",             tag:"CSS • Style",           legende:"Couleurs pastels, Flexbox et border-radius donnent à la Rose la présentation qu'elle mérite."},
-	{plante:"🌻", nom:"Tournesol", latin:"Helianthus annuus",        tag:"JS • Logique",          legende:"Une fonction calcule la saison de floraison et la hauteur estimée selon la zone géographique."},
-	{plante:"💐", nom:"Lavande",   latin:"Lavandula angustifolia",   tag:"DOM • Interactivité",   legende:"Un clic sur la carte révèle les vertus médicinales sans recharger la page — le DOM en action."},
-	{plante:"🌸", nom:"Orchidée",  latin:"Phalaenopsis amabilis",    tag:"API • Données live",    legende:"fetch() récupère les données de l'Orchidée depuis une API botanique externe en temps réel."},
-	{plante:"🎋", nom:"Bambou",    latin:"Phyllostachys edulis",     tag:"Git • Versions",        legende:"git commit 'Ajout Bambou' — l'historique grandit avec la plante, chaque pouce est un commit."},
-	{plante:"🌷", nom:"Tulipe",    latin:"Tulipa gesneriana",        tag:"React • Composants",    legende:"<PlantCard species='Tulipe' /> : un composant React réutilisable pour toutes les espèces."},
-	{plante:"🌵", nom:"Cactus",    latin:"Carnegiea gigantea",       tag:"Node • API REST",       legende:"GET /api/plantes/cactus — Express expose les données du Cactus à tous les clients de l'app."},
-	{plante:"🍀", nom:"Trèfle",    latin:"Trifolium repens",         tag:"BDD • Persistance",     legende:"Les 300 variétés de Trèfle survivent dans MongoDB même après un redémarrage du serveur."},
-	{plante:"🌴", nom:"Palmier",   latin:"Arecaceae",                tag:"Full Stack • Déployé",  legende:"L'encyclopédie React + Express + Atlas est en ligne, indexée et accessible partout dans le monde."},
-	{plante:"🫒", nom:"Olivier",   latin:"Olea europaea",            tag:"Portfolio • Emploi",    legende:"L'encyclopédie devient ton portfolio — 12 plantes, 12 compétences démontrées à un recruteur."},
+	{emoji:"🏗️", nom:"Structure HTML",   step:"Étape 1 / 12",  tag:"HTML • Squelette",     desc:"Tu crées la div#dashboard et les premiers conteneurs — l'ossature de ton panel de dev."},
+	{emoji:"🧭", nom:"Header & Nav",      step:"Étape 2 / 12",  tag:"HTML • Sémantique",    desc:"<header>, <nav> et <main> structurent le dashboard de façon lisible et accessible."},
+	{emoji:"🎨", nom:"Thème visuel",      step:"Étape 3 / 12",  tag:"CSS • Design",         desc:"Variables CSS, palette sombre et grille Flexbox — ton dashboard a enfin du style."},
+	{emoji:"⏰", nom:"Horloge live",      step:"Étape 4 / 12",  tag:"JS • Temps réel",      desc:"setInterval() met à jour l'heure chaque seconde — le cœur du dashboard bat."},
+	{emoji:"✅", nom:"Todo list",         step:"Étape 5 / 12",  tag:"DOM • Interactivité",  desc:"Ajouter, cocher et supprimer des tâches sans recharger la page — le DOM en action."},
+	{emoji:"💬", nom:"Citations dev",     step:"Étape 6 / 12",  tag:"API • fetch()",        desc:"fetch() charge une citation de développeur aléatoire depuis une API publique."},
+	{emoji:"🔖", nom:"Badge version",     step:"Étape 7 / 12",  tag:"Git • Versions",       desc:"Un badge v1.0.0 dans le header — mis à jour à chaque git tag de ton projet."},
+	{emoji:"⚛️", nom:"Composants React",  step:"Étape 8 / 12",  tag:"React • Composants",   desc:"<Clock />, <TodoList />, <Quote /> — chaque widget devient un composant réutilisable."},
+	{emoji:"🔌", nom:"API REST",          step:"Étape 9 / 12",  tag:"Node • Express",       desc:"GET /api/tasks — Express expose ta todo-list à n'importe quel client."},
+	{emoji:"🗄️", nom:"Persistance BDD",  step:"Étape 10 / 12", tag:"BDD • MongoDB",        desc:"Les tâches survivent aux rechargements grâce à MongoDB et Mongoose."},
+	{emoji:"🚀", nom:"Dashboard live",    step:"Étape 11 / 12", tag:"Full Stack • Déployé", desc:"Vercel + Railway — ton dashboard est en ligne et accessible depuis partout."},
+	{emoji:"🏆", nom:"Version finale",    step:"Étape 12 / 12", tag:"Portfolio • Emploi",   desc:"Le dashboard est ton projet phare — 12 compétences démontrées à un recruteur."},
 ];
 
 const GOAL = LEVELS[LEVELS.length-1].xp;
@@ -1831,35 +1831,35 @@ function printCert(){
 	window.print();
 }
 
-function renderEncyclopedie() {
-	const grid    = document.getElementById('encycloGrid');
-	const counter = document.getElementById('encycloCount');
+function renderFilRouge() {
+	const grid    = document.getElementById('dashFrGrid');
+	const counter = document.getElementById('dashFrCount');
 	if (!grid) return;
 	const doneCount = MODULES.filter(m => isDone(m.id)).length;
-	if (counter) counter.textContent = doneCount + ' / ' + MODULES.length + ' plantes découvertes';
+	if (counter) counter.textContent = doneCount + ' / ' + MODULES.length + ' widgets construits';
 	grid.innerHTML = FIL_ROUGE.map(function(fr, i) {
 		const m      = MODULES[i];
 		const done   = isDone(m.id);
 		const locked = !isUnlocked(m.id);
-		const cls    = done ? 'enc-done' : locked ? 'enc-locked' : '';
+		const cls    = done ? 'dfr-done' : locked ? 'dfr-locked' : '';
 		const click  = locked
-			? 'onclick="toast(\'🌿 Complète « ' + MODULES[i > 0 ? i-1 : 0].name + ' » pour découvrir cette plante !\')"'
+			? 'onclick="toast(\'💻 Complète « ' + MODULES[i > 0 ? i-1 : 0].name + ' » pour débloquer ce widget !\')"'
 			: 'onclick="tryOpenMod(' + m.id + ')"';
 		const kbNav  = locked ? 'tabindex="-1"' : 'tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tryOpenMod(' + m.id + ')}"';
-		const label  = fr.nom + (done ? ' — découverte' : locked ? ' — verrouillée' : ' — en cours');
-		return '<div class="encyclo-card ' + cls + '" role="button" aria-label="' + label + '" ' + click + ' ' + kbNav + '>' +
-			(done ? '<span class="enc-check">✅</span>' : '') +
-			'<span class="enc-emoji">' + fr.plante + '</span>' +
-			'<p class="enc-name">' + fr.nom + '</p>' +
-			'<p class="enc-latin">' + fr.latin + '</p>' +
-			'<span class="enc-tag">' + fr.tag + '</span>' +
-			'<p class="enc-legende">' + fr.legende + '</p>' +
+		const label  = fr.nom + (done ? ' — terminé' : locked ? ' — verrouillé' : ' — en cours');
+		return '<div class="dash-fr-card ' + cls + '" role="button" aria-label="' + label + '" ' + click + ' ' + kbNav + '>' +
+			(done ? '<span class="dfr-check">✅</span>' : '') +
+			'<span class="dfr-emoji">' + fr.emoji + '</span>' +
+			'<p class="dfr-name">' + fr.nom + '</p>' +
+			'<p class="dfr-step">' + fr.step + '</p>' +
+			'<span class="dfr-tag">' + fr.tag + '</span>' +
+			'<p class="dfr-desc">' + fr.desc + '</p>' +
 			'</div>';
 	}).join('');
 }
 
 function renderAll(){
-	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderEncyclopedie(); renderProfile();
+	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderFilRouge(); renderProfile();
 	const cb = document.getElementById('freeUnlockToggle');
 	if(cb) cb.checked = !!state.freeUnlock;
 	updateThemeBtn();
