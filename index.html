@@ -1032,6 +1032,24 @@ section:first-child {
   body { background:#fff !important; }
 }
 
+/* Fil rouge — Encyclopédie botanique */
+.encyclo-header { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
+.encyclo-header h2 { margin:0; }
+.encyclo-count { font-size:13px; font-weight:700; color:var(--notion-blue); background:var(--notion-blue-bg); padding:3px 10px; border-radius:999px; white-space:nowrap; }
+.encyclo-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:14px; }
+@media (max-width:820px){ .encyclo-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:560px){ .encyclo-grid { grid-template-columns:repeat(2,1fr); } }
+.encyclo-card { border-radius:12px; padding:14px; background:var(--notion-surface); border:1px solid var(--notion-border-soft); box-shadow:var(--notion-shadow); position:relative; overflow:hidden; transition:transform 140ms,box-shadow 140ms,border-color 140ms; cursor:pointer; }
+.encyclo-card.enc-locked { opacity:.42; filter:grayscale(.85); cursor:not-allowed; }
+.encyclo-card.enc-done { border-color:#2a9d76; }
+.encyclo-card:not(.enc-locked):hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.09); border-color:var(--notion-border); }
+.enc-emoji { font-size:34px; display:block; margin-bottom:8px; line-height:1; }
+.enc-name { font-weight:700; font-size:13px; margin:0 0 1px; }
+.enc-latin { font-style:italic; font-size:11px; color:var(--notion-text-soft); margin:0 0 8px; }
+.enc-tag { display:inline-flex; align-items:center; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:999px; background:var(--notion-green-bg); color:#2a9d76; }
+.enc-legende { font-size:11.5px; color:var(--notion-text-soft); margin:8px 0 0; line-height:1.5; }
+.enc-check { position:absolute; top:9px; right:9px; font-size:13px; }
+
 /* Sprint 7.5 — Live Preview sandbox enhancements */
 .sandbox-console {
 	margin-top:8px;
@@ -1145,6 +1163,15 @@ section:first-child {
 		<h2>🎖️ Badges de projet</h2>
 		<p class="notion-muted">Débloque un badge à chaque mini-projet (« boss de fin de module ») terminé.</p>
 		<div class="badge-grid" id="badgeGrid"></div>
+	</section>
+
+	<section id="encyclopedieSection">
+		<div class="encyclo-header">
+			<h2>📖 Encyclopédie botanique</h2>
+			<span class="encyclo-count" id="encycloCount">0 / 12 plantes découvertes</span>
+		</div>
+		<p class="notion-muted">Chaque module te permet de maîtriser une technique — et d'ajouter une plante à ton encyclopédie. Regarde-la s'enrichir au fil de ta progression.</p>
+		<div class="encyclo-grid" id="encycloGrid"></div>
 	</section>
 
 	<section id="profileSection"></section>
@@ -1523,6 +1550,22 @@ const MODULES = [
 }
 ];
 
+// ── Fil rouge : données de l'encyclopédie botanique (indexé par module id) ────
+const FIL_ROUGE = [
+	{plante:"🌿", nom:"Fougère",   latin:"Pteridium aquilinum",    tag:"HTML • Structure",      legende:"Les balises <h1> et <p> créent la première fiche de l'encyclopédie — le squelette d'une plante."},
+	{plante:"🌳", nom:"Chêne",     latin:"Quercus robur",           tag:"HTML • Sémantique",     legende:"<article>, <dl> et <figure> organisent la fiche du Chêne comme une vraie page de référence."},
+	{plante:"🌹", nom:"Rose",      latin:"Rosa gallica",             tag:"CSS • Style",           legende:"Couleurs pastels, Flexbox et border-radius donnent à la Rose la présentation qu'elle mérite."},
+	{plante:"🌻", nom:"Tournesol", latin:"Helianthus annuus",        tag:"JS • Logique",          legende:"Une fonction calcule la saison de floraison et la hauteur estimée selon la zone géographique."},
+	{plante:"💐", nom:"Lavande",   latin:"Lavandula angustifolia",   tag:"DOM • Interactivité",   legende:"Un clic sur la carte révèle les vertus médicinales sans recharger la page — le DOM en action."},
+	{plante:"🌸", nom:"Orchidée",  latin:"Phalaenopsis amabilis",    tag:"API • Données live",    legende:"fetch() récupère les données de l'Orchidée depuis une API botanique externe en temps réel."},
+	{plante:"🎋", nom:"Bambou",    latin:"Phyllostachys edulis",     tag:"Git • Versions",        legende:"git commit 'Ajout Bambou' — l'historique grandit avec la plante, chaque pouce est un commit."},
+	{plante:"🌷", nom:"Tulipe",    latin:"Tulipa gesneriana",        tag:"React • Composants",    legende:"<PlantCard species='Tulipe' /> : un composant React réutilisable pour toutes les espèces."},
+	{plante:"🌵", nom:"Cactus",    latin:"Carnegiea gigantea",       tag:"Node • API REST",       legende:"GET /api/plantes/cactus — Express expose les données du Cactus à tous les clients de l'app."},
+	{plante:"🍀", nom:"Trèfle",    latin:"Trifolium repens",         tag:"BDD • Persistance",     legende:"Les 300 variétés de Trèfle survivent dans MongoDB même après un redémarrage du serveur."},
+	{plante:"🌴", nom:"Palmier",   latin:"Arecaceae",                tag:"Full Stack • Déployé",  legende:"L'encyclopédie React + Express + Atlas est en ligne, indexée et accessible partout dans le monde."},
+	{plante:"🫒", nom:"Olivier",   latin:"Olea europaea",            tag:"Portfolio • Emploi",    legende:"L'encyclopédie devient ton portfolio — 12 plantes, 12 compétences démontrées à un recruteur."},
+];
+
 const GOAL = LEVELS[LEVELS.length-1].xp;
 const KEY = "fullstack_progress_v1";
 let state = load();
@@ -1788,8 +1831,35 @@ function printCert(){
 	window.print();
 }
 
+function renderEncyclopedie() {
+	const grid    = document.getElementById('encycloGrid');
+	const counter = document.getElementById('encycloCount');
+	if (!grid) return;
+	const doneCount = MODULES.filter(m => isDone(m.id)).length;
+	if (counter) counter.textContent = doneCount + ' / ' + MODULES.length + ' plantes découvertes';
+	grid.innerHTML = FIL_ROUGE.map(function(fr, i) {
+		const m      = MODULES[i];
+		const done   = isDone(m.id);
+		const locked = !isUnlocked(m.id);
+		const cls    = done ? 'enc-done' : locked ? 'enc-locked' : '';
+		const click  = locked
+			? 'onclick="toast(\'🌿 Complète « ' + MODULES[i > 0 ? i-1 : 0].name + ' » pour découvrir cette plante !\')"'
+			: 'onclick="tryOpenMod(' + m.id + ')"';
+		const kbNav  = locked ? 'tabindex="-1"' : 'tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tryOpenMod(' + m.id + ')}"';
+		const label  = fr.nom + (done ? ' — découverte' : locked ? ' — verrouillée' : ' — en cours');
+		return '<div class="encyclo-card ' + cls + '" role="button" aria-label="' + label + '" ' + click + ' ' + kbNav + '>' +
+			(done ? '<span class="enc-check">✅</span>' : '') +
+			'<span class="enc-emoji">' + fr.plante + '</span>' +
+			'<p class="enc-name">' + fr.nom + '</p>' +
+			'<p class="enc-latin">' + fr.latin + '</p>' +
+			'<span class="enc-tag">' + fr.tag + '</span>' +
+			'<p class="enc-legende">' + fr.legende + '</p>' +
+			'</div>';
+	}).join('');
+}
+
 function renderAll(){
-	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderProfile();
+	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderEncyclopedie(); renderProfile();
 	const cb = document.getElementById('freeUnlockToggle');
 	if(cb) cb.checked = !!state.freeUnlock;
 	updateThemeBtn();
