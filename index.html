@@ -1,0 +1,2014 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deviens Développeur Web Full Stack — De zéro à embauché</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#097fe8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ApprendsCode">
+<style>
+/*
+ * _base.css — Global design tokens, element defaults, page shell, and tiny utilities.
+ * ALWAYS included in every page.
+ *
+ * Provides:
+ *   :root variables (light + dark), box-sizing, html/body,
+ *   element defaults (button, input, select, textarea, label, fieldset, legend,
+ *   a, hr, img, h1-h4, p, ul/ol/li, blockquote, table/th/td, details/summary,
+ *   pre/code), main / .notion-shell, utility classes, .notion-footer,
+ *   reduced-motion and responsive breakpoints for base elements.
+ */
+
+:root {
+	color-scheme: light dark;
+	--notion-bg: #ffffff;
+	--notion-bg-soft: #f9f9f8;
+	--notion-surface: #ffffff;
+	--notion-surface-hover: #f6f5f4;
+	--notion-text: #191918;
+	--notion-text-soft: rgba(0, 0, 0, 0.54);
+	--notion-text-faint: rgba(0, 0, 0, 0.45);
+	--notion-border: rgba(0, 0, 0, 0.1);
+	--notion-border-soft: rgba(0, 0, 0, 0.05);
+	--notion-shadow:
+		0px 0.7px 1.462px rgba(0, 0, 0, 0.015), 0px 3px 9px rgba(0, 0, 0, 0.03);
+	--notion-blue: #2783de;
+	--notion-orange: #d5803b;
+	--notion-red: #e56458;
+	--notion-blue-bg: #f3f9fd;
+	--notion-yellow-bg: #fcfaef;
+	--notion-orange-bg: #fcf7f4;
+	--notion-green-bg: #f6f9f7;
+	--notion-red-bg: #fdf6f6;
+	--notion-gray-bg: #f9f8f7;
+	--notion-radius: 8px;
+	--notion-page-width: 900px;
+	--notion-chart-1: #5e9fe8;
+	--notion-chart-2: #eac26b;
+	--notion-chart-3: #72bc8f;
+	--notion-chart-4: #bf8eda;
+	--notion-chart-5: #de9255;
+	--notion-chart-6: #df84a8;
+	--notion-chart-7: #4fb9c9;
+	--notion-chart-8: #e97366;
+	--diff-add: #47c1b6;
+	--diff-del: #f07070;
+	--pr-approved: #2b8a3e;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--notion-bg: #000000;
+		--notion-bg-soft: #191918;
+		--notion-surface: #191918;
+		--notion-surface-hover: #31302e;
+		--notion-text: #ffffff;
+		--notion-text-soft: rgba(255, 255, 255, 0.5);
+		--notion-text-faint: rgba(255, 255, 255, 0.45);
+		--notion-border: rgba(255, 255, 255, 0.2);
+		--notion-border-soft: rgba(255, 255, 255, 0.1);
+		--notion-shadow:
+			0px 0.7px 1.462px rgba(0, 0, 0, 0.06), 0px 3px 9px rgba(0, 0, 0, 0.12);
+		--notion-blue: #5e9fe8;
+		--notion-orange: #de9255;
+		--notion-red: #e97366;
+		--notion-blue-bg: rgba(41, 139, 253, 0.061);
+		--notion-yellow-bg: rgba(203, 145, 47, 0.08);
+		--notion-orange-bg: rgba(246, 126, 35, 0.08);
+		--notion-green-bg: rgba(42, 157, 118, 0.08);
+		--notion-red-bg: rgba(246, 73, 50, 0.08);
+		--notion-gray-bg: #31302e;
+		--diff-add: #5dd8cb;
+		--diff-del: #ff8a80;
+		--pr-approved: #69db7c;
+	}
+}
+
+/* Thème sombre forcé manuellement (remplace la préférence système) */
+:root[data-theme="dark"] {
+	--notion-bg: #000000;
+	--notion-bg-soft: #191918;
+	--notion-surface: #191918;
+	--notion-surface-hover: #31302e;
+	--notion-text: #ffffff;
+	--notion-text-soft: rgba(255, 255, 255, 0.5);
+	--notion-text-faint: rgba(255, 255, 255, 0.45);
+	--notion-border: rgba(255, 255, 255, 0.2);
+	--notion-border-soft: rgba(255, 255, 255, 0.1);
+	--notion-shadow:
+		0px 0.7px 1.462px rgba(0, 0, 0, 0.06), 0px 3px 9px rgba(0, 0, 0, 0.12);
+	--notion-blue: #5e9fe8;
+	--notion-orange: #de9255;
+	--notion-red: #e97366;
+	--notion-blue-bg: rgba(41, 139, 253, 0.061);
+	--notion-yellow-bg: rgba(203, 145, 47, 0.08);
+	--notion-orange-bg: rgba(246, 126, 35, 0.08);
+	--notion-green-bg: rgba(42, 157, 118, 0.08);
+	--notion-red-bg: rgba(246, 73, 50, 0.08);
+	--notion-gray-bg: #31302e;
+	--diff-add: #5dd8cb;
+	--diff-del: #ff8a80;
+	--pr-approved: #69db7c;
+}
+
+* {
+	box-sizing: border-box;
+}
+html {
+	scroll-behavior: smooth;
+}
+body {
+	margin: 0;
+	background: var(--notion-bg);
+	color: var(--notion-text);
+	font-family:
+		ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+		"Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 16px;
+	line-height: 1.5;
+	transition:
+		background 180ms ease,
+		color 180ms ease;
+}
+
+/* -- Base element defaults -------------------------------- */
+button,
+[type="button"],
+[type="submit"],
+[type="reset"] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 8px 16px;
+	font: inherit;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.2;
+	color: #ffffff;
+	background: var(--notion-blue);
+	border: 1px solid transparent;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 150ms;
+	white-space: nowrap;
+}
+button:hover,
+[type="button"]:hover,
+[type="submit"]:hover,
+[type="reset"]:hover {
+	background: color-mix(in srgb, var(--notion-blue) 82%, black);
+}
+button:focus-visible,
+[type="button"]:focus-visible,
+[type="submit"]:focus-visible,
+[type="reset"]:focus-visible {
+	outline: 2px solid var(--notion-blue);
+	outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+	font: inherit;
+	font-size: 14px;
+	line-height: 1.4;
+	color: var(--notion-text);
+	background: var(--notion-surface);
+	border: 1px solid var(--notion-border);
+	border-radius: 8px;
+	padding: 8px 12px;
+	transition: border-color 150ms;
+}
+input:focus,
+select:focus,
+textarea:focus {
+	outline: none;
+	border-color: var(--notion-blue);
+	box-shadow: 0 0 0 2px rgba(9, 127, 232, 0.15);
+}
+input::placeholder,
+textarea::placeholder {
+	color: var(--notion-text-faint);
+}
+select {
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%23999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	padding-right: 30px;
+}
+textarea {
+	resize: vertical;
+	min-height: 80px;
+}
+input[type="range"] {
+	border: none;
+	padding: 0;
+	background: transparent;
+	accent-color: var(--notion-blue);
+	height: 18px;
+	cursor: pointer;
+	box-shadow: none;
+}
+input[type="range"]:focus {
+	box-shadow: none;
+}
+input[type="checkbox"],
+input[type="radio"] {
+	width: 16px;
+	height: 16px;
+	accent-color: var(--notion-blue);
+	border: 1px solid var(--notion-border);
+	padding: 0;
+	cursor: pointer;
+}
+label {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--notion-text);
+	margin-bottom: 6px;
+}
+fieldset {
+	border: 1px solid var(--notion-border-soft);
+	border-radius: 10px;
+	padding: 16px;
+	margin: 0;
+}
+legend {
+	font-weight: 600;
+	padding: 0 4px;
+}
+
+a {
+	color: var(--notion-text);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	text-decoration-color: var(--notion-border);
+}
+a:hover {
+	text-decoration-color: var(--notion-text);
+}
+
+hr {
+	height: 1px;
+	margin: 34px 0;
+	border: none;
+	background: var(--notion-border-soft);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 8px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	text-wrap: balance;
+}
+h1 {
+	margin: 0 0 14px;
+	font-size: clamp(42px, 7vw, 72px);
+	line-height: 1.1;
+	letter-spacing: -0.035em;
+	font-weight: 700;
+}
+h2 {
+	margin: 44px 0 10px;
+	font-size: 32px;
+	line-height: 1.25;
+	letter-spacing: -0.025em;
+}
+h3 {
+	margin: 0 0 6px;
+	font-size: 18px;
+	line-height: 1.556;
+	letter-spacing: -0.007em;
+}
+p {
+	margin: 0 0 10px;
+}
+
+ul,
+ol {
+	margin: 8px 0 16px;
+	padding-left: 24px;
+}
+li {
+	margin-bottom: 4px;
+}
+li::marker {
+	color: var(--notion-text-faint);
+}
+
+blockquote {
+	border-left: 3px solid var(--notion-text);
+	padding: 4px 0 4px 16px;
+	margin: 24px 0;
+}
+blockquote p {
+	font-size: 18px;
+	line-height: 1.5;
+	margin: 0;
+}
+
+table {
+	width: 100%;
+	margin: 14px 0;
+	border-collapse: separate;
+	border-spacing: 0;
+	border: 1px solid var(--notion-border-soft);
+	border-radius: 10px;
+	overflow: hidden;
+	background: var(--notion-surface);
+	font-size: 14px;
+}
+th,
+td {
+	padding: 12px 14px;
+	vertical-align: top;
+	text-align: left;
+	border-right: 1px solid var(--notion-border-soft);
+	border-bottom: 1px solid var(--notion-border-soft);
+}
+th:last-child,
+td:last-child {
+	border-right: 0;
+}
+tr:last-child td {
+	border-bottom: 0;
+}
+th {
+	background: var(--notion-bg-soft);
+	color: var(--notion-text-soft);
+	font-weight: 600;
+}
+
+details {
+	margin: 16px 0;
+	border-radius: var(--notion-radius);
+}
+summary {
+	padding: 8px 10px;
+	border-radius: var(--notion-radius);
+	cursor: pointer;
+	font-weight: 600;
+}
+summary:hover {
+	background: var(--notion-surface-hover);
+}
+details p {
+	margin: 8px 10px 0 28px;
+	color: var(--notion-text-soft);
+}
+
+pre,
+code {
+	font-family: ui-monospace, "iA Writer Mono", Nitti, Menlo, Courier, monospace;
+}
+pre {
+	margin: 16px 0;
+	padding: 14px 16px;
+	overflow-x: auto;
+	border: 1px solid var(--notion-border-soft);
+	border-radius: 10px;
+	background: var(--notion-gray-bg);
+	font-size: 13px;
+	line-height: 1.55;
+}
+code {
+	font-size: 0.9em;
+	padding: 2px 5px;
+	border-radius: 4px;
+	background: var(--notion-gray-bg);
+}
+pre code {
+	font-size: inherit;
+	padding: 0;
+	border-radius: 0;
+	background: none;
+}
+
+main {
+	max-width: var(--notion-page-width);
+	margin: 0 auto;
+	padding: 76px 24px 88px;
+}
+
+section {
+	margin-top: 44px;
+}
+section:first-child {
+	margin-top: 0;
+}
+
+/* -- Page shell ------------------------------------------- */
+.notion-shell {
+	max-width: var(--notion-page-width);
+	margin: 0 auto;
+	padding: 76px 24px 88px;
+}
+
+/* -- Tiny utilities --------------------------------------- */
+.notion-lede {
+	max-width: 720px;
+	margin: 0 0 24px;
+	color: var(--notion-text-soft);
+	font-size: 20px;
+}
+.notion-muted {
+	color: var(--notion-text-soft);
+}
+.notion-faint {
+	color: var(--notion-text-faint);
+}
+.notion-divider {
+	height: 1px;
+	margin: 34px 0;
+	background: var(--notion-border-soft);
+}
+.notion-eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.0078125rem;
+	text-transform: uppercase;
+	color: var(--notion-blue);
+}
+
+/* -- Footer ----------------------------------------------- */
+.notion-footer {
+	margin-top: 52px;
+	padding-top: 18px;
+	border-top: 1px solid var(--notion-border-soft);
+	color: var(--notion-text-faint);
+	font-size: 13px;
+}
+
+/* -- Accessibility & motion ------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* -- Responsive: 560px (base elements) -------------------- */
+@media (max-width: 560px) {
+	main,
+	.notion-shell {
+		padding-inline: 16px;
+	}
+	table {
+		display: block;
+		overflow-x: auto;
+	}
+}
+/*
+ * hero — Full-width hero section with title, subtitle, and optional eyebrow.
+ *
+ * HTML:
+ * <section class="notion-hero">
+ *   <span class="notion-eyebrow">Category</span>
+ *   <h1>Page Title</h1>
+ *   <p>A brief description that supports the title with additional context.</p>
+ *   <div class="notion-button-group">
+ *     <a class="notion-button" data-variant="primary" href="#">Get started</a>
+ *     <a class="notion-button" data-variant="secondary" href="#">Learn more</a>
+ *   </div>
+ * </section>
+ */
+
+.notion-hero {
+	padding: 48px 0 40px;
+	max-width: var(--notion-page-width);
+}
+.notion-hero h1 {
+	font-size: clamp(42px, 7vw, 72px);
+	font-weight: 700;
+	letter-spacing: -0.04em;
+	line-height: 1.05;
+	margin: 0;
+	text-wrap: balance;
+}
+.notion-hero p {
+	font-size: 20px;
+	line-height: 1.5;
+	color: var(--notion-text-soft);
+	margin: 16px 0 0;
+	max-width: 640px;
+}
+.notion-hero .notion-eyebrow {
+	margin-bottom: 12px;
+}
+
+/* -- Responsive: 820px ------------------------------------ */
+@media (max-width: 820px) {
+	.notion-hero {
+		padding: 32px 0 24px;
+	}
+	.notion-hero h1 {
+		font-size: clamp(32px, 8vw, 48px);
+	}
+}
+/*
+ * callout — Highlighted info box with icon and text.
+ * Options: data-tone="blue" | "green" | "orange" | "red" (default: yellow)
+ *
+ * HTML:
+ * <div class="notion-callout" data-tone="blue">
+ *   <div>💡</div>
+ *   <div><strong>Note</strong><p>Helpful context.</p></div>
+ * </div>
+ */
+
+.notion-callout {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 14px;
+	margin: 18px 0;
+	padding: 16px 18px;
+	border-radius: var(--notion-radius);
+	background: var(--notion-yellow-bg);
+	box-shadow: inset 0 0 0 1px var(--notion-border-soft);
+}
+.notion-callout[data-tone="blue"] {
+	background: var(--notion-blue-bg);
+}
+.notion-callout[data-tone="green"] {
+	background: var(--notion-green-bg);
+}
+.notion-callout[data-tone="orange"] {
+	background: var(--notion-orange-bg);
+}
+.notion-callout[data-tone="red"] {
+	background: var(--notion-red-bg);
+}
+.notion-callout strong {
+	display: block;
+	margin-bottom: 3px;
+}
+.notion-callout p {
+	margin: 0;
+	color: var(--notion-text-soft);
+}
+/*
+ * card-grid — Grid of clickable cards with icon, title, and description.
+ *
+ * HTML:
+ * <section class="notion-card-grid">
+ *   <article class="notion-card">
+ *     <div class="notion-card-icon">%</div>
+ *     <h3>Card</h3>
+ *     <p>Card text.</p>
+ *   </article>
+ * </section>
+ */
+
+.notion-card-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin: 20px 0 6px;
+}
+.notion-card {
+	padding: 16px;
+	border: 1px solid var(--notion-border-soft);
+	border-radius: 10px;
+	background: var(--notion-surface);
+	box-shadow: var(--notion-shadow);
+	transition:
+		transform 140ms ease,
+		background 140ms ease,
+		border-color 140ms ease;
+}
+.notion-card:hover {
+	transform: translateY(-1px);
+	background: var(--notion-surface-hover);
+	border-color: var(--notion-border);
+}
+.notion-card-icon {
+	width: 34px;
+	height: 34px;
+	display: grid;
+	place-items: center;
+	margin-bottom: 12px;
+	border-radius: 8px;
+	background: var(--notion-gray-bg);
+	font-size: 20px;
+}
+.notion-card p {
+	color: var(--notion-text-soft);
+}
+
+/* -- Responsive: 820px ------------------------------------ */
+@media (max-width: 820px) {
+	.notion-card-grid {
+		grid-template-columns: 1fr;
+	}
+}
+/*
+ * meter — Single progress bar with label and percentage.
+ * Options: data-tone="green" | "orange" | "red" (default: blue)
+ *
+ * HTML:
+ * <div class="notion-meter" style="--value: 72%">
+ *   <div class="notion-meter-row">
+ *     <span>Progress</span>
+ *     <span>72%</span>
+ *   </div>
+ *   <div class="notion-meter-track">
+ *     <div class="notion-meter-fill"></div>
+ *   </div>
+ * </div>
+ */
+
+.notion-meter {
+	--value: 50%;
+	--meter-color: var(--notion-blue);
+	display: grid;
+	gap: 7px;
+	margin: 12px 0;
+}
+.notion-meter-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	color: var(--notion-text-soft);
+	font-size: 13px;
+	font-weight: 600;
+}
+.notion-meter-track {
+	height: 9px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: var(--notion-gray-bg);
+	box-shadow: inset 0 0 0 1px var(--notion-border-soft);
+}
+.notion-meter-fill {
+	height: 100%;
+	width: var(--value);
+	border-radius: 999px;
+	background: var(--meter-color);
+}
+.notion-meter[data-tone="green"] {
+	--meter-color: var(--notion-chart-3);
+}
+.notion-meter[data-tone="orange"] {
+	--meter-color: var(--notion-chart-5);
+}
+.notion-meter[data-tone="red"] {
+	--meter-color: var(--notion-chart-8);
+}
+/*
+ * checklist — To-do style list with check icons.
+ *
+ * HTML:
+ * <ul class="notion-checklist">
+ *   <li>
+ *     <span class="notion-check">&#x2713;</span>
+ *     <span>Compare offers using the same loan amount, term, and points.</span>
+ *   </li>
+ * </ul>
+ */
+
+.notion-checklist {
+	display: grid;
+	gap: 8px;
+	margin-top: 14px;
+	padding: 0;
+	list-style: none;
+}
+.notion-checklist li {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 10px;
+	align-items: start;
+	padding: 9px 10px;
+	border-radius: var(--notion-radius);
+}
+.notion-checklist li:hover {
+	background: var(--notion-surface-hover);
+}
+.notion-checklist > div {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 10px;
+	align-items: start;
+	padding: 9px 10px;
+	border-radius: var(--notion-radius);
+}
+.notion-checklist > div:hover {
+	background: var(--notion-surface-hover);
+}
+.notion-check {
+	width: 18px;
+	height: 18px;
+	display: grid;
+	place-items: center;
+	margin-top: 2px;
+	border-radius: 5px;
+	background: var(--notion-blue-bg);
+	color: var(--notion-blue);
+	font-size: 12px;
+	font-weight: 700;
+}
+/*
+ * code — Alias for the base <pre><code> element.
+ * No additional styles beyond _base.css defaults.
+ *
+ * HTML:
+ * <pre class="notion-code"><code>monthly = principal * r * (1 + r)^n / ((1 + r)^n - 1)</code></pre>
+ */
+
+/* .notion-code is now an alias -- bare <pre><code> is styled identically */
+/*
+ * toggle — Alias for the base <details> element.
+ * No additional styles beyond _base.css defaults.
+ *
+ * HTML:
+ * <details class="notion-toggle">
+ *   <summary>More detail</summary>
+ *   <p>Hidden content.</p>
+ * </details>
+ */
+
+/* .notion-toggle is now an alias -- bare <details> is styled identically */
+/*
+ * stat-grid — Grid of stat cards with label, big number, caption, and trend.
+ *
+ * HTML:
+ * <section class="notion-stat-grid">
+ *   <div class="notion-stat">
+ *     <p class="notion-stat-label">Metric</p>
+ *     <p class="notion-stat-value">42%</p>
+ *     <p class="notion-stat-caption">Short explanation.</p>
+ *     <span class="notion-stat-trend">&#x2197; trend</span>
+ *   </div>
+ * </section>
+ */
+
+.notion-stat-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin: 20px 0 6px;
+}
+.notion-stat {
+	padding: 16px;
+	border: 1px solid var(--notion-border-soft);
+	border-radius: 10px;
+	background: var(--notion-surface);
+	box-shadow: var(--notion-shadow);
+}
+.notion-stat-label {
+	margin: 0 0 6px;
+	color: var(--notion-text-soft);
+	font-size: 13px;
+	font-weight: 600;
+}
+.notion-stat-value {
+	margin: 0;
+	font-size: 32px;
+	line-height: 1.05;
+	letter-spacing: -0.04em;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+.notion-stat-caption {
+	margin: 8px 0 0;
+	color: var(--notion-text-soft);
+	font-size: 13px;
+}
+.notion-stat-trend {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 10px;
+	padding: 3px 7px;
+	border-radius: 999px;
+	background: var(--notion-blue-bg);
+	color: var(--notion-blue);
+	font-size: 12px;
+	font-weight: 650;
+}
+
+/* -- Responsive: 1080px ----------------------------------- */
+@media (max-width: 1080px) {
+	.notion-stat-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* -- Responsive: 820px ------------------------------------ */
+@media (max-width: 820px) {
+	.notion-stat-grid {
+		grid-template-columns: 1fr;
+	}
+}
+/*
+ * button — Styled link/button with variant and size options.
+ * Options: data-variant="primary"|"secondary"|"tertiary"
+ *          data-size="small"|"large"
+ *
+ * HTML:
+ * <a class="notion-button" data-variant="primary" href="#">Primary</a>
+ */
+
+.notion-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 8px 16px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.2;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition:
+		background 150ms,
+		box-shadow 150ms,
+		border-color 150ms;
+	text-decoration: none;
+	font-family: inherit;
+	white-space: nowrap;
+}
+.notion-button:focus-visible {
+	outline: 2px solid var(--notion-blue);
+	outline-offset: 2px;
+}
+/* Primary */
+.notion-button[data-variant="primary"],
+.notion-button:not([data-variant]) {
+	background: var(--notion-blue);
+	color: #ffffff;
+	border-color: transparent;
+}
+.notion-button[data-variant="primary"]:hover,
+.notion-button:not([data-variant]):hover {
+	background: color-mix(in srgb, var(--notion-blue) 82%, black);
+}
+/* Secondary */
+.notion-button[data-variant="secondary"] {
+	background: var(--notion-blue-bg);
+	color: var(--notion-blue);
+	border-color: transparent;
+}
+.notion-button[data-variant="secondary"]:hover {
+	background: color-mix(in srgb, var(--notion-blue-bg) 70%, var(--notion-blue));
+}
+/* Tertiary */
+.notion-button[data-variant="tertiary"] {
+	background: transparent;
+	color: var(--notion-text);
+	border-color: transparent;
+}
+.notion-button[data-variant="tertiary"]:hover {
+	background: var(--notion-surface-hover);
+}
+/* Small modifier */
+.notion-button[data-size="small"] {
+	padding: 4px 12px;
+	font-size: 12px;
+}
+/* Large modifier */
+.notion-button[data-size="large"] {
+	padding: 12px 24px;
+	font-size: 16px;
+}
+.notion-button-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 24px;
+}
+
+/* -- Responsive: 820px ------------------------------------ */
+@media (max-width: 820px) {
+	.notion-button-group {
+		flex-direction: column;
+	}
+	.notion-button-group .notion-button {
+		width: 100%;
+	}
+}
+/* ===== App gamifié — styles spécifiques ===== */
+.hero-wrap { text-align:center; padding: 60px 0 10px; }
+.hero-wrap h1 { font-size: clamp(34px, 6vw, 60px); background: linear-gradient(120deg,#097fe8,#9b5de5,#f15bb5); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-sub { font-size: 19px; color: var(--notion-text-soft); max-width: 640px; margin: 0 auto 8px; }
+
+/* Dashboard sticky */
+.dash { position: sticky; top: 0; z-index: 50; background: var(--notion-bg); border-bottom: 1px solid var(--notion-border-soft); padding: 14px 0; margin-bottom: 8px; backdrop-filter: saturate(180%) blur(6px); }
+.dash-inner { max-width: var(--notion-page-width); margin:0 auto; padding: 0 24px; display:flex; align-items:center; gap: 20px; flex-wrap: wrap; }
+.dash-level { display:flex; align-items:center; gap:12px; }
+.level-ring { width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:20px; color:#fff; background: conic-gradient(#097fe8 var(--ring,0%), var(--notion-gray-bg) 0); position:relative; flex-shrink:0; }
+.level-ring span { width:44px; height:44px; border-radius:50%; background: var(--notion-bg); display:grid; place-items:center; color: var(--notion-text); }
+.dash-title-num { font-weight:800; font-size:15px; }
+.dash-title-sub { font-size:12px; color: var(--notion-text-soft); }
+.dash-xp { flex:1; min-width: 220px; }
+.dash-xp-top { display:flex; justify-content:space-between; font-size:13px; font-weight:600; color: var(--notion-text-soft); margin-bottom:6px; }
+.xp-track { height:12px; border-radius:999px; background: var(--notion-gray-bg); overflow:hidden; box-shadow: inset 0 0 0 1px var(--notion-border-soft); }
+.xp-fill { height:100%; border-radius:999px; background: linear-gradient(90deg,#097fe8,#9b5de5); width:0%; transition: width 500ms ease; }
+.dash-badges-count { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.btn-reset { background:transparent; color: var(--notion-text-faint); border:1px solid var(--notion-border); font-size:12px; padding:5px 10px; }
+.btn-reset:hover { background: var(--notion-surface-hover); color: var(--notion-text); }
+.btn-icon { background:transparent; color: var(--notion-text-soft); border:1px solid var(--notion-border); font-size:16px; padding:4px 8px; border-radius:8px; line-height:1; }
+.btn-icon:hover { background: var(--notion-surface-hover); color: var(--notion-text); }
+.dash-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+
+/* Module cards */
+.mod-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px; }
+@media (max-width: 720px){ .mod-grid{ grid-template-columns:1fr; } }
+.mod-card { position:relative; border:1px solid var(--notion-border-soft); border-radius:14px; background: var(--notion-surface); box-shadow: var(--notion-shadow); padding:18px; cursor:pointer; transition: transform 120ms, box-shadow 120ms, border-color 120ms; overflow:hidden; }
+.mod-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.08); border-color: var(--notion-border); }
+.mod-card.done { border-color: #2a9d76; }
+.mod-card.done::after { content:"✓ Terminé"; position:absolute; top:12px; right:12px; background: var(--notion-green-bg); color:#2a9d76; font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; }
+.mod-emoji { font-size:30px; }
+.mod-num { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color: var(--notion-blue); margin-top:8px; }
+.mod-name { font-size:17px; font-weight:700; margin:2px 0 6px; }
+.mod-desc { font-size:13px; color: var(--notion-text-soft); margin:0 0 12px; }
+.mod-foot { display:flex; align-items:center; justify-content:space-between; font-size:12px; }
+.mod-xp { font-weight:700; color: var(--notion-orange); }
+.mod-card.mod-locked { opacity:.6; cursor:not-allowed; }
+.mod-card.mod-locked:hover { transform:none; box-shadow: var(--notion-shadow); border-color: var(--notion-border-soft); }
+.mod-card.mod-locked::after { content:"🔒 Verrouillé"; position:absolute; top:12px; right:12px; background: var(--notion-gray-bg); color: var(--notion-text-soft); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; }
+.mod-progress { height:6px; border-radius:999px; background: var(--notion-gray-bg); overflow:hidden; margin-top:10px; }
+.mod-progress > div { height:100%; background: linear-gradient(90deg,#097fe8,#9b5de5); width:0%; }
+
+/* Levels & badges */
+.level-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+@media (max-width:720px){ .level-grid{ grid-template-columns:repeat(2,1fr);} }
+@media (max-width:480px){ .level-grid{ grid-template-columns:1fr;} }
+.level-cell { border:1px solid var(--notion-border-soft); border-radius:10px; padding:12px; background:var(--notion-surface); display:flex; gap:10px; align-items:center; transition: all 150ms; }
+.level-cell.reached { background: var(--notion-green-bg); border-color:#2a9d76; }
+.level-cell .lc-emoji { font-size:22px; }
+.level-cell .lc-title { font-weight:700; font-size:13px; }
+.level-cell .lc-xp { font-size:11px; color:var(--notion-text-soft); }
+
+.badge-grid { display:grid; grid-template-columns: repeat(5,1fr); gap:12px; }
+@media (max-width:720px){ .badge-grid{ grid-template-columns:repeat(3,1fr);} }
+@media (max-width:480px){ .badge-grid{ grid-template-columns:repeat(2,1fr);} }
+.badge-cell { text-align:center; padding:14px 8px; border:1px solid var(--notion-border-soft); border-radius:12px; background:var(--notion-surface); }
+.badge-cell .b-emoji { font-size:32px; filter: grayscale(1) opacity(.35); transition: filter 200ms transform 200ms; }
+.badge-cell.earned .b-emoji { filter:none; animation: pop 400ms ease; }
+.badge-cell .b-name { font-size:11px; font-weight:600; margin-top:6px; color:var(--notion-text-soft); }
+.badge-cell.earned .b-name { color: var(--notion-text); }
+@keyframes pop { 0%{transform:scale(.4);} 60%{transform:scale(1.2);} 100%{transform:scale(1);} }
+
+/* Modal */
+.ov { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-start; justify-content:center; padding:5vh 16px; z-index:100; overflow-y:auto; opacity:0; visibility:hidden; transition: opacity 220ms ease, visibility 0ms 220ms; }
+.ov.open { opacity:1; visibility:visible; transition: opacity 220ms ease; }
+.sheet { background:var(--notion-bg); border:1px solid var(--notion-border-soft); border-radius:16px; width:760px; max-width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); opacity:0; transform: translateY(24px) scale(0.97); transition: transform 280ms cubic-bezier(0.34,1.1,0.64,1), opacity 220ms ease; }
+.ov.open .sheet { opacity:1; transform: translateY(0) scale(1); }
+.sheet-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:22px 26px 6px; }
+.sheet-head h2 { margin:0; font-size:24px; }
+.x-close { background:none; border:none; color:var(--notion-text-faint); font-size:20px; width:34px; height:34px; border-radius:8px; padding:0; }
+.x-close:hover { background:var(--notion-surface-hover); color:var(--notion-text); }
+.sheet-body { padding: 4px 26px 26px; }
+.les-h { font-size:15px; font-weight:700; margin:22px 0 6px; display:flex; gap:8px; align-items:center; }
+.exo { background:var(--notion-gray-bg); border-radius:10px; padding:12px 14px; font-size:14px; margin:8px 0; }
+
+/* Quiz */
+.q { border:1px solid var(--notion-border-soft); border-radius:10px; padding:14px; margin:10px 0; }
+.q-text { font-weight:600; margin-bottom:8px; }
+.q-opt { display:block; width:100%; text-align:left; background:var(--notion-surface); color:var(--notion-text); border:1px solid var(--notion-border); border-radius:8px; padding:9px 12px; margin:6px 0; font-size:14px; cursor:pointer; transition: all 120ms; }
+.q-opt:hover { background:var(--notion-surface-hover); }
+.q-opt.correct { background:var(--notion-green-bg); border-color:#2a9d76; color:#1c7d5c; font-weight:600; }
+.q-opt.wrong { background:var(--notion-red-bg); border-color:var(--notion-red); }
+.q-opt.disabled { pointer-events:none; }
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:#191918; color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; font-size:14px; opacity:0; transition: all 300ms; z-index:200; box-shadow:0 8px 24px rgba(0,0,0,.3); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.confetti { position:fixed; width:10px; height:14px; top:-20px; z-index:300; pointer-events:none; }
+
+/* Sprint 3 — Profil, streak, barre de progression, mobile compact */
+.dash-stats { display:flex; flex-direction:column; gap:3px; }
+.dash-streak { font-size:13px; font-weight:700; color: var(--notion-orange); }
+.profile-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:16px 0 24px; }
+@media (max-width:820px){ .profile-grid { grid-template-columns:repeat(2,1fr); } }
+.prog-bar-wrap { margin:4px 0 0; }
+.prog-bar-row { display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--notion-text-soft); margin-bottom:8px; }
+.prog-bar-track { height:14px; border-radius:999px; background:var(--notion-gray-bg); overflow:hidden; box-shadow:inset 0 0 0 1px var(--notion-border-soft); }
+.prog-bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#097fe8,#9b5de5); transition:width 600ms ease; }
+@media (max-width:480px){
+  .dash-inner { gap:8px; padding:0 14px; }
+  .level-ring { width:42px; height:42px; font-size:15px; }
+  .level-ring span { width:32px; height:32px; }
+  .dash-title-num { font-size:13px; }
+  .dash-title-sub { font-size:11px; }
+  #exportBtn, #importBtn { display:none; }
+}
+
+/* Sprint 4 — Skip-link, recherche modules, bac à sable */
+.skip-link { position:absolute; top:-999px; left:16px; z-index:9999; padding:8px 18px; background:var(--notion-blue); color:#fff; border-radius:0 0 8px 8px; font-weight:700; font-size:14px; text-decoration:none; }
+.skip-link:focus { top:0; outline:2px solid var(--notion-blue); outline-offset:2px; }
+.mod-search-wrap { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+#modSearch { width:200px; }
+.sandbox { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:8px 0; border:1px solid var(--notion-border-soft); border-radius:10px; padding:12px; background:var(--notion-gray-bg); }
+.sandbox textarea { min-height:160px; font-family:ui-monospace,"Cascadia Code",Menlo,monospace; font-size:13px; resize:vertical; background:var(--notion-surface); }
+.sandbox iframe { border:1px solid var(--notion-border-soft); border-radius:8px; min-height:160px; background:#fff; }
+@media (max-width:620px){ .sandbox { grid-template-columns:1fr; } }
+
+/* Sprint 7 — Reset module, certificat imprimable */
+.mod-reset-btn { background:transparent; color:var(--notion-text-faint); border:1px solid var(--notion-border); font-size:12px; padding:4px 10px; width:100%; margin-top:8px; border-radius:8px; cursor:pointer; transition:all 150ms; }
+.mod-reset-btn:hover { background:var(--notion-red-bg); color:var(--notion-red); border-color:var(--notion-red); }
+#certificate { display:none; }
+@media print {
+  .skip-link, .dash, main, .ov, .toast { display:none !important; }
+  #certificate { display:block !important; }
+  body { background:#fff !important; }
+}
+
+/* Sprint 8 — Mode Cours, onglets, vocab, quiz-expl, carnet de bord */
+.mod-tabs { display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--notion-border); padding-bottom:0; flex-wrap:wrap; }
+.mod-tab { background:transparent; border:none; border-bottom:2px solid transparent; padding:8px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; font-weight:600; color:var(--notion-text-faint); transition:all 150ms; margin-bottom:-1px; font-family:inherit; }
+.mod-tab:hover:not(.active) { background:var(--notion-surface-hover); color:var(--notion-text); }
+.mod-tab.active { color:var(--notion-blue); border-bottom-color:var(--notion-blue); background:transparent; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.obj-list { list-style:none; padding:0; margin:10px 0 16px; }
+.obj-list li { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px solid var(--notion-border-soft); font-size:14px; line-height:1.5; }
+.obj-list li:last-child { border-bottom:0; }
+.obj-list li::before { content:'✓'; color:var(--notion-blue); font-weight:800; flex-shrink:0; margin-top:1px; }
+.vocab-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:10px; margin:10px 0 16px; }
+.vocab-card { border:1px solid var(--notion-border-soft); border-radius:8px; padding:12px; background:var(--notion-surface); }
+.vocab-term { font-weight:700; color:var(--notion-blue); margin-bottom:4px; font-size:13px; }
+.vocab-def { font-size:12px; color:var(--notion-text-soft); line-height:1.5; }
+.error-list { list-style:none; padding:0; margin:10px 0 16px; }
+.error-list li { display:flex; gap:10px; align-items:flex-start; padding:8px 0; font-size:14px; border-bottom:1px solid var(--notion-border-soft); line-height:1.5; }
+.error-list li:last-child { border-bottom:0; }
+.error-list li::before { content:'⚠️'; flex-shrink:0; }
+.quiz-expl { display:none; font-size:13px; color:var(--notion-text-soft); background:var(--notion-blue-bg); border-left:3px solid var(--notion-blue); padding:8px 12px; border-radius:0 6px 6px 0; margin-top:8px; line-height:1.5; }
+.notes-area { width:100%; min-height:80px; padding:10px 12px; border:1px solid var(--notion-border); border-radius:8px; background:var(--notion-surface); color:var(--notion-text); font-size:13px; font-family:inherit; resize:vertical; margin-top:8px; transition:border-color 150ms; }
+.notes-area:focus { outline:none; border-color:var(--notion-blue); }
+.notes-section { margin-top:24px; border-top:1px solid var(--notion-border-soft); padding-top:16px; }
+@media (max-width:500px){ .mod-tab { font-size:12px; padding:7px 10px; } }
+</style></head>
+<body>
+<a class="skip-link" href="#modules">Aller au contenu principal</a>
+<!-- Dashboard sticky -->
+<div class="dash">
+	<div class="dash-inner">
+		<div class="dash-level">
+			<div class="level-ring" id="ring"><span id="ringNum">1</span></div>
+			<div>
+				<div class="dash-title-num" id="levelName">🌱 Apprenti·e curieux·se</div>
+				<div class="dash-title-sub" id="levelNext">Niveau 1</div>
+			</div>
+		</div>
+		<div class="dash-xp">
+			<div class="dash-xp-top"><span id="xpLabel">0 XP</span><span id="xpGoal">/ 2050 XP</span></div>
+			<div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
+		</div>
+		<div class="dash-stats">
+			<div class="dash-badges-count">🎖️ <span id="badgeCount">0</span>/12</div>
+			<div class="dash-streak" id="dashStreak">📅 1 jour</div>
+		</div>
+		<div class="dash-controls">
+			<button class="btn-icon" id="themeToggle" onclick="toggleTheme()" aria-label="Passer en mode sombre">🌙</button>
+			<button class="btn-reset" id="exportBtn" onclick="exportProgress()" title="Exporter la progression en JSON" aria-label="Exporter la progression">↓ Export</button>
+			<button class="btn-reset" id="importBtn" onclick="importProgress()" title="Importer une progression JSON" aria-label="Importer une progression">↑ Import</button>
+			<button class="btn-reset" onclick="resetAll()">Réinitialiser</button>
+		</div>
+	</div>
+</div>
+
+<main class="notion-shell" style="padding-top:24px">
+
+	<section class="hero-wrap">
+		<span class="notion-eyebrow">De zéro à embauché·e</span>
+		<h1>Deviens Développeur Web Full Stack</h1>
+		<p class="hero-sub">Un parcours ludique en 12 modules pour apprendre HTML, CSS, JavaScript, React, Node.js et les bases de données. Gagne de l'XP, monte de niveau, débloque des badges. 🚀</p>
+		<div class="notion-callout" data-tone="blue" style="text-align:left; max-width:560px; margin:18px auto 0;">
+			<div>💡</div>
+			<div><strong>Comment ça marche ?</strong><p>Ouvre un module, lis la leçon, fais les exercices dans VS Code, réussis le quiz, puis clique sur <em>Valider le module</em> pour empocher ton XP. Ta progression est sauvegardée automatiquement dans ce navigateur.</p></div>
+		</div>
+		<div id="resumeBox"></div>
+	</section>
+
+	<section id="modules">
+		<h2>🎮 Les modules</h2>
+		<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+			<div class="mod-search-wrap">
+				<p class="notion-muted" style="margin:0">Avance dans l'ordre : chaque module terminé te rapproche du titre de Junior Full Stack Developer.</p>
+				<input type="search" id="modSearch" placeholder="🔍 Chercher un module…" oninput="filterModules(this.value)" aria-label="Rechercher un module">
+			</div>
+			<label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;cursor:pointer;flex-shrink:0;color:var(--notion-text-soft)">
+				<input type="checkbox" id="freeUnlockToggle" onchange="toggleFreeUnlock(this.checked)">
+				Tout déverrouiller
+			</label>
+		</div>
+		<div class="mod-grid" id="modGrid"></div>
+	</section>
+
+	<section>
+		<h2>🆙 Niveaux à débloquer</h2>
+		<div class="level-grid" id="levelGrid"></div>
+	</section>
+
+	<section>
+		<h2>🎖️ Badges de projet</h2>
+		<p class="notion-muted">Débloque un badge à chaque mini-projet (« boss de fin de module ») terminé.</p>
+		<div class="badge-grid" id="badgeGrid"></div>
+	</section>
+
+	<section id="profileSection"></section>
+
+	<p class="notion-footer">Créé pour Alexis • Ouvre ce fichier dans VS Code pour modifier le code et apprendre en pratiquant. Bon code 👋</p>
+</main>
+
+<!-- Modal module -->
+<div class="ov" id="ov" onclick="if(event.target===this)closeMod()" role="presentation">
+	<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+		<div class="sheet-head">
+			<h2 id="mTitle"></h2>
+			<button class="x-close" onclick="closeMod()" aria-label="Fermer la fenêtre">✕</button>
+		</div>
+		<div class="sheet-body" id="mBody"></div>
+	</div>
+</div>
+
+<div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+<div id="certificate">
+  <div style="font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:60px 40px;border:3px double #097fe8;border-radius:16px;text-align:center">
+    <div style="font-size:56px;margin-bottom:8px">🎓</div>
+    <div style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:16px">Certificat d&rsquo;achèvement</div>
+    <div style="font-size:32px;font-weight:700;color:#097fe8;margin-bottom:4px">Développeur·se Web Full Stack</div>
+    <div style="font-size:14px;color:#888;margin-bottom:28px">Un parcours complet de 12 modules — de zéro à employable</div>
+    <div style="font-size:13px;color:#aaa;margin-bottom:6px">Décerné à</div>
+    <div id="certName" style="font-size:36px;font-weight:700;border-bottom:2px solid #097fe8;padding-bottom:14px;margin-bottom:20px;color:#191918"></div>
+    <p style="font-size:14px;color:#555;line-height:1.7;margin-bottom:20px">pour avoir complété avec succès le parcours complet :<br><b>HTML · CSS · JavaScript · DOM · ES6+ · Fetch · Git · React · Node.js · BDD · Full Stack · Portfolio</b></p>
+    <div style="display:flex;justify-content:center;gap:44px;margin:20px 0;flex-wrap:wrap">
+      <div><div id="certXP" style="font-size:26px;font-weight:700;color:#097fe8"></div><div style="font-size:12px;color:#aaa">XP gagnée</div></div>
+      <div><div id="certLevel" style="font-size:26px;font-weight:700;color:#097fe8"></div><div style="font-size:12px;color:#aaa">Niveau atteint</div></div>
+      <div><div id="certBadges" style="font-size:26px;font-weight:700;color:#097fe8"></div><div style="font-size:12px;color:#aaa">Badges</div></div>
+    </div>
+    <div id="certDate" style="font-size:13px;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:16px"></div>
+  </div>
+</div>
+
+<script>
+const LEVELS = [
+	{n:1, emoji:"🌱", name:"Apprenti·e curieux·se", xp:0},
+	{n:2, emoji:"🏗️", name:"Bâtisseur·se", xp:150},
+	{n:3, emoji:"🎨", name:"Styliste", xp:250},
+	{n:4, emoji:"🧠", name:"Logicien·ne", xp:400},
+	{n:5, emoji:"⚡", name:"Magicien·ne du DOM", xp:550},
+	{n:6, emoji:"🌐", name:"Connecté·e", xp:700},
+	{n:7, emoji:"🐙", name:"Git Master", xp:800},
+	{n:8, emoji:"⚛️", name:"Artisan·e React", xp:1050},
+	{n:9, emoji:"🔧", name:"Backend Builder", xp:1250},
+	{n:10, emoji:"🗄️", name:"Gardien·ne des données", xp:1450},
+	{n:11, emoji:"🧩", name:"Full Stack", xp:1850},
+	{n:12, emoji:"🎓", name:"Junior Full Stack Developer", xp:2050},
+];
+
+const MODULES = [
+{
+	id:0, emoji:"🧱", num:"Module 0", name:"Les fondations du web", xp:50,
+	desc:"Comment marche le web, frontend vs backend, installer ses outils.",
+	badge:"🧰", badgeName:"Setup",
+	starter:"<h1>Hello World !</h1>\n<p>Bienvenue sur ma première page HTML.</p>\n<p>Modifie ce code et vois le résultat à droite ➡️</p>",
+	lessons:[
+		{h:"🌐 Comment marche le web", html:"<p>Quand tu tapes une adresse, ton <b>navigateur (client)</b> envoie une requête à un <b>serveur</b> qui répond avec du HTML, CSS et JS. C'est le modèle <b>client ↔ serveur</b>.</p><ul><li><b>Frontend</b> = ce que tu vois (HTML/CSS/JS).</li><li><b>Backend</b> = la logique côté serveur + base de données.</li></ul>"},
+		{h:"🛠️ Tes outils", html:"<ul><li>Installe <b>VS Code</b> (éditeur de code).</li><li>Un navigateur moderne (Chrome/Firefox) + ses <b>DevTools</b> (touche F12).</li><li>Crée un compte <b>GitHub</b>.</li></ul>"},
+		{h:"🔤 Les 3 langages du web", html:"<p>HTML, CSS et JS fonctionnent toujours <b>ensemble</b> :</p><ul><li><b>HTML</b> = le squelette (structure)</li><li><b>CSS</b> = les vêtements (style)</li><li><b>JS</b> = les muscles (interactivité)</li></ul><pre class='notion-code'><code>&lt;h1 id='titre'&gt;Bonjour&lt;/h1&gt;  &lt;!-- HTML --&gt;\nh1 { color: blue; }            /* CSS */\ndocument.querySelector('#titre').textContent = 'Hello !'; // JS</code></pre>"}
+	],
+	cours:{
+		objectifs:["Expliquer le trajet d'une page web (client → serveur → réponse)","Distinguer frontend et backend","Installer VS Code et utiliser les DevTools"],
+		vocab:[{t:"Client",d:"Le navigateur (Chrome, Firefox…) qui envoie des requêtes au serveur."},{t:"Serveur",d:"Machine qui répond aux requêtes en envoyant HTML, CSS et JS."},{t:"Frontend",d:"Tout ce que l'utilisateur voit et avec lequel il interagit (HTML/CSS/JS)."},{t:"Backend",d:"La logique côté serveur : traitement, sécurité, base de données."},{t:"DevTools",d:"Outils du navigateur (F12) : inspecter, déboguer, analyser les requêtes réseau."}],
+		html:"<p>Quand tu tapes une URL, ton navigateur envoie une <b>requête HTTP</b>. Le serveur répond avec du HTML+CSS+JS que le navigateur interprète et affiche.</p><p><b>Les 3 langages du web</b> fonctionnent toujours ensemble :</p><ul><li><b>HTML</b> — structure (le squelette)</li><li><b>CSS</b> — style (l'apparence)</li><li><b>JS</b> — comportement (l'interactivité)</li></ul>",
+		erreurs:["Confondre frontend (navigateur) et backend (serveur) — ils ne s'exécutent pas dans le même environnement.","Penser que JS ne fonctionne que dans le navigateur — Node.js l'utilise aussi côté serveur.","Ne pas ouvrir les DevTools (F12) pour lire les erreurs — c'est ton meilleur outil de diagnostic."]
+	},
+	exo:"Crée un dossier <code>mon-site</code>, ouvre-le dans VS Code et crée un fichier <code>index.html</code>.",
+	project:"Affiche « Hello World » dans ton navigateur depuis ton premier fichier HTML.",
+	quiz:[
+		{q:"Qui envoie la requête au serveur ?", o:["Le navigateur (client)","La base de données","Le CSS"], a:0, expl:"Le navigateur (client) envoie toujours la requête. Le serveur reçoit, traite et renvoie la réponse."},
+		{q:"Le frontend, c'est...", o:["La logique serveur","Ce que l'utilisateur voit","Une base de données"], a:1, expl:"Frontend = ce que l'utilisateur voit dans son navigateur. Backend = la logique côté serveur (invisible)."},
+		{q:"F12 dans le navigateur ouvre...", o:["Le terminal système","Les DevTools","Word"], a:1, expl:"Les DevTools (F12) te donnent accès au HTML, CSS, console JS, requêtes réseau et bien plus — ton meilleur outil."},
+		{q:"VS Code est...", o:["Un navigateur web","Un éditeur de code","Une base de données"], a:1, expl:"VS Code (Visual Studio Code) est l'éditeur de code gratuit le plus populaire chez les développeurs web."},
+		{q:"HTML est l'abréviation de...", o:["HyperText Markup Language","High Tech Markdown Layout","Home Tool Markup Language"], a:0, expl:"HyperText Markup Language — le langage de balisage qui structure les pages web depuis 1991."},
+		{q:"Quel type de fichier ouvre-t-on dans le navigateur pour afficher une page web ?", o:[".txt",".html",".css"], a:1, expl:"Les fichiers .html sont le point d'entrée d'une page web. Le navigateur les interprète pour afficher le contenu."}
+	]
+},
+{
+	id:1, emoji:"📄", num:"Module 1", name:"HTML — la structure", xp:100,
+	desc:"Balises, titres, listes, liens, images, formulaires.",
+	badge:"📝", badgeName:"CV en ligne",
+	starter:"<h1>Mon CV</h1>\n<p>Développeur·se en herbe 🚀</p>\n<h2>Mes compétences</h2>\n<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>",
+	lessons:[
+		{h:"🧱 Les balises", html:"<p>Le HTML structure le contenu avec des <b>balises</b>.</p><pre class='notion-code'><code>&lt;h1&gt;Titre&lt;/h1&gt;\n&lt;p&gt;Un paragraphe&lt;/p&gt;\n&lt;a href='...'&gt;Un lien&lt;/a&gt;\n&lt;img src='photo.jpg' alt='moi'&gt;</code></pre>"},
+		{h:"📋 Listes & formulaires", html:"<pre class='notion-code'><code>&lt;ul&gt;&lt;li&gt;Élément&lt;/li&gt;&lt;/ul&gt;\n&lt;input type='text' placeholder='Nom'&gt;\n&lt;button&gt;Envoyer&lt;/button&gt;</code></pre>"},
+		{h:"📄 Structure d'une page HTML", html:"<p>Toute page HTML commence par ce squelette standard :</p><pre class='notion-code'><code>&lt;!DOCTYPE html&gt;\n&lt;html lang='fr'&gt;\n  &lt;head&gt;\n    &lt;meta charset='UTF-8'&gt;\n    &lt;title&gt;Ma page&lt;/title&gt;\n    &lt;link rel='stylesheet' href='style.css'&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Contenu visible ici&lt;/h1&gt;\n    &lt;script src='script.js'&gt;&lt;/script&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p><code>&lt;head&gt;</code> = métadonnées invisibles. <code>&lt;body&gt;</code> = ce que l'utilisateur voit.</p>"},
+		{h:"🏷️ Classes & identifiants", html:"<p>Les attributs <code>class</code> et <code>id</code> permettent de cibler des éléments depuis CSS et JS :</p><pre class='notion-code'><code>&lt;div class='carte'&gt;Utilisable plusieurs fois&lt;/div&gt;\n&lt;div id='menu'&gt;Unique sur la page&lt;/div&gt;</code></pre><p>En CSS : <code>.carte {}</code> pour une classe, <code>#menu {}</code> pour un id.</p>"}
+	],
+	cours:{
+		objectifs:["Structurer une page HTML avec les balises sémantiques correctes","Créer des listes, liens, images et formulaires accessibles","Comprendre la différence entre <head> et <body>"],
+		vocab:[{t:"Balise",d:"Élément HTML entre chevrons : <p>, <h1>, <img>. La plupart ont une balise ouvrante et une fermante."},{t:"Attribut",d:"Information sur une balise : href pour les liens, src pour les images, alt pour le texte alternatif."},{t:"Sémantique",d:"Utiliser la balise qui décrit le mieux le contenu : <nav>, <article>, <footer>…"},{t:"Alt",d:"Texte alternatif d'une image, lu par les lecteurs d'écran. Obligatoire pour l'accessibilité."},{t:"head",d:"Zone invisible de la page : métadonnées, titre de l'onglet, lien vers CSS et JS."}],
+		html:"<p>Toute page HTML suit ce squelette :</p><pre class='notion-code'><code>&lt;!DOCTYPE html&gt;\n&lt;html lang=&quot;fr&quot;&gt;\n  &lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot;&gt;\n    &lt;title&gt;Ma page&lt;/title&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Titre principal&lt;/h1&gt;\n    &lt;p&gt;Un paragraphe.&lt;/p&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>Les balises <b>sémantiques</b> aident les moteurs de recherche et les lecteurs d'écran : <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code>.</p>",
+		erreurs:["Utiliser <div> pour tout au lieu des balises sémantiques — préfère <nav>, <main>, <article>.","Oublier l'attribut alt sur les images — indispensable pour l'accessibilité.","Mettre plusieurs <h1> sans raison — il doit y en avoir un seul par page."]
+	},
+	exo:"Écris une page avec un titre, un paragraphe sur toi, une liste de tes 3 hobbies et une image.",
+	project:"🏆 Boss : crée ton <b>CV en ligne</b> en HTML (titre, sections expérience/formation, liens).",
+	quiz:[
+		{q:"Quelle balise pour le plus grand titre ?", o:["&lt;p&gt;","&lt;h1&gt;","&lt;title&gt;"], a:1, expl:"Les titres vont de <h1> (principal, unique par page) à <h6>. <title> est le titre de l'onglet, invisible dans la page."},
+		{q:"Quel attribut donne la destination d'un lien ?", o:["src","href","alt"], a:1, expl:"href (HyperText REFerence) indique la destination d'un lien. src indique la source d'une image ou d'un script."},
+		{q:"Quelle balise pour insérer une image ?", o:["&lt;img&gt;","&lt;pic&gt;","&lt;photo&gt;"], a:0, expl:"<img> est auto-fermante. Elle prend src (chemin de l'image) et alt (texte alternatif, obligatoire)."},
+		{q:"&lt;ul&gt; crée une liste...", o:["ordonnée (1,2,3)","non ordonnée (puces)","de liens"], a:1, expl:"<ul> = unordered list (puces). <ol> = ordered list (numéros). <li> est l'élément de liste dans les deux cas."},
+		{q:"L'attribut alt d'une image sert à...", o:["Changer sa taille","Décrire l'image pour l'accessibilité","Créer un lien"], a:1, expl:"alt est lu par les lecteurs d'écran et s'affiche si l'image ne charge pas. C'est un critère d'accessibilité essentiel."},
+		{q:"Quelle balise crée un paragraphe ?", o:["&lt;p&gt;","&lt;span&gt;","&lt;div&gt;"], a:0, expl:"<p> crée un paragraphe. <span> est inline (dans une ligne). <div> est un conteneur générique sans sémantique."}
+	]
+},
+{
+	id:2, emoji:"🎨", num:"Module 2", name:"CSS — le style", xp:100,
+	desc:"Couleurs, box model, Flexbox, responsive design.",
+	badge:"🌟", badgeName:"CV stylisé",
+	starter:"<style>\n  body { font-family: sans-serif; background: #f0f4ff; padding: 20px; }\n  h1 { color: #097fe8; border-bottom: 2px solid #097fe8; }\n  .carte { background: white; padding: 16px; border-radius: 8px; }\n</style>\n<h1>CSS en action</h1>\n<div class=\"carte\">\n  <p>Modifie les couleurs et les styles !</p>\n</div>",
+	lessons:[
+		{h:"🎨 Sélecteurs & propriétés", html:"<pre class='notion-code'><code>h1 { color: blue; font-size: 32px; }\n.carte { padding: 16px; border-radius: 8px; }</code></pre>"},
+		{h:"📐 Flexbox", html:"<p>Pour aligner des éléments facilement :</p><pre class='notion-code'><code>.row { display: flex; gap: 12px; justify-content: center; }</code></pre>"},
+		{h:"📏 Unités CSS", html:"<p>Choisir la bonne unité est crucial pour le responsive :</p><ul><li><b>px</b> — taille fixe, évite pour le texte</li><li><b>rem</b> — relatif à la base (1rem = 16px) : recommandé pour les tailles de texte</li><li><b>%</b> — relatif au parent : parfait pour les largeurs</li><li><b>vw / vh</b> — relatif à la fenêtre : utile pour les sections plein écran</li></ul><pre class='notion-code'><code>h1 { font-size: 2rem; }       /* 32px si base = 16px */\n.section { width: 100%; max-width: 900px; }</code></pre>"},
+		{h:"🔲 CSS Grid", html:"<p>Grid est idéal pour les mises en page à <b>plusieurs colonnes</b> :</p><pre class='notion-code'><code>.grille {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n@media (max-width: 600px) {\n  .grille { grid-template-columns: 1fr; }\n}</code></pre>"}
+	],
+	cours:{
+		objectifs:["Comprendre et utiliser les sélecteurs CSS et la cascade","Appliquer le box model, Flexbox et Grid","Rendre une page responsive avec les media queries"],
+		vocab:[{t:"Cascade",d:"Règle qui détermine quel style s'applique quand plusieurs règles ciblent le même élément (spécificité + ordre)."},{t:"Box model",d:"Modèle de boîte : contenu → padding → border → margin. Tout élément HTML en suit la règle."},{t:"Flexbox",d:"display:flex sur un conteneur : aligne ses enfants en ligne ou en colonne facilement."},{t:"Grid",d:"display:grid : crée une grille en colonnes et lignes, idéale pour les mises en page complexes."},{t:"Media query",d:"Règle CSS conditionnelle (@media) qui applique des styles selon la taille de l'écran."}],
+		html:"<p>Le CSS se compose de <b>sélecteurs</b> (qui cibler) et de <b>propriétés</b> (quoi modifier) :</p><pre class='notion-code'><code>h1 { color: blue; font-size: 2rem; }\n.carte { display: flex; gap: 12px; }</code></pre><p>La <b>cascade</b> : si deux règles ciblent le même élément, la plus <em>spécifique</em> ou la plus <em>récente</em> gagne. L'<code>id</code> bat la <code>class</code>, la <code>class</code> bat la <code>balise</code>.</p><p><b>Responsive</b> avec les media queries :</p><pre class='notion-code'><code>@media (max-width: 600px) {\n  .grille { grid-template-columns: 1fr; }\n}</code></pre>",
+		erreurs:["Oublier box-sizing:border-box — sans ça, padding et border augmentent la taille totale de façon surprenante.","Utiliser des px pour les tailles de texte — préfère rem pour le responsive.","Confondre Flexbox (1D : une ligne ou colonne) et Grid (2D : lignes ET colonnes)."]
+	},
+	exo:"Ajoute du CSS à ton CV : une police, des couleurs, des marges et un layout en colonnes.",
+	project:"🏆 Boss : rends ton CV <b>beau et responsive</b> (lisible sur mobile).",
+	quiz:[
+		{q:"Quelle propriété change la couleur du texte ?", o:["background","color","font-size"], a:1, expl:"color change la couleur du texte. background-color change le fond. Ne les confonds pas."},
+		{q:"Flexbox sert à...", o:["Stocker des données","Aligner/disposer des éléments","Créer des variables"], a:1, expl:"display:flex sur un conteneur active Flexbox et permet d'aligner ses enfants en ligne ou en colonne avec gap, justify-content…"},
+		{q:"Le 'box model' inclut...", o:["margin, border, padding, content","font, color, size","flex, grid, float"], a:0, expl:"De l'intérieur vers l'extérieur : content → padding → border → margin. Utilise box-sizing:border-box pour éviter les surprises."},
+		{q:"Pour rendre un site responsive on utilise...", o:["@media queries","@font-face","@import"], a:0, expl:"@media (max-width: 600px) { ... } applique des styles uniquement sous 600px de largeur."},
+		{q:"display:none fait quoi ?", o:["Cache l'élément et libère son espace","Rend l'élément transparent","L'agrandit"], a:0, expl:"display:none retire l'élément du flux (son espace est libéré). visibility:hidden le cache mais conserve son espace."},
+		{q:"Quelle propriété CSS espace les enfants d'un flex ou grid ?", o:["spacing","gap","margin-between"], a:1, expl:"gap est la propriété moderne pour espacer les enfants d'un Flex ou Grid. Elle remplace les marges manuelles sur chaque enfant."}
+	]
+},
+{
+	id:3, emoji:"⚙️", num:"Module 3", name:"JavaScript — les bases", xp:150,
+	desc:"Variables, fonctions, conditions, boucles, tableaux.",
+	badge:"🧮", badgeName:"Logique",
+	starter:"<div id='out'></div>\n<script>\nlet nombre = 7;\ndocument.getElementById('out').textContent =\n  nombre % 2 === 0 ? nombre + ' est pair ✅' : nombre + ' est impair ✅';\n<\/script>",
+	lessons:[
+		{h:"📦 Variables & types", html:"<pre class='notion-code'><code>let nom = 'Alexis';\nconst age = 25;\nlet actif = true;</code></pre>"},
+		{h:"🔁 Fonctions & conditions", html:"<pre class='notion-code'><code>function saluer(n){\n  if(n) return 'Salut ' + n;\n  return 'Salut !';\n}</code></pre>"},
+		{h:"📚 Tableaux", html:"<p>Un tableau stocke plusieurs valeurs dans une variable :</p><pre class='notion-code'><code>const fruits = ['pomme', 'banane', 'kiwi'];\nfruits.push('mangue');   // ajouter\nfruits[0];               // 'pomme'\nfruits.length;           // 4\nfruits.pop();            // retire le dernier</code></pre>"},
+		{h:"🔁 Boucles", html:"<p>Pour répéter une action sur chaque élément :</p><pre class='notion-code'><code>for (let i = 0; i &lt; fruits.length; i++) {\n  console.log(fruits[i]);\n}\n\n// Version moderne (recommandée)\nfruits.forEach(f =&gt; console.log(f));\n\n// Transformer un tableau\nconst majuscules = fruits.map(f =&gt; f.toUpperCase());</code></pre>"}
+	],
+	cours:{
+		objectifs:["Déclarer et utiliser des variables avec let et const","Écrire des fonctions, conditions et boucles","Manipuler des tableaux et déboguer dans la console"],
+		vocab:[{t:"Variable",d:"Conteneur nommé pour stocker une valeur. const = immuable, let = modifiable."},{t:"Fonction",d:"Bloc de code réutilisable. Elle prend des paramètres et peut retourner une valeur."},{t:"Boucle",d:"Structure qui répète une action : for, while, forEach, map…"},{t:"Tableau",d:"Liste ordonnée de valeurs : [1, 'chat', true]. Index commence à 0."},{t:"typeof",d:"Opérateur qui retourne le type d'une valeur : 'number', 'string', 'boolean', 'object'…"}],
+		html:"<p>JS raisonne avec des <b>variables</b>, des <b>conditions</b> et des <b>boucles</b> :</p><pre class='notion-code'><code>const age = 20;\nif (age >= 18) {\n  console.log('Majeur');\n} else {\n  console.log('Mineur');\n}</code></pre><p>Les <b>tableaux</b> stockent plusieurs valeurs. <code>map()</code> les transforme, <code>filter()</code> les filtre :</p><pre class='notion-code'><code>const notes = [14, 18, 9, 12];\nconst admis = notes.filter(n => n >= 10); // [14, 18, 12]</code></pre>",
+		erreurs:["Utiliser var au lieu de let/const — var a une portée de fonction, pas de bloc, ce qui crée des bugs subtils.","Confondre = (affectation) et === (comparaison stricte) — erreur très fréquente.","Oublier le return dans une fonction — sans return, elle retourne undefined."]
+	},
+	exo:"Écris une fonction qui prend un nombre et dit s'il est pair ou impair.",
+	project:"🏆 Boss : un mini <b>jeu « devine le nombre »</b> dans la console.",
+	quiz:[
+		{q:"Quel mot-clé pour une constante ?", o:["let","const","var"], a:1, expl:"const déclare une valeur immuable. let peut être réassignée. var est à éviter (portée de fonction, hoisting inattendu)."},
+		{q:"Que renvoie 3 === '3' ?", o:["true","false","erreur"], a:1, expl:"=== compare valeur ET type. 3 est un number, '3' est une string : types différents → false. == ferait une conversion implicite."},
+		{q:"Quelle structure pour répéter du code ?", o:["if / else","for / while","const"], a:1, expl:"for et while sont des boucles. if/else est une condition. const est une déclaration de variable."},
+		{q:"typeof 42 renvoie...", o:["'number'","'integer'","'string'"], a:0, expl:"typeof retourne le type en string : 'number', 'string', 'boolean', 'object', 'function', 'undefined'. Il n'y a pas de type 'integer' en JS."},
+		{q:"Que fait arr.map(fn) ?", o:["Filtre les éléments","Retourne un nouveau tableau transformé","Trie le tableau"], a:1, expl:"map() retourne un NOUVEAU tableau transformé. filter() filtre. forEach() parcourt sans retourner. Aucune ne modifie l'original."},
+		{q:"Comment accéder au premier élément d'un tableau ?", o:["arr[0]","arr.first()","arr(1)"], a:0, expl:"Les tableaux JS commencent à l'index 0. arr[0] = premier, arr[1] = deuxième, arr[arr.length-1] = dernier."}
+	]
+},
+{
+	id:4, emoji:"🖱️", num:"Module 4", name:"JS & le DOM", xp:150,
+	desc:"Manipuler la page, écouter les clics, créer de l'interactivité.",
+	badge:"✅", badgeName:"To-Do List",
+	starter:"<button onclick='ajouterTache()'>+ Ajouter une tâche</button>\n<ul id='liste'></ul>\n<script>\nfunction ajouterTache() {\n  const li = document.createElement('li');\n  li.textContent = 'Nouvelle tâche ✅';\n  document.getElementById('liste').appendChild(li);\n}\n<\/script>",
+	lessons:[
+		{h:"🎯 Sélectionner & modifier", html:"<pre class='notion-code'><code>const btn = document.querySelector('#go');\nbtn.addEventListener('click', () =&gt; {\n  document.body.style.background = 'pink';\n});</code></pre>"},
+		{h:"➕ Créer & supprimer des éléments", html:"<pre class='notion-code'><code>// Créer un élément\nconst li = document.createElement('li');\nli.textContent = 'Nouvelle tâche';\nli.classList.add('tache');\ndocument.querySelector('#liste').appendChild(li);\n\n// Supprimer\nli.remove();</code></pre>"},
+		{h:"📡 Événements courants", html:"<p>Au-delà du clic, il existe plein d'événements :</p><pre class='notion-code'><code>input.addEventListener('input', e =&gt; console.log(e.target.value));\nform.addEventListener('submit', e =&gt; { e.preventDefault(); /* ... */ });\ndocument.addEventListener('keydown', e =&gt; console.log(e.key));</code></pre>"}
+	],
+	cours:{
+		objectifs:["Sélectionner et modifier des éléments HTML depuis JS","Écouter les événements (clic, saisie, soumission)","Créer et supprimer des éléments dynamiquement, sauvegarder en localStorage"],
+		vocab:[{t:"DOM",d:"Document Object Model — représentation en arbre de la page HTML, manipulable depuis JS."},{t:"querySelector",d:"Sélectionne le premier élément correspondant à un sélecteur CSS : document.querySelector('.btn')."},{t:"addEventListener",d:"Attache une fonction à un événement sur un élément : click, input, submit, keydown…"},{t:"innerHTML",d:"Lit ou écrit le contenu HTML d'un élément. textContent pour le texte pur (plus sûr)."},{t:"localStorage",d:"Stockage côté navigateur, persistant entre les sessions. Clés et valeurs sous forme de chaînes."}],
+		html:"<p>Pour interagir avec la page, tu <b>sélectionnes</b> un élément et tu lui <b>attaches un événement</b> :</p><pre class='notion-code'><code>const btn = document.querySelector('#go');\nbtn.addEventListener('click', () => {\n  document.body.style.background = 'pink';\n});</code></pre><p>Pour <b>créer</b> un élément dynamiquement :</p><pre class='notion-code'><code>const li = document.createElement('li');\nli.textContent = 'Nouvelle tâche';\ndocument.querySelector('#liste').appendChild(li);</code></pre>",
+		erreurs:["Utiliser innerHTML avec des données utilisateur — risque d'injection XSS. Préfère textContent.","Oublier event.preventDefault() sur un formulaire — sans ça, la page se recharge.","Modifier le DOM dans une boucle pour chaque élément — c'est lent. Construis un string HTML et affecte-le une seule fois."]
+	},
+	exo:"Fais un bouton qui ajoute un élément à une liste quand on clique.",
+	project:"🏆 Boss : une <b>To-Do List</b> interactive (ajouter / cocher / supprimer).",
+	quiz:[
+		{q:"Quelle méthode sélectionne un élément CSS ?", o:["document.querySelector","console.log","Math.random"], a:0, expl:"querySelector retourne le PREMIER élément correspondant. querySelectorAll retourne TOUS les éléments (NodeList)."},
+		{q:"Comment réagir à un clic ?", o:["addEventListener('click', ...)","if click","onClick = true"], a:0, expl:"addEventListener est la méthode moderne. Elle permet plusieurs écouteurs sur le même élément, et est plus propre que l'attribut onclick."},
+		{q:"innerHTML permet de...", o:["Modifier le contenu HTML d'un élément","Appliquer du style","Supprimer un fichier"], a:0, expl:"innerHTML lit/écrit du HTML brut. textContent lit/écrit du texte pur (plus sûr, pas de risque XSS)."},
+		{q:"event.preventDefault() sert à...", o:["Empêcher le comportement par défaut du navigateur","Ajouter une classe CSS","Logger dans la console"], a:0, expl:"Sans preventDefault(), un clic sur <a> navigue, un submit recharge la page. preventDefault() annule ce comportement natif."},
+		{q:"Quelle propriété lit le texte d'un élément sans balises HTML ?", o:["innerHTML","textContent","innerText"], a:1, expl:"textContent retourne le texte pur. innerHTML inclut les balises HTML. innerText respecte le CSS (cache les display:none)."},
+		{q:"element.classList.add() permet de...", o:["Créer un élément","Ajouter une classe CSS à un élément","Supprimer un élément"], a:1, expl:"classList est l'objet moderne pour les classes : .add(), .remove(), .toggle(), .contains(). Plus sûr que modifier className."}
+	]
+},
+{
+	id:5, emoji:"🚀", num:"Module 5", name:"JS moderne & API", xp:150,
+	desc:"ES6+, fetch, async/await, consommer une API.",
+	badge:"☀️", badgeName:"App météo",
+	starter:"<div id='out'>Chargement...</div>\n<script>\nasync function getData() {\n  const villes = [{nom:'Paris',temp:18},{nom:'Lyon',temp:22},{nom:'Nice',temp:28}];\n  return new Promise(r => setTimeout(() => r(villes), 400));\n}\nasync function afficher() {\n  const villes = await getData();\n  document.getElementById('out').innerHTML = villes.map(v =>\n    '<p>' + v.nom + ' : <b>' + v.temp + '°C</b></p>'\n  ).join('');\n}\nafficher();\n<\/script>",
+	lessons:[
+		{h:"✨ Syntaxe moderne", html:"<pre class='notion-code'><code>const carre = x =&gt; x * x;\nconst {nom, age} = user;\nconst total = [...a, ...b];</code></pre>"},
+		{h:"🌐 Appeler une API", html:"<pre class='notion-code'><code>const r = await fetch(url);\nconst data = await r.json();</code></pre>"},
+		{h:"⚠️ Gérer les erreurs réseau", html:"<p>Un appel réseau peut échouer — protège-toi avec <code>try/catch</code> :</p><pre class='notion-code'><code>async function getData(url) {\n  try {\n    const r = await fetch(url);\n    if (!r.ok) throw new Error('Erreur ' + r.status);\n    return await r.json();\n  } catch (e) {\n    console.error('Problème :', e.message);\n    return null;\n  }\n}</code></pre>"},
+		{h:"🔗 Envoyer des données (POST)", html:"<pre class='notion-code'><code>await fetch('/api/taches', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ titre: 'Apprendre fetch' })\n});</code></pre>"}
+	],
+	cours:{
+		objectifs:["Utiliser la syntaxe ES6+ (arrow functions, déstructuration, spread)","Appeler une API avec fetch et async/await","Gérer les états : chargement, succès, erreur, données vides"],
+		vocab:[{t:"async/await",d:"Syntaxe pour écrire du code asynchrone de façon lisible. async déclare la fonction, await attend la Promise."},{t:"fetch",d:"Fonction native pour envoyer des requêtes HTTP. Retourne une Promise<Response>."},{t:"Promise",d:"Objet représentant une opération asynchrone. États : pending, fulfilled (résolu), rejected (échoué)."},{t:"JSON",d:"Format texte d'échange de données basé sur la syntaxe JS. response.json() le convertit en objet JS."},{t:"try/catch",d:"Bloque les erreurs pour les gérer proprement : try { code risqué } catch(e) { gérer l'erreur }."}],
+		html:"<p>Un appel API complet gère 3 états : chargement, succès et erreur :</p><pre class='notion-code'><code>async function charger(url) {\n  try {\n    const r = await fetch(url);\n    if (!r.ok) throw new Error('Erreur ' + r.status);\n    const data = await r.json();\n    afficher(data);\n  } catch(e) {\n    afficherErreur(e.message);\n  }\n}</code></pre><p>La <b>déstructuration</b> et le <b>spread</b> simplifient le code :</p><pre class='notion-code'><code>const { nom, age } = utilisateur; // déstructuration\nconst copie = { ...utilisateur, age: 26 }; // spread</code></pre>",
+		erreurs:["Oublier d'attendre la 2e Promise : response.json() retourne aussi une Promise, il faut un await.","Ne pas vérifier r.ok avant d'appeler r.json() — même un 404 passe dans le then() de fetch.","Utiliser fetch sans try/catch — les erreurs réseau (offline, timeout) rejettent la Promise."]
+	},
+	exo:"Récupère des données d'une API publique et affiche-les.",
+	project:"🏆 Boss : une <b>app météo</b> qui interroge une API et affiche la température d'une ville.",
+	quiz:[
+		{q:"fetch() sert à...", o:["Styliser la page","Récupérer des données réseau","Déclarer une variable"], a:1, expl:"fetch() envoie une requête HTTP asynchrone et retourne une Promise<Response>. Il faut await pour attendre le résultat."},
+		{q:"await s'utilise dans...", o:["une fonction async","un for classique","un const"], a:0, expl:"await suspend l'exécution jusqu'à ce que la Promise soit résolue. Il ne peut s'utiliser que dans une fonction déclarée async."},
+		{q:"La déstructuration `const {nom} = obj` extrait...", o:["La propriété 'nom' de obj","Tous les objets","Un tableau"], a:0, expl:"const {a, b} = obj équivaut à const a = obj.a; const b = obj.b; — plus concis et lisible."},
+		{q:"Les arrow functions `=>` sont...", o:["Une syntaxe raccourcie pour les fonctions","Un type de boucle","Une déclaration de classe"], a:0, expl:"Les fonctions fléchées sont plus courtes et n'ont pas leur propre this — idéal pour les callbacks comme .map() et .filter()."},
+		{q:"Que retourne fetch() ?", o:["Une Promise","Un objet JSON directement","Une string"], a:0, expl:"fetch() retourne une Promise<Response>. Pour lire le JSON, il faut appeler response.json() qui retourne aussi une Promise."},
+		{q:"L'opérateur spread ... permet de...", o:["Déclarer une variable","Copier ou fusionner des tableaux et objets","Créer une boucle"], a:1, expl:"[...a, ...b] fusionne deux tableaux. {...obj, x:1} copie un objet en ajoutant ou modifiant des propriétés."}
+	]
+},
+{
+	id:6, emoji:"🐙", num:"Module 6", name:"Git & GitHub", xp:100,
+	desc:"Versionner son code, commits, branches, publier en ligne.",
+	badge:"🔀", badgeName:"Premier repo",
+	lessons:[
+		{h:"💾 Les commandes de base", html:"<pre class='notion-code'><code>git init\ngit add .\ngit commit -m 'premier commit'\ngit push</code></pre>"},
+		{h:"🌿 Branches & fusion", html:"<p>Les branches permettent de travailler sur une fonctionnalité sans toucher au code principal :</p><pre class='notion-code'><code>git branch ma-feature       # créer une branche\ngit checkout ma-feature     # s'y déplacer\n# ... tu travailles ...\ngit checkout main\ngit merge ma-feature        # fusionner\ngit branch -d ma-feature    # supprimer</code></pre>"},
+		{h:"🌍 GitHub Pages — publier gratuitement", html:"<p>GitHub Pages héberge ton site statique directement depuis ton repo :</p><ol style='margin:8px 0 0;padding-left:20px'><li>Va dans <b>Settings → Pages</b> de ton repo</li><li>Choisis la branche <code>main</code> comme source</li><li>Ton site est en ligne sur <code>ton-pseudo.github.io/nom-repo</code> 🎉</li></ol>"}
+	],
+	cours:{
+		objectifs:["Versionner un projet avec les commandes Git essentielles","Travailler avec des branches et fusionner","Publier un dépôt sur GitHub et écrire un bon README"],
+		vocab:[{t:"commit",d:"Instantané nommé de l'état du projet. C'est une sauvegarde avec un message explicatif."},{t:"branch",d:"Ligne de développement parallèle. Permet de travailler sans toucher à la branche principale."},{t:"merge",d:"Fusion d'une branche dans une autre pour intégrer les changements."},{t:".gitignore",d:"Fichier qui liste les éléments ignorés par Git : node_modules/, .env, fichiers système."},{t:"pull request",d:"Demande de fusion sur GitHub : tu proposes tes changements, quelqu'un les valide."}],
+		html:"<p>Le cycle de base de Git :</p><pre class='notion-code'><code>git add .          # prépare les changements\ngit commit -m 'message clair'  # enregistre un snapshot\ngit push           # envoie sur GitHub</code></pre><p>Les <b>branches</b> isolent le travail :</p><pre class='notion-code'><code>git checkout -b ma-feature  # créer et basculer\n# ... développer ...\ngit checkout main\ngit merge ma-feature        # fusionner</code></pre>",
+		erreurs:["Écrire des messages de commit vagues ('update', 'fix') — un bon message dit QUOI et POURQUOI.","Commiter des secrets (.env, mots de passe) — utilise .gitignore dès le départ.","Travailler directement sur main — crée toujours une branche pour chaque fonctionnalité."]
+	},
+	exo:"Mets ton CV sur un repo GitHub et publie-le avec GitHub Pages.",
+	project:"🏆 Boss : ton premier <b>repo public</b> en ligne avec un joli README.",
+	quiz:[
+		{q:"Quelle commande enregistre un instantané du code ?", o:["git commit","git save","git delete"], a:0, expl:"git commit enregistre un snapshot nommé de ton travail. C'est comme une sauvegarde avec un message explicatif."},
+		{q:"GitHub sert à...", o:["Héberger et partager du code","Compiler du C++","Dessiner des maquettes"], a:0, expl:"GitHub = plateforme cloud pour stocker des dépôts Git, collaborer et montrer son travail. Git = outil local de versioning."},
+		{q:"git add . fait quoi ?", o:["Supprime tous les fichiers","Prépare les changements pour le commit","Pousse vers GitHub"], a:1, expl:"git add . met tous les fichiers modifiés en 'staging area'. Ensuite git commit les enregistre définitivement."},
+		{q:"Une branche git permet de...", o:["Travailler en parallèle sans affecter main","Supprimer du code","Accélérer le site"], a:0, expl:"Les branches isolent le travail. main reste stable pendant que tu développes une fonctionnalité sur une autre branche."},
+		{q:"git clone sert à...", o:["Supprimer un repo","Copier un repo distant en local","Créer une branche"], a:1, expl:"git clone télécharge tout le dépôt (code + historique complet) sur ton ordinateur pour travailler dessus."},
+		{q:"Quel fichier liste les éléments ignorés par git ?", o:[".ignore","README.md",".gitignore"], a:2, expl:".gitignore liste les fichiers/dossiers exclus du suivi Git : node_modules/, .env, .DS_Store… Crée-le à la racine du projet."}
+	]
+},
+{
+	id:7, emoji:"⚛️", num:"Module 7", name:"React", xp:250,
+	desc:"Composants, props, state, hooks, applications dynamiques.",
+	badge:"🧩", badgeName:"App React",
+	lessons:[
+		{h:"🧩 Composants & props", html:"<pre class='notion-code'><code>function Carte({titre}){\n  return &lt;h3&gt;{titre}&lt;/h3&gt;;\n}</code></pre>"},
+		{h:"🔄 Le state (useState)", html:"<pre class='notion-code'><code>const [n, setN] = useState(0);\n&lt;button onClick={() =&gt; setN(n+1)}&gt;{n}&lt;/button&gt;</code></pre>"},
+		{h:"⚡ useEffect — effets de bord", html:"<p><code>useEffect</code> exécute du code <b>après le rendu</b> — parfait pour appeler une API :</p><pre class='notion-code'><code>useEffect(() =&gt; {\n  fetch('/api/taches')\n    .then(r =&gt; r.json())\n    .then(data =&gt; setTaches(data));\n}, []); // [] = seulement au premier rendu</code></pre>"},
+		{h:"📋 Afficher des listes", html:"<p>En React, on utilise <code>.map()</code> pour afficher une liste — et <code>key</code> est obligatoire :</p><pre class='notion-code'><code>function ListeTaches({ taches }) {\n  return (\n    &lt;ul&gt;\n      {taches.map(t =&gt; (\n        &lt;li key={t.id}&gt;{t.titre}&lt;/li&gt;\n      ))}\n    &lt;/ul&gt;\n  );\n}</code></pre>"}
+	],
+	cours:{
+		objectifs:["Créer des composants React avec JSX","Passer des données avec les props","Gérer l'état local avec useState et les effets avec useEffect"],
+		vocab:[{t:"Composant",d:"Fonction JS qui retourne du JSX. C'est la brique de base d'une app React."},{t:"JSX",d:"Syntaxe HTML-like dans JS, transpilée par Babel en appels React.createElement()."},{t:"props",d:"Paramètres d'un composant, passés par le parent. Flux unidirectionnel : parent → enfant."},{t:"useState",d:"Hook qui crée une variable d'état : const [val, setVal] = useState(init). Re-rend le composant à chaque changement."},{t:"useEffect",d:"Hook qui exécute du code après le rendu : appels API, abonnements, synchronisation localStorage."}],
+		html:"<p>Un composant = une fonction qui retourne du JSX :</p><pre class='notion-code'><code>function Compteur() {\n  const [n, setN] = useState(0);\n  return (\n    &lt;div&gt;\n      &lt;p&gt;{n}&lt;/p&gt;\n      &lt;button onClick={() => setN(n + 1)}&gt;+1&lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><p><b>Règle clé</b> : les props vont du parent vers l'enfant (sens unique). Pour remonter une info, passe une <em>fonction callback</em> en prop.</p>",
+		erreurs:["Modifier l'état directement (state.x = 1) — toujours utiliser le setter (setState) pour déclencher un re-rendu.","Oublier la prop key dans les listes — React en a besoin pour identifier les éléments.","Mettre des appels fetch directement dans le composant sans useEffect — ça crée une boucle infinie."]
+	},
+	exo:"Crée un compteur React avec un bouton +1 et -1.",
+	project:"🏆 Boss : recode ta <b>To-Do List en React</b> avec des composants.",
+	quiz:[
+		{q:"Un composant React renvoie...", o:["du JSX","du SQL","un fichier CSS"], a:0, expl:"Un composant = une fonction JS qui retourne du JSX. JSX ressemble à du HTML mais est transformé en JS par un compilateur."},
+		{q:"useState sert à...", o:["styliser un élément","gérer un état qui change","appeler une API"], a:1, expl:"useState retourne [valeur, setter]. Quand le setter est appelé avec une nouvelle valeur, React re-rend le composant."},
+		{q:"Les props sont...", o:["Des données passées au composant de l'extérieur","L'état local du composant","Des balises HTML spéciales"], a:0, expl:"Les props vont du PARENT vers l'ENFANT (sens unique). Pour remonter une info, on passe une fonction callback en prop."},
+		{q:"useEffect se déclenche...", o:["Après chaque rendu (ou selon les dépendances)","Au chargement de la page uniquement","À chaque clic utilisateur"], a:0, expl:"useEffect(fn, []) : une fois. useEffect(fn, [a]) : quand a change. useEffect(fn) : après chaque rendu (attention aux boucles)."},
+		{q:"JSX permet de...", o:["Écrire du HTML-like dans du JavaScript","Styliser des composants","Connecter une BDD"], a:0, expl:"JSX n'est pas du HTML. C'est du sucre syntaxique transpilé en appels React.createElement() par Babel ou un bundler."},
+		{q:"Pour passer des données d'un composant parent à enfant, on utilise...", o:["useState","les props","useEffect"], a:1, expl:"Les props = paramètres d'un composant. function Carte({titre}) reçoit titre via <Carte titre='Hello' />."}
+	]
+},
+{
+	id:8, emoji:"🔧", num:"Module 8", name:"Node.js & Express", xp:200,
+	desc:"Le backend en JS : serveur, routes, API REST.",
+	badge:"🛰️", badgeName:"API REST",
+	lessons:[
+		{h:"🔌 Un serveur Express", html:"<pre class='notion-code'><code>const app = express();\napp.get('/api', (req,res) =&gt; {\n  res.json({ message: 'Salut !' });\n});\napp.listen(3000);</code></pre>"},
+		{h:"🔀 POST, PUT, DELETE & middleware", html:"<pre class='notion-code'><code>app.use(express.json()); // middleware : lit le body JSON\n\napp.post('/taches', (req, res) =&gt; {\n  const tache = req.body;       // données reçues\n  res.status(201).json(tache);\n});\n\napp.delete('/taches/:id', (req, res) =&gt; {\n  const { id } = req.params;    // paramètre d'URL\n  res.json({ supprimé: id });\n});</code></pre>"},
+		{h:"🔑 Variables d'environnement", html:"<p>Ne jamais mettre de mots de passe ou clés API dans le code — utilise un fichier <code>.env</code> :</p><pre class='notion-code'><code># .env (ne pas committer !)\nDB_URL=mongodb://localhost/mabase\nJWT_SECRET=motdepassefort123\n\n# Dans le code\nconst url = process.env.DB_URL;</code></pre><p>Installe <code>dotenv</code> et appelle <code>require('dotenv').config()</code> au démarrage.</p>"}
+	],
+	cours:{
+		objectifs:["Créer un serveur Express avec des routes REST","Comprendre les verbes HTTP et les codes de statut","Utiliser les middlewares et les variables d'environnement"],
+		vocab:[{t:"Route",d:"Association entre une URL+méthode HTTP et une fonction handler : app.get('/api', handler)."},{t:"Middleware",d:"Fonction qui s'exécute entre la requête et la réponse : logging, auth, parsing du body JSON."},{t:"req / res",d:"Objets Express : req contient la requête (params, body, headers), res permet d'envoyer la réponse."},{t:"HTTP statuts",d:"200 = OK, 201 = Créé, 400 = Mauvaise requête, 401 = Non auth, 404 = Introuvable, 500 = Erreur serveur."},{t:".env",d:"Fichier de variables d'environnement (secrets, URLs). Ne jamais le commiter sur GitHub."}],
+		html:"<p>Un serveur Express minimal :</p><pre class='notion-code'><code>const express = require('express');\nconst app = express();\napp.use(express.json()); // middleware : lit le body JSON\n\napp.get('/api/taches', (req, res) => {\n  res.json(taches);\n});\n\napp.post('/api/taches', (req, res) => {\n  const tache = req.body;\n  taches.push(tache);\n  res.status(201).json(tache);\n});\n\napp.listen(3000);</code></pre>",
+		erreurs:["Oublier app.use(express.json()) — sans ça, req.body est undefined pour les requêtes POST.","Retourner une réponse sans code HTTP approprié (toujours 200) — utilise 201 pour Created, 404 pour Not Found.","Mettre la logique directement dans les routes — organise en contrôleurs séparés dès que le projet grandit."]
+	},
+	exo:"Crée une route GET qui renvoie une liste de tâches en JSON.",
+	project:"🏆 Boss : une <b>API REST</b> complète (GET/POST/DELETE) pour des tâches.",
+	quiz:[
+		{q:"Node.js permet d'exécuter JavaScript...", o:["côté serveur","uniquement dans le navigateur","dans Word"], a:0, expl:"Node.js utilise le moteur V8 de Chrome hors du navigateur : JS pour les serveurs, scripts, CLIs et outils de build."},
+		{q:"Express sert à...", o:["styliser des pages","créer des routes et un serveur","versionner du code"], a:1, expl:"Express est un framework minimaliste sur Node.js pour créer des routes, gérer les middlewares et envoyer des réponses HTTP."},
+		{q:"Une API REST répond généralement en...", o:["JSON","HTML pur","CSS"], a:0, expl:"JSON est le format standard pour les échanges entre frontend et backend. res.json(data) dans Express définit Content-Type: application/json."},
+		{q:"app.get('/route', fn) gère les requêtes...", o:["GET","POST","DELETE"], a:0, expl:"GET = lire, POST = créer, PUT/PATCH = modifier, DELETE = supprimer. Ces 4 verbes HTTP correspondent aux opérations CRUD."},
+		{q:"npm install installe...", o:["Node.js lui-même","Les dépendances listées dans package.json","Un serveur web"], a:1, expl:"npm install lit package.json et télécharge toutes les dépendances dans node_modules/. npm install <pkg> en ajoute une nouvelle."},
+		{q:"Quel code HTTP signifie 'créé avec succès' ?", o:["200","201","404"], a:1, expl:"200 = OK, 201 = Created, 400 = Bad Request, 401 = Non auth, 403 = Forbidden, 404 = Not Found, 500 = Erreur serveur."}
+	]
+},
+{
+	id:9, emoji:"🗄️", num:"Module 9", name:"Bases de données", xp:200,
+	desc:"Stocker les données : SQL vs NoSQL, CRUD, MongoDB.",
+	badge:"💾", badgeName:"Données persistantes",
+	lessons:[
+		{h:"🗄️ Les opérations CRUD", html:"<p><b>C</b>reate, <b>R</b>ead, <b>U</b>pdate, <b>D</b>elete — les 4 actions de base sur des données.</p><pre class='notion-code'><code>db.tasks.insertOne({ titre: 'Coder' });\ndb.tasks.find();</code></pre>"},
+		{h:"🔍 SQL — les 4 requêtes essentielles", html:"<p>SQL est le langage des bases relationnelles (PostgreSQL, MySQL, SQLite) :</p><pre class='notion-code'><code>-- Lire\nSELECT * FROM taches WHERE fait = true;\n\n-- Ajouter\nINSERT INTO taches (titre, fait) VALUES ('Coder', false);\n\n-- Modifier\nUPDATE taches SET fait = true WHERE id = 1;\n\n-- Supprimer\nDELETE FROM taches WHERE id = 1;</code></pre>"},
+		{h:"🍃 MongoDB & Mongoose", html:"<p><b>Mongoose</b> est la librairie Node pour piloter MongoDB avec des schémas :</p><pre class='notion-code'><code>const TacheSchema = new mongoose.Schema({\n  titre: String,\n  fait: { type: Boolean, default: false }\n});\nconst Tache = mongoose.model('Tache', TacheSchema);\n\n// Créer\nawait Tache.create({ titre: 'Coder' });\n// Lire\nconst taches = await Tache.find();</code></pre>"}
+	],
+	cours:{
+		objectifs:["Comprendre la différence entre SQL et NoSQL","Effectuer les opérations CRUD sur une base de données","Modéliser les données et sécuriser les accès"],
+		vocab:[{t:"CRUD",d:"Create, Read, Update, Delete — les 4 opérations de base sur des données."},{t:"SQL",d:"Structured Query Language — langage des bases relationnelles (tables, colonnes, relations)."},{t:"NoSQL",d:"Bases de données non relationnelles : documents (MongoDB), clé-valeur, graphes…"},{t:"Schéma",d:"Structure qui définit les champs, types et contraintes d'une table ou collection."},{t:"INDEX",d:"Structure qui accélère les recherches, comme l'index d'un livre."}],
+		html:"<p>Les <b>4 opérations SQL</b> essentielles :</p><pre class='notion-code'><code>SELECT * FROM taches WHERE fait = false;\nINSERT INTO taches (titre) VALUES ('Coder');\nUPDATE taches SET fait = true WHERE id = 1;\nDELETE FROM taches WHERE id = 1;</code></pre><p>Avec <b>Mongoose</b> (MongoDB) :</p><pre class='notion-code'><code>const Tache = mongoose.model('Tache', { titre: String, fait: Boolean });\nawait Tache.create({ titre: 'Coder' });\nconst toutes = await Tache.find();</code></pre>",
+		erreurs:["Stocker des mots de passe en clair — toujours les hacher avec bcrypt.","Ne pas valider les données avant de les insérer — vérifie toujours ce que tu reçois.","Confondre suppression logique (flag deleted=true) et suppression physique — les deux ont leur place."]
+	},
+	exo:"Connecte ton API à une base et sauvegarde les tâches durablement.",
+	project:"🏆 Boss : ton API stocke les tâches dans une <b>vraie base de données</b>.",
+	quiz:[
+		{q:"Que veut dire le R de CRUD ?", o:["Run","Read","Reset"], a:1, expl:"CRUD = Create (INSERT), Read (SELECT), Update (UPDATE), Delete (DELETE). Les 4 opérations de base sur des données."},
+		{q:"MongoDB est une base...", o:["NoSQL orientée documents","Un langage CSS","Un éditeur de code"], a:0, expl:"MongoDB stocke des documents JSON (BSON). Pas de tables ni de schéma rigide — flexible, idéal pour des données variables."},
+		{q:"SQL signifie...", o:["Structured Query Language","Styled Query Layout","Simple Query Logic"], a:0, expl:"SQL = Structured Query Language. C'est le langage des bases relationnelles. SELECT, INSERT, UPDATE, DELETE sont les commandes de base."},
+		{q:"Une PRIMARY KEY sert à...", o:["Identifier chaque ligne de façon unique","Trier les données","Supprimer une table"], a:0, expl:"La clé primaire identifie chaque ligne de façon unique. Elle sert de référence pour les jointures entre tables."},
+		{q:"Quel mot-clé SQL filtre les lignes d'un résultat ?", o:["ORDER BY","WHERE","GROUP BY"], a:1, expl:"WHERE filtre. ORDER BY trie. GROUP BY regroupe. JOIN combine des tables. LIMIT limite le nombre de résultats."},
+		{q:"Différence principale entre SQL et NoSQL ?", o:["SQL = tableaux relationnels, NoSQL = documents flexibles","SQL est plus récent","NoSQL ne stocke pas les nombres"], a:0, expl:"SQL = structure rigide, relations fortes, intégrité des données. NoSQL = flexible, horizontal, idéal pour les données variables."}
+	]
+},
+{
+	id:10, emoji:"🧩", num:"Module 10", name:"Full stack assemblé", xp:400,
+	desc:"Relier React + Node + BDD : ton app complète de A à Z.",
+	badge:"🌉", badgeName:"App full stack",
+	lessons:[
+		{h:"🔗 Le flux complet", html:"<p>Frontend React → appelle ton API Express via <code>fetch</code> → qui lit/écrit dans la base. Tu gères l'authentification et le déploiement.</p>"},
+		{h:"🔐 Authentification JWT", html:"<p>Le JWT (JSON Web Token) est le standard pour sécuriser une API REST :</p><pre class='notion-code'><code>// Connexion → serveur génère un token\nconst token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);\nres.json({ token });\n\n// Requêtes suivantes → client envoie le token\nfetch('/api/profil', {\n  headers: { Authorization: 'Bearer ' + token }\n});</code></pre>"},
+		{h:"🚀 Déployer son app", html:"<ul><li><b>Frontend React</b> → <b>Vercel</b> : connecte ton repo GitHub, deploy auto à chaque push</li><li><b>Backend Node/Express</b> → <b>Render</b> ou <b>Railway</b> : gratuit pour commencer</li><li><b>Base de données</b> → <b>MongoDB Atlas</b> (gratuit jusqu'à 512 Mo) ou <b>Supabase</b> (PostgreSQL gratuit)</li></ul><p>En 30 minutes tu peux avoir ton app complète en ligne 🌐</p>"}
+	],
+	cours:{
+		objectifs:["Connecter un frontend React à une API Express","Implémenter une authentification par token JWT","Déployer une application full stack en ligne"],
+		vocab:[{t:"CORS",d:"Cross-Origin Resource Sharing — mécanisme qui contrôle les accès entre domaines. Active-le dans Express avec le package cors."},{t:"JWT",d:"JSON Web Token — token signé pour authentifier les requêtes API sans session serveur."},{t:"Variable d'env",d:"Variable configurée sur le serveur (non commitée). process.env.MA_VAR dans Node."},{t:"Déploiement",d:"Mise en ligne d'une app : Vercel (frontend), Render/Railway (backend), MongoDB Atlas (BDD)."},{t:"fetch (auth)",d:"Pour les routes protégées : ajoute Authorization: Bearer token dans les headers de chaque requête."}],
+		html:"<p>Le flux complet d'une app full stack :</p><pre class='notion-code'><code>React (Vercel) ──fetch──▶ Express API (Render)\n                              │\n                       MongoDB Atlas</code></pre><p><b>Authentification JWT</b> :</p><pre class='notion-code'><code>// Login → serveur envoie un token\nconst token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);\n\n// Requêtes suivantes → client l'envoie\nfetch('/api/profil', {\n  headers: { Authorization: 'Bearer ' + token }\n});</code></pre>",
+		erreurs:["Hardcoder les URLs du backend dans le frontend — utilise des variables d'environnement.","Exposer JWT_SECRET dans le code source — c'est le secret à protéger absolument.","Négliger CORS — configure-le dès le départ pour éviter les erreurs 'blocked by CORS policy'."]
+	},
+	exo:"Branche ton frontend React sur ton API + base de données.",
+	project:"🏆 Boss : une <b>app full stack déployée</b> en ligne (front + back + BDD).",
+	quiz:[
+		{q:"Le frontend parle au backend via...", o:["des requêtes HTTP (fetch)","du CSS uniquement","Git"], a:0, expl:"React utilise fetch() pour envoyer des requêtes HTTP à l'API Express. Le backend répond en JSON."},
+		{q:"« Full stack » signifie maîtriser...", o:["frontend + backend + BDD","que du HTML/CSS","que du design"], a:0, expl:"Un dev full stack sait travailler sur toutes les couches : interface utilisateur, serveur, base de données et déploiement."},
+		{q:"CORS est un mécanisme qui...", o:["Contrôle les accès entre origines différentes","Compresse les images","Gère les mots de passe"], a:0, expl:"CORS bloque par défaut les requêtes entre domaines différents. Active-le dans Express avec le package cors."},
+		{q:"Que signifie le code HTTP 404 ?", o:["Succès","Ressource non trouvée","Erreur serveur interne"], a:1, expl:"404 = Not Found. 200 = OK. 201 = Created. 400 = Bad Request. 401 = Non authentifié. 500 = Erreur interne du serveur."},
+		{q:"L'HTTPS protège les données en...", o:["Les compressant","Les chiffrant via SSL/TLS","Les supprimant après envoi"], a:1, expl:"HTTPS chiffre la communication via SSL/TLS. Sans HTTPS, les données transitent en clair et peuvent être interceptées."}
+	]
+},
+{
+	id:11, emoji:"🎓", num:"Module 11", name:"Portfolio & emploi", xp:200,
+	desc:"Portfolio, CV tech, GitHub propre, prépa entretiens.",
+	badge:"💼", badgeName:"Prêt·e à postuler",
+	lessons:[
+		{h:"💼 Te rendre employable", html:"<ul><li>Un <b>portfolio</b> avec 3–4 projets soignés.</li><li>Un <b>GitHub</b> actif et bien rangé.</li><li>Un <b>CV tech</b> + LinkedIn à jour.</li><li>T'entraîner aux <b>entretiens</b> et aux exercices de code.</li></ul>"},
+		{h:"🎤 Les types d'entretiens techniques", html:"<ul><li><b>Live coding</b> — tu résous un problème en direct sur CoderPad. Parle à voix haute, les recruteurs notent ton raisonnement autant que la solution.</li><li><b>Take-home test</b> — mini-projet à rendre en 48–72h. Soigne la lisibilité et le README.</li><li><b>Code review</b> — tu lis et commentes du code existant. Montre que tu sais identifier les problèmes.</li></ul><p>💡 Pour t'entraîner : <b>LeetCode</b> (algo), <b>Frontend Mentor</b> (UI), <b>Codewars</b> (JS).</p>"},
+		{h:"💡 Ce que cherche vraiment un recruteur junior", html:"<p>Les recruteurs savent que tu n'as pas 5 ans d'expérience. Ils cherchent :</p><ul><li>✅ Des <b>projets concrets</b> (même simples) avec du code sur GitHub</li><li>✅ La <b>capacité à apprendre</b> vite et à poser les bonnes questions</li><li>✅ Une <b>curiosité sincère</b> pour la tech (veille, projets perso…)</li><li>✅ La <b>communication</b> : expliquer ce que tu fais et pourquoi</li></ul><p>Un CV sans projets vaut beaucoup moins qu'un portfolio imparfait mais réel.</p>"}
+	],
+	cours:{
+		objectifs:["Créer un portfolio qui met en valeur tes projets","Préparer un CV technique et un profil GitHub soigné","Se préparer aux entretiens techniques junior"],
+		vocab:[{t:"Portfolio",d:"Site qui présente tes projets avec captures, démo live et liens GitHub. Ta vitrine professionnelle."},{t:"README",d:"Fichier Markdown à la racine d'un repo : description, installation, screenshots, technologies."},{t:"Live coding",d:"Exercice d'entretien où tu résous un problème en direct. Parle à voix haute — le raisonnement compte autant que la solution."},{t:"Take-home",d:"Mini-projet d'entretien à rendre en 48-72h. Soigne la lisibilité du code et le README."},{t:"Soft skills",d:"Capacité à communiquer, expliquer ton raisonnement, reconnaître ses limites et apprendre vite."}],
+		html:"<p>Un bon portfolio junior :</p><ul><li>3-4 projets soignés plutôt que 10 projets bâclés</li><li>Chaque projet avec une démo live + lien GitHub + description courte</li><li>Un README clair sur chaque repo (technologies, installation, captures)</li><li>Un design simple et lisible — la lisibilité prime sur l'originalité</li></ul><p>Pour les entretiens : entraîne-toi sur <b>LeetCode</b> (algo), <b>Frontend Mentor</b> (UI), <b>Codewars</b> (JS). Parle à voix haute pendant les exercices.</p>",
+		erreurs:["Mettre trop de projets non terminés sur GitHub — 3 repos propres valent mieux que 15 abandonnés.","Sous-estimer l'importance du README — c'est la première chose qu'un recruteur lit avant le code.","Mentir sur ses compétences dans le CV — un entretien le révèle immédiatement."]
+	},
+	exo:"Assemble tes meilleurs projets dans un portfolio en ligne.",
+	project:"🏆 Boss final : <b>portfolio publié</b> + candidature envoyée. 🎉",
+	quiz:[
+		{q:"Le meilleur argument en entretien junior ?", o:["Des projets concrets à montrer","Rien, les diplômes suffisent","Un long CV vide de projets"], a:0, expl:"Des projets sur GitHub prouvent tes compétences bien mieux qu'un diplôme. Un recruteur peut voir ton code directement."},
+		{q:"Un portfolio sert à...", o:["Prouver ce que tu sais faire","Stocker des photos","Coder plus vite"], a:0, expl:"Le portfolio montre tes projets en action. C'est ta vitrine professionnelle. 3-4 projets soignés valent mieux que 10 bâclés."},
+		{q:"Pour préparer les entretiens techniques...", o:["Pratiquer des exercices de code (LeetCode, etc.)","Mémoriser Wikipedia","Dessiner des maquettes"], a:0, expl:"LeetCode, Codewars, Frontend Mentor… La pratique régulière de petits exercices prépare efficacement aux épreuves techniques."},
+		{q:"Un bon README de projet doit contenir...", o:["Description, installation, utilisation","Uniquement du code commenté","Le CV de l'auteur"], a:0, expl:"Un README complet : description, technologies utilisées, installation, utilisation, captures d'écran, et lien vers la démo."},
+		{q:"Pourquoi publier ses projets sur GitHub ?", o:["Montrer son travail et sa régularité","C'est obligatoire par la loi","Pour vendre des licences"], a:0, expl:"GitHub = preuve publique de ton travail. Les recruteurs regardent tes repos et ta régularité. C'est ton historique professionnel."}
+	]
+}
+];
+
+const GOAL = LEVELS[LEVELS.length-1].xp;
+const KEY = "fullstack_progress_v1";
+let state = load();
+
+function load(){
+	try {
+		const s = JSON.parse(localStorage.getItem(KEY)) || {done:[]};
+		if(!('freeUnlock' in s)) s.freeUnlock = false;
+		if(!('streak' in s)) s.streak = 1;
+		if(!('lastVisit' in s)) s.lastVisit = null;
+		return s;
+	} catch(e){ return {done:[], freeUnlock:false, streak:1, lastVisit:null}; }
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function isDone(id){ return state.done.includes(id); }
+function totalXP(){ return MODULES.filter(m=>isDone(m.id)).reduce((s,m)=>s+m.xp,0); }
+function currentLevel(xp){ let lv=LEVELS[0]; for(const l of LEVELS){ if(xp>=l.xp) lv=l; } return lv; }
+function nextLevel(xp){ for(const l of LEVELS){ if(xp<l.xp) return l; } return null; }
+
+function renderDash(){
+	const xp = totalXP();
+	const lv = currentLevel(xp);
+	const nx = nextLevel(xp);
+	document.getElementById("ringNum").textContent = lv.n;
+	document.getElementById("levelName").textContent = lv.emoji + " " + lv.name;
+	document.getElementById("levelNext").textContent = nx ? ("Niveau " + lv.n + " • " + (nx.xp - xp) + " XP → niv. " + nx.n) : "Niveau MAX atteint 🎉";
+	document.getElementById("xpLabel").textContent = xp + " XP";
+	document.getElementById("xpGoal").textContent = "/ " + GOAL + " XP";
+	const pct = Math.min(100, Math.round(xp/GOAL*100));
+	document.getElementById("xpFill").style.width = pct + "%";
+	// ring fill toward next level
+	let ringPct = 100;
+	if(nx){ const span = nx.xp - lv.xp; ringPct = span>0 ? Math.round((xp-lv.xp)/span*100) : 100; }
+	document.getElementById("ring").style.setProperty("--ring", ringPct + "%");
+	document.getElementById("badgeCount").textContent = state.done.length;
+	const streak = state.streak || 1;
+	const ds = document.getElementById('dashStreak');
+	if(ds) ds.textContent = (streak >= 2 ? '🔥' : '📅') + ' ' + streak + ' jour' + (streak > 1 ? 's' : '');
+}
+
+let modFilter = '';
+function filterModules(q){ modFilter = q.toLowerCase().trim(); renderModules(); }
+
+function renderModules(){
+	const g = document.getElementById("modGrid");
+	const mods = MODULES.filter(m => {
+		if(!modFilter) return true;
+		const q = modFilter;
+		if(m.name.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q)) return true;
+		if(m.lessons.some(l => l.h.toLowerCase().includes(q) || l.html.toLowerCase().includes(q))) return true;
+		if(m.quiz.some(qz => qz.q.toLowerCase().includes(q))) return true;
+		return false;
+	});
+	if(!mods.length){ g.innerHTML = '<p class="notion-muted" style="padding:20px;text-align:center;grid-column:1/-1">Aucun module ne correspond à cette recherche.</p>'; return; }
+	g.innerHTML = mods.map(m => {
+		const done = isDone(m.id);
+		const locked = !done && !isUnlocked(m.id);
+		const label = m.name + (done ? ' — Terminé' : locked ? ' — Verrouillé' : '');
+		return '<div class="mod-card'+(done?' done':'')+(locked?' mod-locked':'')+'" tabindex="0" role="button" aria-label="'+label+'" onclick="tryOpenMod('+m.id+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tryOpenMod('+m.id+')}">'+
+			'<div class="mod-emoji">'+m.emoji+'</div>'+
+			'<div class="mod-num">'+m.num+'</div>'+
+			'<div class="mod-name">'+m.name+'</div>'+
+			'<p class="mod-desc">'+m.desc+'</p>'+
+			'<div class="mod-foot"><span class="mod-xp">+'+m.xp+' XP</span><span class="notion-faint">'+(done?'Terminé ✅':locked?'Verrouillé':'À faire')+'</span></div>'+
+			'<div class="mod-progress"><div style="width:'+(done?100:0)+'%"></div></div>'+
+		'</div>';
+	}).join('');
+}
+
+function renderLevels(){
+	const xp = totalXP();
+	document.getElementById("levelGrid").innerHTML = LEVELS.map(l =>
+		'<div class="level-cell'+(xp>=l.xp?' reached':'')+'">'+
+			'<span class="lc-emoji">'+l.emoji+'</span>'+
+			'<div><div class="lc-title">Niv '+l.n+' — '+l.name+'</div><div class="lc-xp">'+l.xp+' XP</div></div>'+
+		'</div>'
+	).join('');
+}
+
+function renderBadges(){
+	document.getElementById("badgeGrid").innerHTML = MODULES.map(m =>
+		'<div class="badge-cell'+(isDone(m.id)?' earned':'')+'">'+
+			'<div class="b-emoji">'+m.badge+'</div>'+
+			'<div class="b-name">'+m.badgeName+'</div>'+
+		'</div>'
+	).join('');
+}
+
+function renderResume(){
+	const box = document.getElementById('resumeBox');
+	if(!box) return;
+	if(state.done.length === 0){ box.innerHTML = ''; return; }
+	const next = MODULES.find(m=>!isDone(m.id));
+	if(next){
+		box.innerHTML = '<div style="margin-top:16px"><button class="notion-button" data-size="large" onclick="tryOpenMod('+next.id+')" style="margin:0 auto">&#9654; Reprendre — '+next.emoji+' '+next.name+'</button></div>';
+	} else {
+		box.innerHTML = '<div class="notion-callout" data-tone="green" style="margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto"><div>&#127881;</div><div><strong>Parcours complet !</strong><p>Tous les modules sont termin&#233;s. Tu es pr&#234;t&#183;e &#224; postuler !</p></div></div>'+
+			'<div style="text-align:center;margin-top:14px"><button onclick="printCert()" class="notion-button" style="margin:0 auto">🎓 Imprimer mon certificat</button></div>';
+	}
+}
+
+function isUnlocked(id){
+	if(state.freeUnlock || id === 0) return true;
+	return isDone(id - 1);
+}
+
+function tryOpenMod(id){
+	if(!isUnlocked(id)){
+		toast('🔒 Termine "'+MODULES[id-1].name+'" pour débloquer ce module !');
+		return;
+	}
+	openMod(id);
+}
+
+function retryQuiz(id){
+	quizState = {};
+	const m = MODULES.find(x=>x.id===id);
+	pickQuiz(m);
+	renderQuiz(m);
+}
+
+function resetMod(id){
+	const m = MODULES.find(x=>x.id===id);
+	if(!confirm('Remettre "'+m.name+'" à zéro ?\n\nTa progression sur les autres modules reste intacte.')) return;
+	state.done = state.done.filter(d => d !== id);
+	save();
+	renderAll();
+	quizState = {};
+	pickQuiz(m);
+	renderQuiz(m);
+	updateValid(m);
+}
+
+function toggleFreeUnlock(val){
+	state.freeUnlock = val;
+	save();
+	renderModules();
+}
+
+function updateStreak(){
+	const today = new Date().toISOString().slice(0, 10);
+	if(!state.lastVisit){
+		state.streak = 1;
+	} else if(state.lastVisit !== today){
+		const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+		state.streak = (state.lastVisit === yesterday) ? (state.streak || 0) + 1 : 1;
+	}
+	state.lastVisit = today;
+	save();
+}
+
+function renderProfile(){
+	const el = document.getElementById('profileSection');
+	if(!el) return;
+	const xp = totalXP();
+	const lv = currentLevel(xp);
+	const doneMods = state.done.length;
+	const totalMods = MODULES.length;
+	const pct = Math.round(doneMods / totalMods * 100);
+	const streak = state.streak || 1;
+	const xpLeft = GOAL - xp;
+	const remainingMods = totalMods - doneMods;
+	const badges = state.done.length;
+	const streakMsg = streak >= 7 ? '🔥 En feu !' : streak >= 3 ? '💪 Continue !' : streak >= 2 ? '⬆️ Bonne série !' : 'Reviens demain';
+	el.innerHTML =
+		'<h2>👤 Mon profil</h2>' +
+		'<div class="profile-grid">' +
+			'<div class="notion-stat">' +
+				'<p class="notion-stat-label">Modules terminés</p>' +
+				'<p class="notion-stat-value">' + doneMods + '<span style="font-size:18px;font-weight:400;color:var(--notion-text-soft)">/' + totalMods + '</span></p>' +
+				'<p class="notion-stat-caption">' + (remainingMods > 0 ? '~' + (remainingMods * 2) + 'h restantes' : '🎓 Parcours complet !') + '</p>' +
+			'</div>' +
+			'<div class="notion-stat">' +
+				'<p class="notion-stat-label">XP gagnée</p>' +
+				'<p class="notion-stat-value">' + xp + '<span style="font-size:18px;font-weight:400;color:var(--notion-text-soft)"> XP</span></p>' +
+				'<p class="notion-stat-caption">' + (xpLeft > 0 ? xpLeft + ' XP restants' : '✨ Niveau max !') + '</p>' +
+			'</div>' +
+			'<div class="notion-stat">' +
+				'<p class="notion-stat-label">Niveau actuel</p>' +
+				'<p class="notion-stat-value" style="font-size:22px;letter-spacing:0">' + lv.emoji + ' Niv.' + lv.n + '</p>' +
+				'<p class="notion-stat-caption">' + lv.name + '</p>' +
+			'</div>' +
+			'<div class="notion-stat">' +
+				'<p class="notion-stat-label">Série de connexions</p>' +
+				'<p class="notion-stat-value">' + streak + '<span style="font-size:18px;font-weight:400;color:var(--notion-text-soft)"> jour' + (streak > 1 ? 's' : '') + '</span></p>' +
+				'<p class="notion-stat-caption">' + streakMsg + '</p>' +
+			'</div>' +
+		'</div>' +
+		'<div class="prog-bar-wrap">' +
+			'<div class="prog-bar-row"><span>Progression globale</span><span>' + doneMods + ' / ' + totalMods + ' modules — ' + pct + '%</span></div>' +
+			'<div class="prog-bar-track"><div class="prog-bar-fill" style="width:' + pct + '%"></div></div>' +
+		'</div>' +
+		(badges > 0 ? '<p class="notion-muted" style="font-size:13px;margin-top:10px">🎖️ ' + badges + '/12 badge' + (badges > 1 ? 's' : '') + ' débloqué' + (badges > 1 ? 's' : '') + '</p>' : '');
+}
+
+/* ===== Theme ===== */
+const THEME_KEY = 'fullstack_theme_v1';
+function initTheme(){
+	const saved = localStorage.getItem(THEME_KEY);
+	if(saved) document.documentElement.setAttribute('data-theme', saved);
+}
+function toggleTheme(){
+	const cur = document.documentElement.getAttribute('data-theme');
+	const dark = cur === 'dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+	const next = dark ? 'light' : 'dark';
+	document.documentElement.setAttribute('data-theme', next);
+	localStorage.setItem(THEME_KEY, next);
+	updateThemeBtn();
+}
+function updateThemeBtn(){
+	const btn = document.getElementById('themeToggle');
+	if(!btn) return;
+	const cur = document.documentElement.getAttribute('data-theme');
+	const dark = cur === 'dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+	btn.textContent = dark ? '☀️' : '🌙';
+	btn.setAttribute('aria-label', dark ? 'Passer en mode clair' : 'Passer en mode sombre');
+}
+
+/* ===== Export / Import ===== */
+function exportProgress(){
+	const json = JSON.stringify({...state, theme: localStorage.getItem(THEME_KEY), exportedAt: new Date().toISOString()}, null, 2);
+	const blob = new Blob([json], {type:'application/json'});
+	const a = document.createElement('a');
+	a.href = URL.createObjectURL(blob);
+	a.download = 'fullstack-progression.json';
+	a.click();
+	setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+function importProgress(){
+	const input = document.createElement('input');
+	input.type = 'file';
+	input.accept = '.json,application/json';
+	input.onchange = e => {
+		const file = e.target.files[0];
+		if(!file) return;
+		const reader = new FileReader();
+		reader.onload = ev => {
+			try {
+				const data = JSON.parse(ev.target.result);
+				if(!Array.isArray(data.done)) throw new Error('Champ "done" manquant ou invalide');
+				if(!confirm('Importer cette progression ? Ta progression actuelle sera remplacée.')) return;
+				state = {done: data.done.filter(id=>Number.isInteger(id)), freeUnlock: !!data.freeUnlock};
+				if(data.theme){ localStorage.setItem(THEME_KEY, data.theme); document.documentElement.setAttribute('data-theme', data.theme); updateThemeBtn(); }
+				save();
+				renderAll();
+				toast('✅ Progression importée avec succès !');
+			} catch(err){ alert('Fichier invalide : '+err.message); }
+		};
+		reader.readAsText(file);
+	};
+	input.click();
+}
+
+function printCert(){
+	const name = prompt('Ton prénom pour le certificat :', 'Alexis') || 'Alexis';
+	const xp = totalXP();
+	const lv = currentLevel(xp);
+	document.getElementById('certName').textContent = name;
+	document.getElementById('certXP').textContent = xp + ' XP';
+	document.getElementById('certLevel').textContent = lv.emoji + ' Niv.' + lv.n;
+	document.getElementById('certBadges').textContent = state.done.length + '/12';
+	document.getElementById('certDate').textContent = 'Délivré le ' + new Date().toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+	window.print();
+}
+
+function renderAll(){
+	renderDash(); renderModules(); renderLevels(); renderBadges(); renderResume(); renderProfile();
+	const cb = document.getElementById('freeUnlockToggle');
+	if(cb) cb.checked = !!state.freeUnlock;
+	updateThemeBtn();
+}
+
+let quizState = {};
+let activeQuiz = [];
+let _openTrigger = null;
+let _currentModId = null;
+const SANDBOX_KEY = 'fullstack_sandbox_v1';
+const NOTES_KEY = 'fullstack_notes_v1';
+function loadSandbox(id){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_KEY))||{}; return s[id]||null; }catch(e){ return null; } }
+function saveSandbox(id, code){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_KEY))||{}; s[id]=code; localStorage.setItem(SANDBOX_KEY,JSON.stringify(s)); }catch(e){} }
+function loadNotes(id){ try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; return s[id]||''; }catch(e){ return ''; } }
+function saveNotes(id){ const ta=document.getElementById('notesArea'); if(!ta) return; try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; s[id]=ta.value; localStorage.setItem(NOTES_KEY,JSON.stringify(s)); }catch(e){} }
+function switchTab(btn, tab){
+	btn.closest('.mod-tabs').querySelectorAll('.mod-tab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+	const body = btn.closest('.sheet-body');
+	body.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+	btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+	const panel = document.getElementById('tab-'+tab);
+	if(panel) panel.classList.add('active');
+}
+
+function pickQuiz(m){
+	const pool = m.quiz.slice();
+	activeQuiz = [];
+	while(activeQuiz.length < Math.min(2, pool.length)){
+		const i = Math.floor(Math.random() * pool.length);
+		activeQuiz.push(pool.splice(i, 1)[0]);
+	}
+}
+
+function openMod(id){
+	_openTrigger = document.activeElement;
+	_currentModId = id;
+	const m = MODULES.find(x=>x.id===id);
+	quizState = {};
+	pickQuiz(m);
+	document.getElementById("mTitle").textContent = m.emoji + " " + m.name;
+	let h = '<p class="notion-muted" style="margin-bottom:12px">'+m.num+' • <span class="mod-xp">+'+m.xp+' XP</span></p>';
+
+	// Onglets
+	const hasSandbox = !!m.starter;
+	h += '<div class="mod-tabs" role="tablist">';
+	h += '<button class="mod-tab active" role="tab" aria-selected="true" onclick="switchTab(this,\'cours\')">📖 Cours</button>';
+	h += '<button class="mod-tab" role="tab" aria-selected="false" onclick="switchTab(this,\'lecons\')">📚 Leçons</button>';
+	if(hasSandbox) h += '<button class="mod-tab" role="tab" aria-selected="false" onclick="switchTab(this,\'sandbox\')">🎮 Bac à sable</button>';
+	h += '<button class="mod-tab" role="tab" aria-selected="false" onclick="switchTab(this,\'quiz\')">✅ Quiz</button>';
+	h += '</div>';
+
+	// ── Panneau Cours ─────────────────────────────────────
+	h += '<div class="tab-panel active" id="tab-cours">';
+	if(m.cours){
+		h += '<div class="les-h">🎯 Objectifs</div>';
+		h += '<ul class="obj-list">'+m.cours.objectifs.map(o=>'<li>'+o+'</li>').join('')+'</ul>';
+		h += '<div class="les-h">📝 Vocabulaire clé</div>';
+		h += '<div class="vocab-grid">'+m.cours.vocab.map(v=>'<div class="vocab-card"><div class="vocab-term">'+v.t+'</div><div class="vocab-def">'+v.d+'</div></div>').join('')+'</div>';
+		h += '<div class="les-h">📖 Le cours</div>';
+		h += m.cours.html;
+		if(m.cours.erreurs && m.cours.erreurs.length){
+			h += '<div class="les-h">⚠️ Erreurs fréquentes</div>';
+			h += '<ul class="error-list">'+m.cours.erreurs.map(e=>'<li>'+e+'</li>').join('')+'</ul>';
+		}
+	} else {
+		h += '<p class="notion-muted" style="padding:12px 0">Contenu du cours à venir.</p>';
+	}
+	h += '</div>';
+
+	// ── Panneau Leçons ────────────────────────────────────
+	h += '<div class="tab-panel" id="tab-lecons">';
+	m.lessons.forEach(l => { h += '<div class="les-h">'+l.h+'</div>' + l.html; });
+	h += '<div class="les-h">💪 Exercice</div><div class="exo">'+m.exo+'</div>';
+	h += '<div class="les-h">🏆 Défi mini-projet (boss de fin)</div><div class="notion-callout" data-tone="orange"><div>🎯</div><div><p>'+m.project+'</p></div></div>';
+	h += '</div>';
+
+	// ── Panneau Bac à sable ───────────────────────────────
+	if(hasSandbox){
+		h += '<div class="tab-panel" id="tab-sandbox">';
+		h += '<div class="les-h" style="justify-content:space-between">🎮 Bac à sable — essaie en direct<button onclick="resetSandbox('+id+')" class="btn-reset" style="font-size:11px;padding:3px 8px" aria-label="Réinitialiser le code du bac à sable">↺ Réinitialiser</button></div>';
+		h += '<div class="sandbox"><textarea id="sandboxCode" oninput="updateSandbox()" aria-label="Éditeur de code" spellcheck="false"></textarea><iframe id="sandboxFrame" title="Aperçu en direct" sandbox="allow-scripts"></iframe></div>';
+		h += '</div>';
+	}
+
+	// ── Panneau Quiz ──────────────────────────────────────
+	h += '<div class="tab-panel" id="tab-quiz">';
+	h += '<div id="quizBox"></div>';
+	h += '<div id="validBox" style="margin-top:18px"></div>';
+	h += '</div>';
+
+	// ── Carnet de bord (toujours visible) ────────────────
+	h += '<div class="notes-section"><div class="les-h">📓 Mon carnet de bord</div>';
+	h += '<textarea class="notes-area" id="notesArea" placeholder="Tes notes, ce que tu as retenu, tes questions…" oninput="saveNotes('+id+')" aria-label="Carnet de bord"></textarea></div>';
+
+	document.getElementById("mBody").innerHTML = h;
+	if(hasSandbox){
+		document.getElementById('sandboxCode').value = loadSandbox(id) || m.starter;
+		updateSandbox();
+	}
+	const na = document.getElementById('notesArea');
+	if(na) na.value = loadNotes(id);
+	renderQuiz(m);
+	document.getElementById("ov").classList.add("open");
+	requestAnimationFrame(()=>{ const btn = document.querySelector('.x-close'); if(btn) btn.focus(); });
+}
+
+function updateSandbox(){
+	const ta = document.getElementById('sandboxCode');
+	const fr = document.getElementById('sandboxFrame');
+	if(!ta || !fr) return;
+	fr.srcdoc = ta.value;
+	if(_currentModId !== null) saveSandbox(_currentModId, ta.value);
+}
+
+function resetSandbox(id){
+	const m = MODULES.find(x=>x.id===id);
+	if(!m || !m.starter) return;
+	const ta = document.getElementById('sandboxCode');
+	if(!ta) return;
+	ta.value = m.starter;
+	saveSandbox(id, m.starter);
+	updateSandbox();
+}
+
+function renderQuiz(m){
+	const box = document.getElementById("quizBox");
+	box.innerHTML = activeQuiz.map((qq,qi) =>
+		'<div class="q"><div class="q-text">'+(qi+1)+'. '+qq.q+'</div>'+
+		qq.o.map((opt,oi)=>'<button class="q-opt" onclick="answer('+m.id+','+qi+','+oi+')" id="q'+qi+'o'+oi+'">'+opt+'</button>').join('')+
+		'<div class="quiz-expl" id="expl'+qi+'"></div>'+
+		'</div>'
+	).join('');
+	updateValid(m);
+}
+
+function answer(mid, qi, oi){
+	const m = MODULES.find(x=>x.id===mid);
+	if(quizState[qi]!==undefined) return;
+	const correct = activeQuiz[qi].a;
+	quizState[qi] = (oi===correct);
+	activeQuiz[qi].o.forEach((_,k)=>{
+		const el = document.getElementById('q'+qi+'o'+k);
+		el.classList.add('disabled');
+		if(k===correct) el.classList.add('correct');
+		if(k===oi && oi!==correct) el.classList.add('wrong');
+	});
+	const expl = activeQuiz[qi].expl;
+	if(expl){ const el=document.getElementById('expl'+qi); if(el){ el.textContent=expl; el.style.display='block'; } }
+	updateValid(m);
+}
+
+function quizPassed(m){ return activeQuiz.every((_,i)=>quizState[i]===true); }
+function quizAnswered(m){ return activeQuiz.every((_,i)=>quizState[i]!==undefined); }
+
+function updateValid(m){
+	const box = document.getElementById("validBox");
+	if(isDone(m.id)){
+		box.innerHTML = '<div class="notion-callout" data-tone="green"><div>✅</div><div><strong>Module terminé !</strong><p>Tu as gagné '+m.xp+' XP et le badge '+m.badge+' '+m.badgeName+'.</p></div></div>'+
+			'<button class="mod-reset-btn" onclick="resetMod('+m.id+')">↩ Remettre ce module à zéro</button>';
+		return;
+	}
+	if(quizAnswered(m) && quizPassed(m)){
+		box.innerHTML = '<button onclick="complete('+m.id+')" style="width:100%;font-size:15px;padding:12px">🎯 Valider le module (+'+m.xp+' XP)</button>';
+	} else if(quizAnswered(m)){
+		box.innerHTML = '<div class="notion-callout" data-tone="red"><div>🔁</div><div><p>Quelques erreurs au quiz. Relis la leçon ci-dessus et réessaie !</p></div></div>'+
+			'<button onclick="retryQuiz('+m.id+')" style="width:100%;margin-top:10px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">🔄 Réessayer le quiz</button>';
+	} else {
+		box.innerHTML = '<p class="notion-faint">Réponds au quiz pour pouvoir valider le module.</p>';
+	}
+}
+
+function complete(id){
+	if(!isDone(id)){
+		const prevLv = currentLevel(totalXP());
+		state.done.push(id);
+		save();
+		celebrate();
+		toast('🎉 +' + MODULES.find(m=>m.id===id).xp + ' XP ! Module validé');
+		const newLv = currentLevel(totalXP());
+		if(newLv.n > prevLv.n) setTimeout(()=>toast('🆙 Niveau '+newLv.n+' — '+newLv.emoji+' '+newLv.name+' !'), 2800);
+	}
+	renderAll();
+	const m = MODULES.find(x=>x.id===id);
+	updateValid(m);
+}
+
+function closeMod(){
+	document.getElementById("ov").classList.remove("open");
+	_currentModId = null;
+	if(_openTrigger && typeof _openTrigger.focus === 'function'){ _openTrigger.focus(); _openTrigger = null; }
+}
+
+function resetAll(){ if(confirm("Réinitialiser toute ta progression ?")){ state={done:[],freeUnlock:false,streak:1,lastVisit:new Date().toISOString().slice(0,10)}; save(); renderAll(); } }
+
+let toastT;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600); }
+
+function celebrate(){
+	if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	const colors=['#097fe8','#9b5de5','#f15bb5','#00bbf9','#00f5d4','#fee440'];
+	for(let i=0;i<60;i++){
+		const c=document.createElement('div'); c.className='confetti';
+		c.style.left=Math.random()*100+'vw';
+		c.style.background=colors[i%colors.length];
+		c.style.transform='rotate('+Math.random()*360+'deg)';
+		document.body.appendChild(c);
+		const dur=2000+Math.random()*1500;
+		c.animate([{top:'-20px',opacity:1},{top:'100vh',opacity:.9}],{duration:dur,easing:'cubic-bezier(.3,.7,.5,1)'});
+		setTimeout(()=>c.remove(),dur);
+	}
+}
+
+document.addEventListener('keydown', e => {
+	const ov = document.getElementById('ov');
+	if(!ov.classList.contains('open')) return;
+	if(e.key === 'Escape'){ closeMod(); return; }
+	if(e.key === 'Tab'){
+		const sheet = document.querySelector('.sheet');
+		const focusables = [...sheet.querySelectorAll(
+			'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+		)];
+		if(!focusables.length) return;
+		const first = focusables[0], last = focusables[focusables.length-1];
+		if(e.shiftKey){ if(document.activeElement===first){ e.preventDefault(); last.focus(); } }
+		else { if(document.activeElement===last){ e.preventDefault(); first.focus(); } }
+	}
+});
+initTheme();
+updateStreak();
+renderAll();
+</script>
+
+<!-- ── PWA : enregistrement du Service Worker ─────────────────────────────── -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[SW] Enregistré — scope :', reg.scope))
+      .catch(err => console.warn('[SW] Échec d\'enregistrement :', err));
+  });
+}
+</script>
+</body>
+</html>
