@@ -1155,6 +1155,17 @@ section:first-child {
 .vocab-card { border:1px solid var(--notion-border-soft); border-radius:8px; padding:12px; background:var(--notion-surface); }
 .vocab-term { font-weight:700; color:var(--notion-blue); margin-bottom:4px; font-size:13px; }
 .vocab-def { font-size:12px; color:var(--notion-text-soft); line-height:1.5; }
+/* ── Flashcards ──────────────────────────────────────────── */
+.flashcard { border:1px solid var(--notion-border-soft); border-radius:10px; padding:12px 14px; background:var(--notion-surface); cursor:pointer; transition:background 120ms; }
+.flashcard:hover { background:var(--notion-gray-bg); }
+.fc-term { font-weight:700; color:var(--notion-blue); font-size:13px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.fc-hint { font-size:11px; color:var(--notion-text-soft); margin-top:3px; }
+.fc-arrow { display:inline-block; transition:transform 200ms; color:var(--notion-text-soft); font-size:11px; flex-shrink:0; }
+.fc-def { font-size:12px; color:var(--notion-text-soft); line-height:1.5; margin-top:8px; padding-top:8px; border-top:1px solid var(--notion-border-soft); display:none; }
+.flashcard.revealed .fc-def { display:block; }
+.flashcard.revealed .fc-arrow { transform:rotate(90deg); }
+.flashcard.revealed .fc-hint { display:none; }
+.fc-actions { display:flex; gap:8px; margin-bottom:10px; }
 .error-list { list-style:none; padding:0; margin:10px 0 16px; }
 .error-list li { display:flex; gap:10px; align-items:flex-start; padding:8px 0; font-size:14px; border-bottom:1px solid var(--notion-border-soft); line-height:1.5; }
 .error-list li:last-child { border-bottom:0; }
@@ -1174,6 +1185,14 @@ section:first-child {
 .quiz-recap-wrong { color:var(--notion-red); font-size:12px; margin-bottom:2px; }
 .quiz-recap-right { color:#2a9d76; font-size:12px; }
 .quiz-recap-expl { font-size:12px; color:var(--notion-text-soft); margin-top:4px; padding:6px 10px; border-radius:6px; background:var(--notion-blue-bg); border-left:3px solid var(--notion-blue); }
+/* ── Timer quiz mode entretien ───────────────────────────── */
+.quiz-timer-bar { display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid var(--notion-border-soft); border-radius:8px; margin-bottom:14px; background:var(--notion-surface); }
+.quiz-timer-label { font-size:12px; color:var(--notion-text-soft); flex:1; }
+.quiz-timer-val { font-size:22px; font-weight:700; font-variant-numeric:tabular-nums; color:var(--notion-blue); min-width:40px; text-align:right; }
+.quiz-timer-val.urgent { color:var(--notion-orange); animation:timerPulse .5s infinite alternate; }
+@keyframes timerPulse { from{opacity:1} to{opacity:.4} }
+.quiz-timer-toggle { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid var(--notion-border); background:var(--notion-surface); color:var(--notion-text-soft); cursor:pointer; }
+.quiz-timer-toggle[data-on="1"] { background:var(--notion-orange); color:#fff; border-color:transparent; }
 
 /* ── Modale confetti finale (parcours complet) ──────────── */
 .final-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity 300ms ease; }
@@ -1471,6 +1490,13 @@ const MODULES = [
 "<li><code>500 Internal Server Error</code> — erreur côté serveur</li></ul>"+
 "<p><b>Dans un vrai projet</b>, lire le code HTTP dans l'onglet Network est la première chose à faire quand quelque chose ne fonctionne pas.</p>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : déboguer son premier bug réseau</b></p>"+
+"<p>La version qui plante silencieusement :</p>"+
+"<pre class='notion-code'><code>// Mauvais : aucune vérification du code HTTP\nconst res = await fetch('/api/data');\nconst data = await res.json();\n// → SyntaxError si l'API renvoie une page 404 en HTML</code></pre>"+
+"<p>Ce qu'on fait en vrai projet :</p>"+
+"<pre class='notion-code'><code>// Correct : vérifier le statut avant de lire la réponse\nconst res = await fetch('/api/data');\nif (!res.ok) throw new Error('Erreur HTTP ' + res.status);\nconst data = await res.json();\n// → l'onglet Network montre la requête, l'URL, le code HTTP dès l'ouverture</code></pre>"+
+"<p>Réflexe à adopter : ouvrir Network <b>avant</b> de chercher sur Google — la réponse est souvent directement visible dans les headers.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Comprendre HTTP et les codes de statut te servira dès que tu appelleras une API en JavaScript (M5).</li>"+
 "<li>Le DOM, que tu vas voir en M4, est directement la représentation en mémoire du HTML que tu construis ici.</li>"+
@@ -1558,6 +1584,13 @@ const MODULES = [
 "<pre class='notion-code'><code>&lt;!-- Mauvais --&gt;\n&lt;img src='photo.jpg'&gt;\n\n&lt;!-- Correct --&gt;\n&lt;img src='photo.jpg' alt='Portrait de l\'équipe en 2024'&gt;</code></pre>"+
 "<p><b>❌ Plusieurs &lt;h1&gt; sur la même page</b> — un seul est autorisé, les autres doivent être h2, h3…</p>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : structure non sémantique vs sémantique</b></p>"+
+"<p>Ce que beaucoup de débutants écrivent :</p>"+
+"<pre class='notion-code'><code>&lt;!-- Mauvais : des div pour tout, aucune info sémantique --&gt;\n&lt;div class='header'&gt;&lt;div class='logo'&gt;Mon site&lt;/div&gt;&lt;/div&gt;\n&lt;div class='nav'&gt;&lt;div class='lien'&gt;Accueil&lt;/div&gt;&lt;/div&gt;\n&lt;div class='content'&gt;&lt;div class='article'&gt;Mon texte&lt;/div&gt;&lt;/div&gt;\n&lt;div class='footer'&gt;2024&lt;/div&gt;</code></pre>"+
+"<p>Ce qu'on utilise en vrai projet :</p>"+
+"<pre class='notion-code'><code>&lt;!-- Correct : balises qui décrivent le sens du contenu --&gt;\n&lt;header&gt;&lt;h1&gt;Mon site&lt;/h1&gt;&lt;/header&gt;\n&lt;nav&gt;&lt;a href='/'&gt;Accueil&lt;/a&gt;&lt;/nav&gt;\n&lt;main&gt;\n  &lt;article&gt;\n    &lt;h2&gt;Titre de l'article&lt;/h2&gt;\n    &lt;p&gt;Mon texte&lt;/p&gt;\n  &lt;/article&gt;\n&lt;/main&gt;\n&lt;footer&gt;&lt;p&gt;&copy; 2024&lt;/p&gt;&lt;/footer&gt;</code></pre>"+
+"<p>Bénéfice immédiat : meilleur SEO, lecteurs d'écran compréhensibles, code lisible sans commentaires.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Les balises que tu apprends ici sont celles que React utilise dans le JSX — tu les retrouveras partout en M7.</li>"+
 "<li>La sémantique HTML aide le SEO et l'accessibilité, deux sujets que tu consolideras en CSS (M2) et en JavaScript (M3).</li>"+
@@ -1642,6 +1675,13 @@ const MODULES = [
 "<p><b>❌ Sélecteur trop spécifique (difficile à surcharger) :</b></p>"+
 "<pre class='notion-code'><code>/* Mauvais */\n#page .section ul li a.lien { color: red; }\n\n/* Correct */\n.lien-nav { color: red; }</code></pre>"+
 "<p><b>❌ Oublier box-sizing</b> — sans <code>box-sizing: border-box</code>, padding et border s'ajoutent à la largeur déclarée.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : CSS éparpillé vs CSS centralisé avec variables</b></p>"+
+"<p>Au début, on répète les valeurs partout :</p>"+
+"<pre class='notion-code'><code>/* Mauvais : couleur en dur à 15 endroits */\n.btn    { background: #097fe8; }\n.titre  { color: #097fe8; border-left: 4px solid #097fe8; }\n.badge  { background: #097fe8; }\n/* Changer la couleur = modifier 15 lignes manuellement */</code></pre>"+
+"<p>Avec des variables CSS, un seul endroit à modifier :</p>"+
+"<pre class='notion-code'><code>/* Correct */\n:root {\n  --bleu: #097fe8;\n  --rayon: 8px;\n  --espacement: 16px;\n}\n.btn    { background: var(--bleu); border-radius: var(--rayon); }\n.titre  { color: var(--bleu); border-left: 4px solid var(--bleu); }\n.badge  { background: var(--bleu); padding: var(--espacement); }\n/* Changer --bleu met à jour toute l'interface */</code></pre>"+
+"<p>C'est aussi la base du thème clair/sombre : on redéfinit les variables selon l'attribut <code>data-theme</code>.</p>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Flexbox et Grid que tu maîtrises ici sont utilisés dans chaque composant React (M7).</li>"+
@@ -1802,6 +1842,13 @@ localStorage.clear(); // tout effacer</code></pre><p><code>localStorage</code> p
 "<li>Les événements se propagent du bas vers le haut (bubbling) — pense à <code>stopPropagation</code> si besoin</li>"+
 "<li>LocalStorage ne stocke que des <b>chaînes</b> — utilise <code>JSON.stringify</code> et <code>JSON.parse</code></li></ul>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : 50 écouteurs vs délégation d'événements</b></p>"+
+"<p>Le réflexe initial — un écouteur par bouton :</p>"+
+"<pre class='notion-code'><code>// Mauvais : O(n) écouteurs, cassé pour les éléments ajoutés dynamiquement\ndocument.querySelectorAll('.btn-suppr').forEach(btn => {\n  btn.addEventListener('click', () => btn.closest('li').remove());\n});\n// Si on ajoute un li dynamiquement → son bouton n'a pas d'écouteur !</code></pre>"+
+"<p>En vrai projet, un seul écouteur sur le parent :</p>"+
+"<pre class='notion-code'><code>// Correct : délégation — fonctionne même pour les éléments futurs\ndocument.getElementById('liste').addEventListener('click', e => {\n  if (e.target.matches('.btn-suppr')) {\n    e.target.closest('li').remove();\n  }\n});</code></pre>"+
+"<p>Résultat : 1 écouteur au lieu de 50, et ça marche même pour les <code>&lt;li&gt;</code> créés après le chargement.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Manipuler le DOM directement est ce que React remplace avec son DOM virtuel — comprendre l'un aide à comprendre l'autre (M7).</li>"+
 "<li>localStorage que tu utilises ici sera remplacé par une vraie BDD côté serveur en M9.</li>"+
@@ -1904,6 +1951,13 @@ const data = await fetch('/api/data').then(r => r.json());</code></pre><p><b>Rè
 "<li><code>await</code> sans <code>try/catch</code> laisse les erreurs silencieuses</li>"+
 "<li>Deux <code>await</code> en séquence = requêtes en série — utilise <code>Promise.all</code> pour les paralléliser</li></ul>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : fetch sans filet vs fetch robuste</b></p>"+
+"<p>La version qui plante (ou pire, reste silencieuse) :</p>"+
+"<pre class='notion-code'><code>// Mauvais : aucune gestion d'erreur\nasync function loadUser(id) {\n  const res = await fetch('/api/users/' + id);\n  const data = await res.json(); // SyntaxError si 404 renvoie du HTML\n  afficher(data);\n}</code></pre>"+
+"<p>La version qu'on écrit en production :</p>"+
+"<pre class='notion-code'><code>// Correct : erreur HTTP séparée de l'erreur réseau\nasync function loadUser(id) {\n  try {\n    const res = await fetch('/api/users/' + id);\n    if (!res.ok) throw new Error('HTTP ' + res.status);\n    const data = await res.json();\n    afficher(data);\n  } catch (err) {\n    afficherMessage('Impossible de charger le profil.');\n    console.error('[loadUser]', err);\n  }\n}</code></pre>"+
+"<p>Règle : toujours séparer l'erreur réseau (<code>catch</code>) de l'erreur HTTP (<code>!res.ok</code>) — elles n'ont pas la même cause ni le même traitement.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Les appels <code>fetch</code> que tu fais ici vers des APIs publiques, tu les feras en M8 vers <b>ta propre API Express</b>.</li>"+
 "<li><code>async/await</code> est le pattern universel : tu le retrouveras dans React (M7), Node (M8) et MongoDB (M9).</li>"+
@@ -1987,6 +2041,13 @@ build/
 "<p><b>❌ .env commité par erreur :</b></p>"+
 "<pre class='notion-code'><code># Vérifier avant tout push\ngit status\n# Si .env est suivi par Git :\ngit rm --cached .env\necho '.env' >> .gitignore\ngit commit -m 'chore: remove .env from tracking'</code></pre>"+
 "<p><b>❌ Message de commit vide ou inutile</b> : <code>git commit -m 'fix'</code> ne permet pas de comprendre ce qui a changé. Préfère <code>'fix: corrige le bug d'affichage de la date'</code>.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : workflow git brouillon vs propre</b></p>"+
+"<p>Ce qu'on fait au début (et qu'il faut vite arrêter) :</p>"+
+"<pre class='notion-code'><code># Mauvais : tout sur main, messages incompréhensibles\ngit add .\ngit commit -m 'modif'\ngit add . && git commit -m 'encore une modif'\ngit add . && git commit -m 'fix'</code></pre>"+
+"<p>Ce qu'on fait dès le premier projet sérieux :</p>"+
+"<pre class='notion-code'><code># Correct : branche par feature, messages clairs\ngit checkout -b feat/formulaire-contact\n# ... modifications ...\ngit add src/contact.js src/contact.css\ngit commit -m 'feat: ajoute formulaire de contact avec validation HTML5'\ngit checkout main\ngit merge feat/formulaire-contact\ngit branch -d feat/formulaire-contact</code></pre>"+
+"<p>En équipe, un historique propre = code reviews plus rapides et moins de conflits à résoudre.</p>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>GitHub te servira à déployer automatiquement avec Vercel et Render (M10) — chaque <code>git push</code> déclenche un déploiement.</li>"+
@@ -2400,6 +2461,13 @@ await Tache.collection.indexes();</code></pre><p>Un index accélère les lecture
 "<p><b>❌ findById sans vérifier null (Mongoose) :</b></p>"+
 "<pre class='notion-code'><code>// Mauvais : plante si l'id n'existe pas\nconst tache = await Tache.findById(req.params.id);\nres.json(tache.titre); // Cannot read properties of null\n\n// Correct\nconst tache = await Tache.findById(req.params.id);\nif (!tache) return res.status(404).json({ message: 'Non trouvé' });\nres.json(tache);</code></pre>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : schéma Mongoose sans contrainte vs schéma production</b></p>"+
+"<p>Le schéma minimal qui laisse passer n'importe quoi :</p>"+
+"<pre class='notion-code'><code>// Mauvais : aucune validation, n'importe quoi peut être inséré\nconst TacheSchema = new mongoose.Schema({\n  titre: String,\n  fait: Boolean\n});</code></pre>"+
+"<p>Le schéma qu'on utilise en production :</p>"+
+"<pre class='notion-code'><code>// Correct : validation, valeurs par défaut, index\nconst TacheSchema = new mongoose.Schema({\n  titre:  { type: String, required: true, trim: true, maxlength: 200 },\n  fait:   { type: Boolean, default: false },\n  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }\n}, { timestamps: true });\n\nTacheSchema.index({ userId: 1, fait: 1 }); // requêtes fréquentes accélérées</code></pre>"+
+"<p>Avantage : la validation en schéma évite de dupliquer les vérifications dans chaque route.</p>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Ce que ce module prépare</b></p>"+
 "<ul><li>Mongoose et les schémas que tu maîtrises ici seront directement utilisés dans ton API Express full stack (M10).</li>"+
 "<li>La gestion des erreurs BDD (null, transactions) se retrouve dans la gestion d'erreurs globale Express.</li>"+
@@ -2651,6 +2719,13 @@ npm install && npm run dev
 "<li><b>❌ Portfolio sans démo live</b> — un lien cassé ou absent est éliminatoire. Déploie AVANT de candidater.</li>"+
 "<li><b>❌ Mettre son premier code sur GitHub</b> — seulement tes meilleurs projets refactorisés méritent d'être en avant. Cache ou archive les anciens.</li>"+
 "<li><b>❌ Négliger le message de commit</b> — les recruteurs regardent l'historique Git de tes projets. Des commits propres montrent du sérieux.</li></ul>""+
+"<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
+"<p><b>Étude de cas : README vide vs README qui convainc un recruteur</b></p>"+
+"<p>Ce que beaucoup laissent dans leur repo :</p>"+
+"<pre class='notion-code'><code># Mon projet\nApplication todo list.</code></pre>"+
+"<p>Ce qu'un recruteur veut voir :</p>"+
+"<pre class='notion-code'><code># TaskFlow — To-Do List Full Stack\n\n**Demo live →** https://taskflow.vercel.app\n\n## Stack\nReact · Node.js · Express · MongoDB · JWT\n\n## Fonctionnalités\n- Authentification (inscription / connexion / JWT)\n- CRUD tâches avec persistance MongoDB\n- Filtres (toutes / actives / terminées)\n\n## Lancer en local\n```bash\nnpm install &amp;&amp; npm run dev   # frontend (port 5173)\ncd server &amp;&amp; npm start      # backend (port 3001)\n```\n\n![aperçu](./screenshot.png)</code></pre>"+
+"<p>5 minutes de README changent complètement la perception du projet — c'est souvent la différence entre un entretien et un silence.</p>""+
 "<hr style='border:1px dashed var(--notion-border);margin:16px 0'/>"+
 "<p><b>📌 Tu as terminé le parcours</b></p>"+
 "<ul><li>Tu as maintenant les bases solides d'un développeur web full stack junior.</li>"+
@@ -2953,6 +3028,14 @@ function retryQuiz(id){
 	renderQuiz(m);
 }
 
+function retryWrongOnly(id){
+	const wrong = activeQuiz.filter((_,i) => quizState[i] === false);
+	quizState = {};
+	activeQuiz = wrong;
+	const m = MODULES.find(x=>x.id===id);
+	renderQuiz(m);
+}
+
 function resetMod(id){
 	const m = MODULES.find(x=>x.id===id);
 	if(!confirm('Remettre "'+m.name+'" à zéro ?\n\nTa progression sur les autres modules reste intacte.')) return;
@@ -3249,6 +3332,59 @@ function renderAll(){
 let quizState = {};
 let activeQuiz = [];
 let _openTrigger = null;
+let quizTimerMode = false;
+let quizTimerInterval = null;
+let quizTimerRemaining = 0;
+
+function startQuizTimer(mid){
+	clearQuizTimer();
+	if(!quizTimerMode) return;
+	quizTimerRemaining = activeQuiz.length * 30;
+	_updateTimerDisplay();
+	const valEl = document.getElementById('quizTimerVal');
+	if(valEl) valEl.style.display = '';
+	quizTimerInterval = setInterval(() => {
+		quizTimerRemaining--;
+		_updateTimerDisplay();
+		if(quizTimerRemaining <= 0){
+			clearQuizTimer();
+			_timeExpired(mid);
+		}
+	}, 1000);
+}
+
+function clearQuizTimer(){
+	if(quizTimerInterval){ clearInterval(quizTimerInterval); quizTimerInterval = null; }
+	const valEl = document.getElementById('quizTimerVal');
+	if(valEl){ valEl.style.display = 'none'; valEl.className = 'quiz-timer-val'; }
+}
+
+function _updateTimerDisplay(){
+	const el = document.getElementById('quizTimerVal');
+	if(!el) return;
+	el.textContent = quizTimerRemaining + 's';
+	el.className = 'quiz-timer-val' + (quizTimerRemaining <= 10 ? ' urgent' : '');
+	el.style.display = '';
+}
+
+function _timeExpired(mid){
+	const m = MODULES.find(x=>x.id===mid);
+	activeQuiz.forEach((_,qi)=>{
+		if(quizState[qi] === undefined){
+			const wrongIdx = activeQuiz[qi].o.findIndex((_,k) => k !== activeQuiz[qi].a);
+			answer(mid, qi, wrongIdx);
+		}
+	});
+	toast('⏱ Temps écoulé !');
+}
+
+function toggleTimerMode(mid){
+	quizTimerMode = !quizTimerMode;
+	const btn = document.getElementById('timerToggleBtn');
+	if(btn){ btn.dataset.on = quizTimerMode ? '1' : '0'; btn.textContent = quizTimerMode ? '⏱ ON' : '⏱ OFF'; }
+	clearQuizTimer();
+	if(quizTimerMode) startQuizTimer(mid);
+}
 let _currentModId = null;
 const SANDBOX_KEY = 'fullstack_sandbox_v1';
 const NOTES_KEY = 'fullstack_notes_v1';
@@ -3256,6 +3392,23 @@ function loadSandbox(id){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_K
 function saveSandbox(id, code){ try{ const s=JSON.parse(localStorage.getItem(SANDBOX_KEY))||{}; s[id]=code; localStorage.setItem(SANDBOX_KEY,JSON.stringify(s)); }catch(e){} }
 function loadNotes(id){ try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; return s[id]||''; }catch(e){ return ''; } }
 function saveNotes(id){ trackQuest('notes', 1); const ta=document.getElementById('notesArea'); if(!ta) return; try{ const s=JSON.parse(localStorage.getItem(NOTES_KEY))||{}; s[id]=ta.value; localStorage.setItem(NOTES_KEY,JSON.stringify(s)); }catch(e){} }
+
+function exportNotes(id){
+	const m = MODULES.find(x=>x.id===id);
+	let notes = {};
+	try{ notes = JSON.parse(localStorage.getItem(NOTES_KEY))||{}; }catch(e){}
+	const allModuleNotes = MODULES.map(mod => {
+		const txt = notes[mod.id];
+		return txt ? '## '+mod.emoji+' '+mod.name+'\n\n'+txt : '';
+	}).filter(Boolean).join('\n\n---\n\n');
+	const content = '# 📓 Mon carnet de bord — Dev Full Stack\n\n'+(allModuleNotes||'(aucune note enregistrée)');
+	const blob = new Blob([content], {type:'text/markdown'});
+	const a = document.createElement('a');
+	a.href = URL.createObjectURL(blob);
+	a.download = 'carnet-dev-fullstack.md';
+	a.click();
+	URL.revokeObjectURL(a.href);
+}
 function switchTab(btn, tab){
 	btn.closest('.mod-tabs').querySelectorAll('.mod-tab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
 	const body = btn.closest('.sheet-body');
@@ -3299,8 +3452,18 @@ function openMod(id){
 	if(m.cours){
 		h += '<div class="les-h">🎯 Objectifs</div>';
 		h += '<ul class="obj-list">'+m.cours.objectifs.map(o=>'<li>'+o+'</li>').join('')+'</ul>';
-		h += '<div class="les-h">📝 Vocabulaire clé</div>';
-		h += '<div class="vocab-grid">'+m.cours.vocab.map(v=>'<div class="vocab-card"><div class="vocab-term">'+v.t+'</div><div class="vocab-def">'+v.d+'</div></div>').join('')+'</div>';
+		h += '<div class="les-h">📝 Flashcards vocabulaire</div>';
+		h += '<div class="fc-actions">'+
+			'<button onclick="document.querySelectorAll(\'#tab-cours .flashcard\').forEach(c=>c.classList.add(\'revealed\'))" style="font-size:11px;padding:4px 10px">Tout révéler</button>'+
+			'<button onclick="document.querySelectorAll(\'#tab-cours .flashcard\').forEach(c=>c.classList.remove(\'revealed\'))" style="font-size:11px;padding:4px 10px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">Tout masquer</button>'+
+		'</div>';
+		h += '<div class="vocab-grid">'+m.cours.vocab.map(v=>
+			'<div class="flashcard" onclick="this.classList.toggle(\'revealed\')" title="Clique pour révéler la définition">'+
+			'<div class="fc-term">'+v.t+'<span class="fc-arrow">▶</span></div>'+
+			'<div class="fc-hint">Clique pour voir la définition</div>'+
+			'<div class="fc-def">'+v.d+'</div>'+
+			'</div>'
+		).join('')+'</div>';
 		h += '<div class="les-h">📖 Le cours</div>';
 		h += m.cours.html;
 		if(m.cours.erreurs && m.cours.erreurs.length){
@@ -3330,12 +3493,19 @@ function openMod(id){
 
 	// ── Panneau Quiz ──────────────────────────────────────
 	h += '<div class="tab-panel" id="tab-quiz">';
+	h += '<div class="quiz-timer-bar" id="quizTimerBar">'+
+		'<span class="quiz-timer-label">⏱ Mode entretien <span id="quizTimerVal" class="quiz-timer-val" style="display:none">30</span></span>'+
+		'<button class="quiz-timer-toggle" id="timerToggleBtn" data-on="0" onclick="toggleTimerMode('+id+')">⏱ OFF</button>'+
+	'</div>';
 	h += '<div id="quizBox"></div>';
 	h += '<div id="validBox" style="margin-top:18px"></div>';
 	h += '</div>';
 
 	// ── Carnet de bord (toujours visible) ────────────────
-	h += '<div class="notes-section"><div class="les-h">📓 Mon carnet de bord</div>';
+	h += '<div class="notes-section">'+
+		'<div class="les-h" style="justify-content:space-between">📓 Mon carnet de bord'+
+		'<button onclick="exportNotes('+id+')" style="font-size:11px;padding:4px 10px;background:var(--notion-surface);border:1px solid var(--notion-border);border-radius:6px;cursor:pointer" title="Télécharger mes notes en Markdown">⬇ Exporter .md</button>'+
+		'</div>';
 	h += '<textarea class="notes-area" id="notesArea" placeholder="Tes notes, ce que tu as retenu, tes questions…" oninput="saveNotes('+id+')" aria-label="Carnet de bord"></textarea></div>';
 
 	document.getElementById("mBody").innerHTML = h;
@@ -3432,6 +3602,7 @@ function renderQuiz(m){
 		'<div class="quiz-expl" id="expl'+qi+'"></div>'+
 		'</div>'
 	).join('');
+	startQuizTimer(m.id);
 	updateValid(m);
 }
 
@@ -3449,6 +3620,7 @@ function answer(mid, qi, oi){
 	});
 	const expl = activeQuiz[qi].expl;
 	if(expl){ const el=document.getElementById('expl'+qi); if(el){ el.textContent=expl; el.style.display='block'; } }
+	if(quizAnswered(m)) clearQuizTimer();
 	updateValid(m);
 }
 
@@ -3469,13 +3641,19 @@ function updateValid(m){
 				'<span class="next-mod-arrow">→</span>'+
 			  '</button>'
 			: '';
-		box.innerHTML = '<div class="notion-callout" data-tone="green"><div>✅</div><div><strong>Module terminé !</strong><p>Tu as gagné '+m.xp+' XP et le badge '+m.badge+' '+m.badgeName+'.</p></div></div>'+
+		const objList = m.cours && m.cours.objectifs
+			? '<div style="margin:12px 0 4px;font-size:12px;font-weight:700;color:var(--notion-text-soft)">OBJECTIFS MAÎTRISÉS</div>'+
+			  '<ul style="margin:0 0 12px;padding-left:18px;font-size:12px;color:var(--notion-text-soft)">'+m.cours.objectifs.map(o=>'<li style="color:#2a9d76;margin-bottom:3px">✓ '+o+'</li>').join('')+'</ul>'
+			: '';
+		box.innerHTML = '<div class="notion-callout" data-tone="green"><div>✅</div><div><strong>Module terminé !</strong><p>Tu as gagné <b>'+m.xp+' XP</b> et le badge <b>'+m.badge+' '+m.badgeName+'</b>.</p></div></div>'+
+			objList+
 			nextBtn +
 			'<button class="mod-reset-btn" onclick="resetMod('+m.id+')">↩ Remettre ce module à zéro</button>';
 		return;
 	}
 	if(quizAnswered(m) && quizPassed(m)){
-		box.innerHTML = '<div class="notion-callout" data-tone="green" style="margin-bottom:12px"><div>🎯</div><div><strong>Parfait !</strong><p>Toutes les réponses sont correctes.</p></div></div>'+
+		const score = activeQuiz.filter((_,i)=>quizState[i]===true).length;
+		box.innerHTML = '<div class="notion-callout" data-tone="green" style="margin-bottom:12px"><div>🎯</div><div><strong>Parfait !</strong><p>'+score+'/'+activeQuiz.length+' bonnes réponses — tu peux valider le module.</p></div></div>'+
 			'<button onclick="complete('+m.id+')" style="width:100%;font-size:15px;padding:12px">🎯 Valider le module (+'+m.xp+' XP)</button>';
 	} else if(quizAnswered(m)){
 		// Récapitulatif détaillé des erreurs
@@ -3495,7 +3673,8 @@ function updateValid(m){
 				'<div class="quiz-recap-header">⚠️ '+errCount+' erreur'+(errCount>1?'s':'')+' à retravailler</div>'+
 				wrongItems+
 			'</div>'+
-			'<button onclick="retryQuiz('+m.id+')" style="width:100%;margin-top:12px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">🔄 Réessayer le quiz</button>';
+			'<button onclick="retryWrongOnly('+m.id+')" style="width:100%;margin-top:12px">📚 Réviser mes '+errCount+' erreur'+(errCount>1?'s':'')+' uniquement</button>'+
+		'<button onclick="retryQuiz('+m.id+')" style="width:100%;margin-top:8px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">🔄 Réessayer le quiz complet</button>';
 	} else {
 		box.innerHTML = '<p class="notion-faint">Réponds au quiz pour pouvoir valider le module.</p>';
 	}
@@ -3522,6 +3701,7 @@ function complete(id){
 }
 
 function closeMod(){
+	clearQuizTimer();
 	document.getElementById("ov").classList.remove("open");
 	_currentModId = null;
 	if(_openTrigger && typeof _openTrigger.focus === 'function'){ _openTrigger.focus(); _openTrigger = null; }
