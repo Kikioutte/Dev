@@ -1791,8 +1791,57 @@ const MODULES = [
 	badge:"✅", badgeName:"To-Do List",
 	starter:"<button onclick='ajouterTache()'>+ Ajouter une tâche</button>\n<ul id='liste'></ul>\n<script>\nfunction ajouterTache() {\n  const li = document.createElement('li');\n  li.textContent = 'Nouvelle tâche ✅';\n  document.getElementById('liste').appendChild(li);\n}\n<\/script>",
 	lessons:[
-		{h:"🎯 Sélectionner & modifier le DOM", html:"<p>Le DOM est l'arbre d'objets de la page. Sélectionne un élément, puis modifie son texte, ses classes ou son style.</p>"},
-		{h:"🖱️ Écouter les événements", html:"<p>Les événements comme <code>click</code>, <code>input</code> ou <code>submit</code> sont le cœur de l'interactivité.</p>"},
+		{h:"🎯 Sélectionner & modifier le DOM", html:"<p>Le DOM (<em>Document Object Model</em>) est la <b>représentation objet de la page HTML</b>. Chaque balise devient un nœud que JavaScript peut lire et modifier en temps réel, sans recharger la page.</p><p><b>Les sélecteurs essentiels :</b></p><pre class='notion-code'><code>// querySelector — retourne LE PREMIER élément trouvé (ou null)
+const titre = document.querySelector('h1');
+const btn   = document.querySelector('#monBtn');    // par id
+const carte = document.querySelector('.card');      // par classe
+const first = document.querySelector('ul li');      // combiné
+
+// querySelectorAll — retourne TOUS les éléments (NodeList)
+const items = document.querySelectorAll('li');
+items.forEach(li => console.log(li.textContent));
+
+// Héritage de jQuery : getElementById (encore courant)
+const form = document.getElementById('myForm');</code></pre><p><b>Modifier un élément :</b></p><pre class='notion-code'><code>const el = document.querySelector('h1');
+
+el.textContent = 'Nouveau titre';         // texte pur (recommandé — immunisé XSS)
+el.style.color   = '#097fe8';            // style inline
+el.style.display = 'none';              // cacher un élément
+
+el.setAttribute('aria-label', 'Titre principal');
+el.removeAttribute('disabled');
+const val = el.getAttribute('data-id'); // lire un attribut</code></pre><p><b>Piège classique :</b> <code>querySelector</code> renvoie <code>null</code> si aucun élément ne correspond. Toujours vérifier avant d'accéder à une propriété :</p><pre class='notion-code'><code>const el = document.querySelector('.absent');
+// Mauvais → TypeError: Cannot set properties of null
+el.textContent = '...';
+
+// Correct
+if (el) el.textContent = '...';</code></pre><p><b>💡 Pro tip :</b> ouvre DevTools → Console et tape <code>document.querySelector('h1')</code> pour inspecter n'importe quel élément en direct. C'est le moyen le plus rapide de tester tes sélecteurs.</p>"},
+		{h:"🖱️ Écouter les événements", html:"<p>Les événements permettent à ton code de <b>réagir aux actions de l'utilisateur</b>. Chaque interaction déclenche un événement que JavaScript peut intercepter via <code>addEventListener</code>.</p><p><b>Syntaxe de base :</b></p><pre class='notion-code'><code>// Attacher un handler (à faire après que le DOM est chargé)
+element.addEventListener(type, handler);
+
+btn.addEventListener('click', () => {
+  console.log('bouton cliqué');
+});
+
+input.addEventListener('input', e => {
+  console.log('valeur :', e.target.value); // lecture en temps réel
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();  // empêche le rechargement de la page
+  traiterFormulaire();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') fermerModal();
+  if (e.key === 'Enter')  valider();
+});</code></pre><p><b>L'objet <code>event</code> — paramètre automatique du handler :</b></p><pre class='notion-code'><code>btn.addEventListener('click', event => {
+  console.log(event.type);            // 'click'
+  console.log(event.target);          // l'élément cliqué (peut être un enfant)
+  console.log(event.currentTarget);   // l'élément qui porte l'écouteur
+  event.preventDefault();             // annule le comportement natif
+  event.stopPropagation();            // stoppe la remontée vers les parents
+});</code></pre><p><b>Événements courants :</b><br><code>click</code> · <code>dblclick</code> · <code>input</code> · <code>change</code> · <code>submit</code> · <code>keydown</code> · <code>keyup</code> · <code>focus</code> · <code>blur</code> · <code>mouseover</code> · <code>mouseout</code> · <code>DOMContentLoaded</code></p><p><b>💡 Pro tip :</b> préfère <code>addEventListener</code> aux attributs HTML <code>onclick='...'</code>. Tu peux en attacher plusieurs sur le même élément, les retirer avec <code>removeEventListener</code>, et séparer proprement le JS du HTML.</p>"},
 		{h:"➕ Créer, insérer & supprimer", html:"<p>Créer et insérer des éléments dynamiquement :</p><pre class='notion-code'><code>const li = document.createElement('li');
 li.textContent = 'Nouvelle tâche';
 li.className = 'tache';
@@ -1803,9 +1852,128 @@ li.remove();
 
 // Insérer avant un autre
 ul.insertBefore(li, ul.firstChild);</code></pre><p><b>Dans un vrai projet</b>, on préfère souvent reconstruire la liste entière via <code>innerHTML</code> ou un framework comme React plutôt que d'insérer/supprimer manuellement.</p>"},
-		{h:"🧱 Construire une To-Do List", html:"<p>La To-Do List combine sélection, événements, création d'éléments et classes CSS. C'est un excellent mini-projet DOM.</p>"},
-		{h:"📦 Classes, attributs & data-*", html:"<p><code>classList</code> et <code>dataset</code> te permettent de piloter le comportement d'une interface proprement.</p>"},
-		{h:"🐞 Éviter les pièges du DOM", html:"<p>Place ton script correctement, pense à <code>preventDefault</code> et vérifie toujours ce que renvoie <code>querySelector</code>.</p>"},
+		{h:"🧱 Construire une To-Do List", html:"<p>La To-Do List est <b>l'exercice DOM incontournable</b> : elle réunit sélection, événements, création d'éléments, délégation et LocalStorage. Maîtriser ce pattern te préparera directement à React.</p><p><b>Architecture : état → sauvegarder → afficher :</b></p><pre class='notion-code'><code>// 1. L'ÉTAT — tableau de tâches (source de vérité)
+let taches = JSON.parse(localStorage.getItem('taches') || '[]');
+
+// 2. SAUVEGARDER l'état dans localStorage
+function sauvegarder() {
+  localStorage.setItem('taches', JSON.stringify(taches));
+}
+
+// 3. AFFICHER — reconstruire la liste depuis l'état
+function afficher() {
+  const ul = document.getElementById('liste');
+  ul.innerHTML = '';
+  taches.forEach(function(t, i) {
+    const li = document.createElement('li');
+    li.textContent  = t.texte;
+    li.className    = t.faite ? 'done' : '';
+    li.dataset.index = i;      // stocke l'index pour la délégation
+    const btnSuppr  = document.createElement('button');
+    btnSuppr.textContent = '✕';
+    btnSuppr.className   = 'btn-suppr';
+    li.appendChild(btnSuppr);
+    ul.appendChild(li);
+  });
+}</code></pre><p><b>Ajouter, cocher, supprimer avec délégation :</b></p><pre class='notion-code'><code>// AJOUTER une tâche
+document.querySelector('#addForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const input = document.querySelector('#newTask');
+  const texte = input.value.trim();
+  if (!texte) return;          // valider avant d'agir
+  taches.push({ texte: texte, faite: false });
+  input.value = '';
+  sauvegarder();
+  afficher();
+});
+
+// DÉLÉGATION : un seul écouteur pour toutes les actions sur les items
+document.getElementById('liste').addEventListener('click', function(e) {
+  const li = e.target.closest('li');
+  if (!li) return;
+  const i = Number(li.dataset.index);
+
+  if (e.target.matches('.btn-suppr'))  { taches.splice(i, 1); }
+  else                                  { taches[i].faite = !taches[i].faite; }
+
+  sauvegarder();
+  afficher();
+});
+
+afficher(); // initialiser au chargement de la page</code></pre><p><b>Pattern clé :</b> état → sauvegarder → réafficher. Ce flux <em>unidirectionnel</em> est exactement celui que React formalise avec <code>useState</code> et le re-rendu automatique — comprendre ce pattern ici t'aidera énormément en M7.</p>"},
+		{h:"📦 classList, attributs & data-*", html:"<p><code>classList</code> et <code>dataset</code> permettent de piloter l'état visuel et les données associées à un élément <b>sans toucher au CSS ni à tes variables JS</b>.</p><p><b>classList — gérer les classes CSS dynamiquement :</b></p><pre class='notion-code'><code>const el = document.querySelector('.carte');
+
+el.classList.add('active');           // ajoute la classe
+el.classList.remove('active');        // supprime la classe
+el.classList.toggle('dark');          // ajoute si absente, supprime si présente
+el.classList.contains('active');      // → true / false (test)
+el.classList.replace('old', 'new');   // remplace une classe par une autre
+
+// Plusieurs à la fois
+el.classList.add('selected', 'highlighted');
+
+// Cas typique : marquer un bouton actif dans un menu
+navBtns.forEach(b => b.classList.remove('active'));
+btnCliqué.classList.add('active');</code></pre><p><b>dataset — stocker des données dans le DOM :</b></p><pre class='notion-code'><code>// HTML : &lt;li data-index='3' data-role='admin'&gt;
+// JS :
+const el = document.querySelector('li');
+
+el.dataset.index = 5;               // écrit → data-index='5' dans le DOM
+console.log(el.dataset.index);      // lit  → '5' (toujours une chaîne !)
+console.log(Number(el.dataset.index)); // convertir si numérique
+
+// Pattern délégation + dataset
+document.getElementById('liste').addEventListener('click', e => {
+  const li = e.target.closest('li');
+  if (!li) return;
+  const i = Number(li.dataset.index); // retrouver l'index
+  supprimer(i);
+});</code></pre><p><b>Attributs HTML généraux :</b></p><pre class='notion-code'><code>el.setAttribute('disabled', '');     // ajouter
+el.removeAttribute('disabled');      // supprimer
+el.getAttribute('href');             // lire
+el.hasAttribute('required');         // vérifier → true / false</code></pre><p><b>💡 Pro tip :</b> utilise <code>data-*</code> pour associer des métadonnées à tes éléments (id, index, état) — c'est propre, accessible via <code>dataset</code> en JS, et ne mélange pas tes données avec le style. Évite de stocker des objets complexes en attributs : garde le tableau JS comme source de vérité.</p>"},
+		{h:"🐞 DOMContentLoaded, preventDefault, XSS & reflow", html:"<p>Quatre pièges classiques qui rendent le code DOM fragile ou dangereux. Les connaître à l'avance t'évitera des heures de débogage.</p><p><b>1. DOMContentLoaded — script exécuté avant que le DOM soit prêt :</b></p><pre class='notion-code'><code>// Mauvais : script dans le head sans defer → DOM pas encore construit
+document.querySelector('#btn').addEventListener('click', handler);
+// → TypeError: Cannot read properties of null
+
+// Solution 1 : placer le script juste avant &lt;/body&gt;
+// Solution 2 : attribut defer sur la balise script
+//   &lt;script src='main.js' defer&gt;&lt;/script&gt;
+// Solution 3 : écouter DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#btn').addEventListener('click', handler);
+});</code></pre><p><b>2. preventDefault — empêcher le comportement natif :</b></p><pre class='notion-code'><code>// Formulaire : sans preventDefault → rechargement de page
+form.addEventListener('submit', e => {
+  e.preventDefault();   // indispensable pour les SPA
+  traiterFormulaire();
+});
+
+// Lien : sans preventDefault → navigation vers href
+lien.addEventListener('click', e => {
+  e.preventDefault();
+  ouvrirModal();
+});
+
+// stopPropagation : stopper la remontée (bubbling)
+btn.addEventListener('click', e => {
+  e.stopPropagation(); // ne pas déclencher l'écouteur du parent
+});</code></pre><p><b>3. XSS — ne jamais injecter du contenu utilisateur via innerHTML :</b></p><pre class='notion-code'><code>// DANGEREUX — l'utilisateur peut injecter du JavaScript
+const nom = input.value;  // si l'utilisateur tape: &lt;img src=x onerror=alert(1)&gt;
+el.innerHTML = 'Bonjour ' + nom;  // exécutera le script !
+
+// SAFE — textContent échappe tout automatiquement
+el.textContent = 'Bonjour ' + nom;  // affiche le texte brut, jamais de XSS</code></pre><p><b>4. Reflow — éviter les modifications DOM répétées en boucle :</b></p><pre class='notion-code'><code>// Mauvais : 1 000 insertions = 1 000 recalculs de layout (lent)
+items.forEach(item => {
+  document.querySelector('#liste').appendChild(item);
+});
+
+// Correct : DocumentFragment = construction en mémoire, 1 seul reflow
+const fragment = document.createDocumentFragment();
+items.forEach(item => fragment.appendChild(item));
+document.querySelector('#liste').appendChild(fragment);
+
+// Règle d'or : grouper les lectures PUIS les écritures
+// (alterner lecture/écriture force le navigateur à recalculer à chaque fois)</code></pre>"},
 		{h:"💾 LocalStorage & sessionStorage", html:"<p>Stocker des données dans le navigateur sans serveur :</p><pre class='notion-code'><code>// Sauvegarder
 localStorage.setItem('theme', 'dark');
 localStorage.setItem('taches', JSON.stringify(taches));
@@ -2582,8 +2750,114 @@ console.log(process.env.CLIENT_URL);</code></pre><p><b>En production</b>, les va
 │   └── server.js
 ├── .env                     ← secrets backend
 └── README.md</code></pre>"},
-		{h:"🧪 Tests & fiabilité", html:"<p>Les tests automatisés vérifient que les routes, les composants et les fonctions critiques continuent de marcher après chaque changement.</p>"},
-		{h:"🚦 Gestion globale des erreurs", html:"<p>Une bonne app capture les erreurs côté serveur et côté client, affiche un message clair et évite les crashs silencieux.</p>"},
+		{h:"🧪 Tests avec Vitest & Supertest", html:"<p>Les tests automatisés vérifient que le code <b>continue de fonctionner correctement après chaque modification</b>. Sans eux, chaque changement peut casser une fonctionnalité existante sans que tu le saches.</p><p><b>Vitest — tester des fonctions JS (tests unitaires) :</b></p><pre class='notion-code'><code>// npm install -D vitest
+
+// utils.js
+export function calculerTotal(panier) {
+  return panier.reduce((sum, item) => sum + item.prix * item.qte, 0);
+}
+
+// utils.test.js
+import { describe, it, expect } from 'vitest';
+import { calculerTotal } from './utils';
+
+describe('calculerTotal', () => {
+  it('retourne 0 pour un panier vide', () => {
+    expect(calculerTotal([])).toBe(0);
+  });
+  it('calcule correctement avec plusieurs articles', () => {
+    const panier = [{ prix: 10, qte: 2 }, { prix: 5, qte: 1 }];
+    expect(calculerTotal(panier)).toBe(25);
+  });
+  it('ignore les items sans quantité', () => {
+    expect(calculerTotal([{ prix: 10, qte: 0 }])).toBe(0);
+  });
+});</code></pre><p><b>Supertest — tester les routes API Express :</b></p><pre class='notion-code'><code>// npm install -D supertest
+
+// taches.test.js
+import request from 'supertest';
+import app from '../server.js';
+
+describe('GET /api/taches', () => {
+  it('retourne 200 et un tableau', async () => {
+    const res = await request(app).get('/api/taches');
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+});
+
+describe('POST /api/taches', () => {
+  it('crée une tâche et retourne 201', async () => {
+    const res = await request(app)
+      .post('/api/taches')
+      .send({ texte: 'Tâche de test' });
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('_id');
+    expect(res.body.texte).toBe('Tâche de test');
+  });
+  it('retourne 400 si le texte est manquant', async () => {
+    const res = await request(app).post('/api/taches').send({});
+    expect(res.status).toBe(400);
+  });
+});</code></pre><p><b>Lancer les tests :</b></p><pre class='notion-code'><code>// package.json
+// \"test\":       \"vitest run\"     → lancement unique
+// \"test:watch\": \"vitest\"         → mode surveillance (relance à chaque modif)
+
+npx vitest run           // une seule passe
+npx vitest               // mode watch</code></pre><p><b>💡 Pro tip :</b> commence toujours par tester les <em>cas limites</em> (valeur vide, mauvais type, absence d'autorisation) — c'est là que les bugs se cachent. Un test qui passe toujours n'est pas utile.</p>"},
+		{h:"🚦 Middleware d'erreur, ApiError & dev vs prod", html:"<p>Sans gestion d'erreurs centralisée, chaque route doit gérer ses propres erreurs — code dupliqué, comportements incohérents. Un middleware d'erreur Express résout tout ça proprement.</p><p><b>Le middleware d'erreur Express (4 paramètres obligatoires) :</b></p><pre class='notion-code'><code>// DOIT être déclaré APRÈS toutes les routes
+app.use((err, req, res, next) => {
+  const status  = err.status  || 500;
+  const message = err.message || 'Erreur interne du serveur';
+
+  // DEV → stack trace complète pour déboguer
+  if (process.env.NODE_ENV !== 'production') {
+    console.error(err.stack);
+    return res.status(status).json({ message, stack: err.stack });
+  }
+
+  // PROD → message générique (ne jamais fuiter les détails internes)
+  res.status(status).json({ message });
+});</code></pre><p><b>Classe ApiError — des erreurs expressives et cohérentes :</b></p><pre class='notion-code'><code>// middleware/ApiError.js
+class ApiError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+    this.name   = 'ApiError';
+  }
+
+  static badRequest(msg)   { return new ApiError(400, msg); }
+  static unauthorized(msg) { return new ApiError(401, msg); }
+  static notFound(msg)     { return new ApiError(404, msg); }
+  static internal(msg)     { return new ApiError(500, msg); }
+}
+
+module.exports = ApiError;
+
+// Utilisation dans une route
+const ApiError = require('./middleware/ApiError');
+
+app.get('/api/users/:id', async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return next(ApiError.notFound('Utilisateur introuvable'));
+    res.json(user);
+  } catch (err) {
+    next(err); // transmis au middleware d'erreur global
+  }
+});</code></pre><p><b>asyncWrapper — éliminer le try/catch répétitif dans chaque route :</b></p><pre class='notion-code'><code>// middleware/asyncWrapper.js
+const asyncWrapper = fn => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+module.exports = asyncWrapper;
+
+// Usage : plus besoin de try/catch dans la route
+const asyncWrapper = require('./middleware/asyncWrapper');
+
+app.get('/api/taches', asyncWrapper(async (req, res) => {
+  const taches = await Tache.find();
+  res.json(taches); // si Tache.find() rejette → automatiquement capturé
+}));</code></pre><p><b>Dev vs Production — ce qu'on expose :</b></p><ul><li><b>Dev :</b> stack trace complète, message exact de l'erreur, valeurs des variables</li><li><b>Prod :</b> message générique côté client, log complet uniquement côté serveur (Winston, Datadog…). Ne jamais exposer les chemins de fichiers, la version de Node ou le schéma BDD.</li></ul>"},
 		{q:"Quelle bonne pratique pour les variables sensibles en prod ?", o:["Les mettre en dur dans le code","Utiliser des variables d'environnement (.env + dashboard hébergeur)","Les mettre dans un commentaire"], a:1, expl:"Les variables d'env séparent la config du code. Elles ne sont jamais commitées, et chaque environnement (dev, prod) peut avoir ses propres valeurs."}
 	],
 	cours:{
