@@ -1194,6 +1194,18 @@ section:first-child {
 .quiz-timer-toggle { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid var(--notion-border); background:var(--notion-surface); color:var(--notion-text-soft); cursor:pointer; }
 .quiz-timer-toggle[data-on="1"] { background:var(--notion-orange); color:#fff; border-color:transparent; }
 
+/* ── Navigation prev/next entre modules ─────────────────── */
+.mod-nav-bar { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:14px; padding:8px 10px; background:var(--notion-bg-soft); border-radius:8px; }
+.mod-nav-btn { font-size:11px; padding:4px 10px; background:var(--notion-surface); color:var(--notion-text-soft); border:1px solid var(--notion-border); border-radius:6px; cursor:pointer; white-space:nowrap; max-width:150px; overflow:hidden; text-overflow:ellipsis; }
+.mod-nav-btn:hover { background:var(--notion-surface-hover); color:var(--notion-text); }
+.mod-nav-pos { font-size:12px; color:var(--notion-text-faint); }
+
+/* ── Compteur live du quiz ───────────────────────────────── */
+.quiz-counter { font-size:12px; color:var(--notion-text-soft); margin-bottom:10px; min-height:18px; }
+.qc-done { font-weight:600; }
+.qc-ok { color:#2a9d76; font-weight:600; }
+.qc-err { color:var(--notion-red); font-weight:600; }
+
 /* ── Modale confetti finale (parcours complet) ──────────── */
 .final-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity 300ms ease; }
 .final-overlay.open { opacity:1; pointer-events:auto; }
@@ -3381,7 +3393,10 @@ function renderProfile(){
 			'<div class="prog-bar-row"><span>Progression globale</span><span>' + doneMods + ' / ' + totalMods + ' modules — ' + pct + '%</span></div>' +
 			'<div class="prog-bar-track"><div class="prog-bar-fill" style="width:' + pct + '%"></div></div>' +
 		'</div>' +
-		(badges > 0 ? '<p class="notion-muted" style="font-size:13px;margin-top:10px">🎖️ ' + badges + '/12 badge' + (badges > 1 ? 's' : '') + ' débloqué' + (badges > 1 ? 's' : '') + '</p>' : '');
+		(badges > 0 ? '<p class="notion-muted" style="font-size:13px;margin-top:10px">🎖️ ' + badges + '/12 badge' + (badges > 1 ? 's' : '') + ' débloqué' + (badges > 1 ? 's' : '') + '</p>' : '') +
+		'<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--notion-border-soft)">' +
+		'<button onclick="resetAll()" style="background:var(--notion-red-bg);color:var(--notion-red);border:1px solid var(--notion-red);font-size:12px;padding:7px 14px">🗑 Tout réinitialiser</button>' +
+		'</div>';
 }
 
 /* ===== Theme ===== */
@@ -3710,7 +3725,14 @@ function openMod(id){
 	quizState = {};
 	pickQuiz(m);
 	document.getElementById("mTitle").textContent = m.emoji + " " + m.name;
-	let h = '<p class="notion-muted" style="margin-bottom:12px">'+m.num+' • <span class="mod-xp">+'+m.xp+' XP</span></p>';
+	const prevM = id > 0 ? MODULES[id - 1] : null;
+	const nextM = id < MODULES.length - 1 ? MODULES[id + 1] : null;
+	let h = '<div class="mod-nav-bar">'+
+		(prevM ? '<button class="mod-nav-btn" onclick="tryOpenMod('+prevM.id+')" title="'+prevM.name+'">← '+prevM.emoji+' '+prevM.num+'</button>' : '<span></span>')+
+		'<span class="mod-nav-pos">'+(id+1)+' / '+MODULES.length+'</span>'+
+		(nextM ? '<button class="mod-nav-btn" onclick="tryOpenMod('+nextM.id+')" title="'+nextM.name+'">'+nextM.num+' '+nextM.emoji+' →</button>' : '<span></span>')+
+	'</div>';
+	h += '<p class="notion-muted" style="margin-bottom:12px">'+m.num+' • <span class="mod-xp">+'+m.xp+' XP</span></p>';
 
 	// Onglets
 	const hasSandbox = !!m.starter;
@@ -3771,6 +3793,7 @@ function openMod(id){
 		'<span class="quiz-timer-label">⏱ Mode entretien <span id="quizTimerVal" class="quiz-timer-val" style="display:none">30</span></span>'+
 		'<button class="quiz-timer-toggle" id="timerToggleBtn" data-on="0" onclick="toggleTimerMode('+id+')">⏱ OFF</button>'+
 	'</div>';
+	h += '<div id="quizCounter" class="quiz-counter"></div>';
 	h += '<div id="quizBox"></div>';
 	h += '<div id="validBox" style="margin-top:18px"></div>';
 	h += '</div>';
@@ -3868,6 +3891,21 @@ window.addEventListener('message', function(e) {
 	con.scrollTop = con.scrollHeight;
 });
 
+function updateQuizCounter(){
+	const el = document.getElementById('quizCounter');
+	if(!el) return;
+	const answered = activeQuiz.filter((_,i) => quizState[i] !== undefined).length;
+	const correct  = activeQuiz.filter((_,i) => quizState[i] === true).length;
+	const wrong    = answered - correct;
+	if(answered === 0){
+		el.innerHTML = '<span class="qc-done">'+activeQuiz.length+' question'+(activeQuiz.length>1?'s':'')+'</span>';
+	} else {
+		el.innerHTML = '<span class="qc-done">'+answered+'/'+activeQuiz.length+' répondues</span>'+
+			(correct > 0 ? ' · <span class="qc-ok">'+correct+' ✓</span>' : '')+
+			(wrong   > 0 ? ' · <span class="qc-err">'+wrong+' ✗</span>' : '');
+	}
+}
+
 function renderQuiz(m){
 	const box = document.getElementById("quizBox");
 	box.innerHTML = activeQuiz.map((qq,qi) =>
@@ -3876,6 +3914,7 @@ function renderQuiz(m){
 		'<div class="quiz-expl" id="expl'+qi+'"></div>'+
 		'</div>'
 	).join('');
+	updateQuizCounter();
 	startQuizTimer(m.id);
 	updateValid(m);
 }
@@ -3895,6 +3934,7 @@ function answer(mid, qi, oi){
 	const expl = activeQuiz[qi].expl;
 	if(expl){ const el=document.getElementById('expl'+qi); if(el){ el.textContent=expl; el.style.display='block'; } }
 	if(quizAnswered(m)) clearQuizTimer();
+	updateQuizCounter();
 	updateValid(m);
 }
 
@@ -3981,7 +4021,13 @@ function closeMod(){
 	if(_openTrigger && typeof _openTrigger.focus === 'function'){ _openTrigger.focus(); _openTrigger = null; }
 }
 
-function resetAll(){ if(confirm("Réinitialiser toute ta progression ?")){ state={done:[],freeUnlock:false,streak:1,lastVisit:new Date().toISOString().slice(0,10),bonusXP:0,dailyQuests:null}; save(); initDailyQuests(); renderAll(); } }
+function resetAll(){
+	if(!confirm('Remettre à zéro TOUTE ta progression ?\n\nCette action supprimera tes modules validés, ton XP et tes badges.')) return;
+	if(!confirm('Dernière confirmation — action irréversible.\nContinuer ?')) return;
+	state = {done:[], freeUnlock:false, streak:1, lastVisit:new Date().toISOString().slice(0,10), bonusXP:0, dailyQuests:null};
+	save(); initDailyQuests(); renderAll();
+	toast('🗑 Progression réinitialisée.');
+}
 
 let toastT;
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600); }
@@ -4000,6 +4046,27 @@ function celebrate(){
 		setTimeout(()=>c.remove(),dur);
 	}
 }
+
+/* ── Raccourcis clavier ──────────────────────────────────── */
+document.addEventListener('keydown', function(e){
+	// Échap → fermer la modale de module
+	if(e.key === 'Escape' && _currentModId !== null){
+		closeMod();
+		return;
+	}
+	// 1 / 2 / 3 → répondre au quiz quand l'onglet Quiz est actif
+	if(['1','2','3'].includes(e.key) && _currentModId !== null){
+		const qPanel = document.getElementById('tab-quiz');
+		if(!qPanel || !qPanel.classList.contains('active')) return;
+		// trouver la première question sans réponse
+		const qi = activeQuiz.findIndex((_,i) => quizState[i] === undefined);
+		if(qi === -1) return;
+		const oi = Number(e.key) - 1;
+		if(!activeQuiz[qi] || oi >= activeQuiz[qi].o.length) return;
+		e.preventDefault();
+		answer(_currentModId, qi, oi);
+	}
+});
 
 document.addEventListener('keydown', e => {
 	// Fermer la modale finale avec Escape
