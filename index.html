@@ -4184,12 +4184,11 @@ if ('serviceWorker' in navigator) {
 		ticking=false;
 	}
 	window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
-	// Attendre que le scroll restauré soit stabilisé avant le premier calcul
-	if(document.readyState === 'complete'){
-		requestAnimationFrame(update);
-	} else {
-		window.addEventListener('load', function(){ requestAnimationFrame(update); }, {once:true});
+	// Page d'accueil : toujours repartir du haut pour éviter le scroll restauré qui décale la fusée
+	if(window.scrollY > 0 && window.scrollY < hero.offsetHeight){
+		window.scrollTo({top:0, behavior:'instant'});
 	}
+	requestAnimationFrame(update);
 })();
 </script>
 </body>

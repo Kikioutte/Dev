@@ -1,4 +1,4 @@
-const CACHE_NAME = 'apprendre-le-code-v3';
+const CACHE_NAME = 'apprendre-le-code-v4';
 
 // Ressources à mettre en cache dès l'installation
 const PRECACHE_ASSETS = [
