@@ -1288,7 +1288,7 @@ section:first-child {
 .rk-cta:focus-visible{outline:3px solid #fee440;outline-offset:3px;}
 .rk-hint{margin-top:34px;font-size:14px;opacity:.85;animation:rk-bob 1.8s ease-in-out infinite;}
 @keyframes rk-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-.rk-rocket{position:absolute;left:50%;bottom:30%;z-index:4;font-size:72px;line-height:1;transform:translate(-50%,0) rotate(-45deg);will-change:transform;filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));}
+.rk-rocket{position:absolute;left:50%;bottom:12%;z-index:4;font-size:72px;line-height:1;transform:translate(-50%,0) rotate(-45deg);will-change:transform;filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));}
 .rk-flame{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:18px;height:0;border-radius:0 0 50% 50%;background:linear-gradient(180deg,#fff,#fee440 30%,#f9844a 70%,#ef233c);filter:blur(2px);opacity:.9;}
 .rk-rocket.is-launching .rk-flame{animation:rk-flick .12s infinite alternate;}
 @keyframes rk-flick{from{opacity:.65}to{opacity:1}}
@@ -4166,7 +4166,7 @@ if ('serviceWorker' in navigator) {
 	}
 	// Respecte la préférence "mouvement réduit"
 	if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-		if(rocket) rocket.style.bottom='30%';
+		if(rocket) rocket.style.bottom='12%';
 		return;
 	}
 	var ticking=false;
