@@ -4184,7 +4184,12 @@ if ('serviceWorker' in navigator) {
 		ticking=false;
 	}
 	window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
-	update();
+	// Attendre que le scroll restauré soit stabilisé avant le premier calcul
+	if(document.readyState === 'complete'){
+		requestAnimationFrame(update);
+	} else {
+		window.addEventListener('load', function(){ requestAnimationFrame(update); }, {once:true});
+	}
 })();
 </script>
 </body>
