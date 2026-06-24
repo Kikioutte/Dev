@@ -1274,7 +1274,7 @@ section:first-child {
     animation: fadeInUp 300ms ease both;
 }
 /* ===== Page d'accueil : fusée en parallaxe ===== */
-.rk-hero{position:relative;height:100vh;min-height:560px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;background:linear-gradient(180deg,#0b1026 0%,#1b2a6b 42%,#3a6ea5 72%,#8fc2e8 100%);}
+.rk-hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;background:linear-gradient(180deg,#0b1026 0%,#1b2a6b 42%,#3a6ea5 72%,#8fc2e8 100%);}
 .rk-stars{position:absolute;inset:0;pointer-events:none;will-change:transform;}
 .rk-star{position:absolute;background:#fff;border-radius:50%;opacity:.8;animation:rk-tw 3s ease-in-out infinite;}
 @keyframes rk-tw{0%,100%{opacity:.2}50%{opacity:1}}
@@ -1288,7 +1288,7 @@ section:first-child {
 .rk-cta:focus-visible{outline:3px solid #fee440;outline-offset:3px;}
 .rk-hint{margin-top:34px;font-size:14px;opacity:.85;animation:rk-bob 1.8s ease-in-out infinite;}
 @keyframes rk-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-.rk-rocket{position:absolute;left:50%;bottom:22%;z-index:4;font-size:72px;line-height:1;transform:translate(-50%,0) rotate(-45deg);will-change:transform;filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));}
+.rk-rocket{position:absolute;left:50%;bottom:30%;z-index:4;font-size:72px;line-height:1;transform:translate(-50%,0) rotate(-45deg);will-change:transform;filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));}
 .rk-flame{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:18px;height:0;border-radius:0 0 50% 50%;background:linear-gradient(180deg,#fff,#fee440 30%,#f9844a 70%,#ef233c);filter:blur(2px);opacity:.9;}
 .rk-rocket.is-launching .rk-flame{animation:rk-flick .12s infinite alternate;}
 @keyframes rk-flick{from{opacity:.65}to{opacity:1}}
@@ -4166,12 +4166,12 @@ if ('serviceWorker' in navigator) {
 	}
 	// Respecte la préférence "mouvement réduit"
 	if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-		if(rocket) rocket.style.bottom='28%';
+		if(rocket) rocket.style.bottom='30%';
 		return;
 	}
 	var ticking=false;
 	function update(){
-		var y=window.scrollY||window.pageYOffset, vh=window.innerHeight;
+		var y=window.scrollY||window.pageYOffset, vh=hero.offsetHeight||window.innerHeight;
 		var p=Math.max(0,Math.min(1, y/vh)); // progression sur le 1er écran (0 -> 1)
 		if(rocket){
 			rocket.classList.toggle('is-launching', p>0.02 && p<0.99);
