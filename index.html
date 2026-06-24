@@ -4175,7 +4175,7 @@ if ('serviceWorker' in navigator) {
 		var p=Math.max(0,Math.min(1, y/vh)); // progression sur le 1er écran (0 -> 1)
 		if(rocket){
 			rocket.classList.toggle('is-launching', p>0.02 && p<0.99);
-			rocket.style.transform='translate(-50%,'+(-p*90)+'vh) rotate(-45deg) scale('+(1+p*0.15)+')';
+			rocket.style.transform='translate(-50%,'+(-p*55)+'vh) rotate(-45deg) scale('+(1+p*0.1)+')';
 		}
 		if(flame) flame.style.height=(p*140)+'px';
 		if(stars) stars.style.transform='translateY('+(y*0.3)+'px)';
