@@ -1,10 +1,12 @@
-const CACHE_NAME = 'apprendre-le-code-v4';
+const CACHE_NAME = 'apprendre-le-code-v6';
 
 // Ressources à mettre en cache dès l'installation
 const PRECACHE_ASSETS = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 // ── Installation : précache les assets essentiels ─────────────────────────────
