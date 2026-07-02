@@ -1,4 +1,4 @@
-const CACHE_NAME = 'apprendre-le-code-v6';
+const CACHE_NAME = 'apprendre-le-code-v7';
 
 // Ressources à mettre en cache dès l'installation
 const PRECACHE_ASSETS = [
@@ -31,13 +31,33 @@ self.addEventListener('activate', event => {
   );
 });
 
-// ── Fetch : Cache-first, fallback réseau, fallback HTML ────────────────────────
+// ── Fetch ──────────────────────────────────────────────────────────────────────
+// Pages HTML (navigations) : réseau d'abord, cache en secours → les mises à jour
+// du site arrivent immédiatement, le hors-ligne reste fonctionnel.
+// Autres ressources : cache d'abord, réseau en secours.
 self.addEventListener('fetch', event => {
   // Ignorer les requêtes non-GET et les requêtes vers d'autres origines
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin && url.protocol !== 'file:') return;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() =>
+          caches.match(event.request).then(cached => cached || caches.match('./index.html'))
+        )
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then(cached => {

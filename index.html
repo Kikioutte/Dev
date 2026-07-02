@@ -15,6 +15,10 @@
 <meta name="twitter:description" content="12 modules interactifs pour apprendre HTML, CSS, JavaScript, React, Node.js et les bases de données.">
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#097fe8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191918" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#097fe8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -2558,7 +2562,7 @@ function load(){
 		return s;
 	} catch(e){ return {done:[], freeUnlock:false, streak:1, lastVisit:null, bonusXP:0, dailyQuests:null}; }
 }
-function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ console.warn('Sauvegarde impossible (stockage plein ou bloqué) :', e); } }
 function isDone(id){ return state.done.includes(id); }
 function totalXP(){ return MODULES.filter(m=>isDone(m.id)).reduce((s,m)=>s+m.xp,0) + (state.bonusXP||0); }
 function currentLevel(xp){ let lv=LEVELS[0]; for(const l of LEVELS){ if(xp>=l.xp) lv=l; } return lv; }
@@ -2693,7 +2697,7 @@ function tryOpenMod(id){
 }
 
 function retryQuiz(id){
-	quizState = {};
+	quizState = {}; quizChoice = {};
 	const m = MODULES.find(x=>x.id===id);
 	pickQuiz(m);
 	renderQuiz(m);
@@ -2701,7 +2705,7 @@ function retryQuiz(id){
 
 function retryWrongOnly(id){
 	const wrong = activeQuiz.filter((_,i) => quizState[i] === false);
-	quizState = {};
+	quizState = {}; quizChoice = {};
 	activeQuiz = wrong;
 	const m = MODULES.find(x=>x.id===id);
 	renderQuiz(m);
@@ -2713,7 +2717,7 @@ function resetMod(id){
 	state.done = state.done.filter(d => d !== id);
 	save();
 	renderAll();
-	quizState = {};
+	quizState = {}; quizChoice = {};
 	pickQuiz(m);
 	renderQuiz(m);
 	updateValid(m);
@@ -2830,8 +2834,17 @@ function importProgress(){
 				const data = JSON.parse(ev.target.result);
 				if(!Array.isArray(data.done)) throw new Error('Champ "done" manquant ou invalide');
 				if(!confirm('Importer cette progression ? Ta progression actuelle sera remplacée.')) return;
-				state = {done: data.done.filter(id=>Number.isInteger(id)), freeUnlock: !!data.freeUnlock};
+				state = {
+					done: data.done.filter(id=>Number.isInteger(id)),
+					freeUnlock: !!data.freeUnlock,
+					streak: Number.isInteger(data.streak) && data.streak > 0 ? data.streak : 1,
+					lastVisit: typeof data.lastVisit === 'string' ? data.lastVisit : null,
+					bonusXP: Number.isInteger(data.bonusXP) && data.bonusXP >= 0 ? data.bonusXP : 0,
+					dailyQuests: data.dailyQuests && typeof data.dailyQuests === 'object' ? data.dailyQuests : null
+				};
 				if(data.theme){ localStorage.setItem(THEME_KEY, data.theme); document.documentElement.setAttribute('data-theme', data.theme); updateThemeBtn(); }
+				updateStreak();
+				initDailyQuests();
 				save();
 				renderAll();
 				toast('✅ Progression importée avec succès !');
@@ -3004,6 +3017,7 @@ function renderAll(){
 }
 
 let quizState = {};
+let quizChoice = {};
 let activeQuiz = [];
 let _openTrigger = null;
 let quizTimerMode = false;
@@ -3107,7 +3121,7 @@ function openMod(id){
 	const m = MODULES.find(x=>x.id===id);
 	trackQuestExplore(id);
 	if(m && m.starter) trackQuest('sandbox', 1);
-	quizState = {};
+	quizState = {}; quizChoice = {};
 	pickQuiz(m);
 	document.getElementById("mTitle").textContent = m.emoji + " " + m.name;
 	const prevM = id > 0 ? MODULES[id - 1] : null;
@@ -3139,7 +3153,7 @@ function openMod(id){
 			'<button onclick="document.querySelectorAll(\'#tab-cours .flashcard\').forEach(c=>c.classList.remove(\'revealed\'))" style="font-size:11px;padding:4px 10px;background:var(--notion-surface);color:var(--notion-text);border:1px solid var(--notion-border)">Tout masquer</button>'+
 		'</div>';
 		h += '<div class="vocab-grid">'+m.cours.vocab.map(v=>
-			'<div class="flashcard" onclick="this.classList.toggle(\'revealed\')" title="Clique pour révéler la définition">'+
+			'<div class="flashcard" tabindex="0" role="button" onclick="this.classList.toggle(\'revealed\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.classList.toggle(\'revealed\')}" title="Clique pour révéler la définition">'+
 			'<div class="fc-term">'+v.t+'<span class="fc-arrow">▶</span></div>'+
 			'<div class="fc-hint">Clique pour voir la définition</div>'+
 			'<div class="fc-def">'+v.d+'</div>'+
@@ -3309,6 +3323,7 @@ function answer(mid, qi, oi){
 	if(quizState[qi]!==undefined) return;
 	const correct = activeQuiz[qi].a;
 	quizState[qi] = (oi===correct);
+	quizChoice[qi] = oi;
 	if(oi===correct) trackQuest('quiz', 1);
 	activeQuiz[qi].o.forEach((_,k)=>{
 		const el = document.getElementById('q'+qi+'o'+k);
@@ -3357,11 +3372,11 @@ function updateValid(m){
 	} else if(quizAnswered(m)){
 		// Récapitulatif détaillé des erreurs
 		const wrongItems = activeQuiz.map((qq,qi) => {
-			if(quizState[qi] === true) return '';
-			const givenIdx = Object.keys(quizState).map(Number).includes(qi) ? activeQuiz[qi].o.findIndex((_,k)=>k!==qq.a && quizState[qi]===false) : -1;
+			if(quizState[qi] !== false) return '';
+			const given = quizChoice[qi];
 			return '<div class="quiz-recap-item">'+
 				'<div class="quiz-recap-q">'+(qi+1)+'. '+qq.q+'</div>'+
-				'<div class="quiz-recap-wrong">✗ Ta réponse : '+qq.o[Object.keys(quizState).map(Number).reduce((acc,k)=>k===qi?k:acc,qi) !== undefined ? activeQuiz[qi].o.findIndex((_v,k)=>{ return !quizState[qi] && k!==qq.a; }) : 0]+'</div>'+
+				(given !== undefined ? '<div class="quiz-recap-wrong">✗ Ta réponse : '+qq.o[given]+'</div>' : '')+
 				'<div class="quiz-recap-right">✓ Bonne réponse : '+qq.o[qq.a]+'</div>'+
 				(qq.expl ? '<div class="quiz-recap-expl">💡 '+qq.expl+'</div>' : '')+
 			'</div>';
@@ -3439,6 +3454,9 @@ document.addEventListener('keydown', function(e){
 		closeMod();
 		return;
 	}
+	// Ne pas intercepter les touches quand on tape dans un champ (notes, sandbox, recherche…)
+	const tag = e.target && e.target.tagName;
+	if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable)) return;
 	// 1 / 2 / 3 → répondre au quiz quand l'onglet Quiz est actif
 	if(['1','2','3'].includes(e.key) && _currentModId !== null){
 		const qPanel = document.getElementById('tab-quiz');
@@ -3457,6 +3475,9 @@ document.addEventListener('keydown', e => {
 	// Fermer la modale finale avec Escape
 	const fo = document.getElementById('finalOverlay');
 	if(fo && fo.classList.contains('open') && e.key === 'Escape'){ closeFinalModal(); return; }
+	// Fermer la révision globale avec Escape
+	const rm = document.getElementById('reviewModal');
+	if(rm && rm.classList.contains('open') && e.key === 'Escape'){ closeGlobalReview(); return; }
 	const ov = document.getElementById('ov');
 	if(!ov.classList.contains('open')) return;
 	if(e.key === 'Escape'){ closeMod(); return; }
